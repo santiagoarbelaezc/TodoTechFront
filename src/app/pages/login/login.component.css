@@ -1,0 +1,147 @@
+/* Estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Fondo con imagen */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    background: url('/assets/fondoLogin.png') no-repeat center center/cover;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Contenedor del login */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Caja del formulario con efecto de elevación */
+.login-box {
+    background: rgba(255, 255, 255, 0.1); /* Fondo con transparencia */
+    padding: 40px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px); /* Efecto de desenfoque */
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3); /* Sombra elegante */
+    text-align: center;
+    width: 350px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto al pasar el mouse */
+.login-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Estilos para centrar el logo y hacerlo más pequeño */
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px; /* Reducimos el tamaño */
+    height: auto;
+    margin: 0 auto; /* Centra el logo horizontalmente */
+    transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out;
+}
+
+/* Efecto cuando pasas el cursor */
+.logo:hover {
+    transform: rotateY(360deg) scale(1.1); /* Rotación y leve aumento de tamaño */
+    filter: drop-shadow(0 0 10px #00d9ff); /* Brillo azul neón */
+}
+
+
+
+/* Formularios */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Grupo de input */
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+/* Campos de entrada con línea en lugar de borde */
+input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+/* Efecto al enfocar */
+input:focus {
+    border-bottom: 2px solid white;
+}
+
+/* Efecto en los labels */
+label {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: 0.3s ease;
+    pointer-events: none;
+}
+
+/* Efecto al escribir en los inputs */
+input:focus + label,
+input:valid + label {
+    top: 5px;
+    left: 10px;
+    font-size: 12px;
+    color: white;
+}
+
+/* Botón elegante */
+button {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: white;
+}
+
+/* Pie de página */
+footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}

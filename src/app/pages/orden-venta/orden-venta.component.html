@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orden de Venta - Nuevo Cliente</title>
+    <link rel="stylesheet" href="orden-venta.component.css">
+</head>
+<body>
+
+    <div class="orden-venta-container">
+        <div class="orden-venta-content">
+            <h2>Orden de Venta</h2>
+            
+            <div class="orden-venta-form">
+                <form (ngSubmit)="onSubmit()">
+
+                    <div class="input-group">
+                        <label for="nombre">Nombre Cliente</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="correo">Correo</label>
+                        <input type="email" id="correo" name="correo" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" name="telefono" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="clave">Clave Secreta</label>
+                        <input type="password" id="clave" name="clave" required>
+                    </div>
+
+                    <button type="submit">Crear Nueva Orden</button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="orden-venta-horario">
+        <p>{{ fechaHora }}</p>
+    </div>
+
+</body>
+</html>

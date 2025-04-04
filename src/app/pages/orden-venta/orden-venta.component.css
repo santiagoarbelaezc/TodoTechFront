@@ -1,0 +1,118 @@
+/* Estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Fondo con imagen */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    background: url('/assets/fondoLogin.png') no-repeat center center/cover;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Contenedor de orden de venta */
+.orden-venta-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0px 12px 36px rgba(0, 0, 0, 0.4);
+    margin: 20px auto;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    position: relative;
+    max-width: 90%;
+}
+
+/* Estilo del título */
+h2 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 32px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    text-align: center;
+}
+
+/* Estilo del reloj */
+.orden-venta-horario {
+    position: absolute;
+    top: 30px;
+    right: 15px;
+    font-size: 24px;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Formularios */
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Grupo de input */
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+/* Campos de entrada mejorados */
+input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    color: white;
+}
+
+/* Efecto al enfocar */
+input:focus {
+    border-bottom: 2px solid white;
+}
+
+/* Efecto en los labels */
+label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Botón mejorado */
+button {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    backdrop-filter: blur(5px);
+}
+
+button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: white;
+}

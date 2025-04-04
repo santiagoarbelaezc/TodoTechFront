@@ -1,0 +1,141 @@
+/* Reset global: Elimina márgenes y rellenos predeterminados, 
+   define el modelo de caja como border-box y establece la fuente global */
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Fondo con desenfoque */
+body {
+    display: flex; /* Usa flexbox para organizar el contenido */
+    flex-direction: column;
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    background: url('/assets/fondoLogin.png') no-repeat center center fixed;
+    background-size: cover; /* Ajusta la imagen de fondo para que cubra toda la pantalla */
+}
+
+/* Capa de desenfoque sobre el fondo */
+.overlay {
+    position: fixed; /* Se mantiene en la misma posición al hacer scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px); /* Aplica desenfoque al fondo */
+    background: rgba(0, 0, 0, 0.5); /* Oscurecimiento sutil para mejorar la legibilidad */
+    z-index: -1; /* Mantiene la capa en el fondo */
+}
+
+/* Menú superior */
+header {
+    width: 100vw; /* Se asegura de que ocupe toda la pantalla */
+    background: rgba(0, 0, 0, 0.8); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(5px); /* Aplica desenfoque al fondo */
+    padding: 15px 0;
+    position: fixed; /* Fija el menú en la parte superior */
+    top: 0;
+    left: 0; /* Asegura que no haya espacios en los bordes */
+    right: 0; /* Asegura que se estire hasta la derecha */
+    z-index: 100; /* Asegura que el menú esté por encima del contenido */
+}
+
+/* Contenedor del menú de navegación */
+.menu {
+    display: flex;
+    justify-content: space-between; /* Espacia los elementos para que cubran toda la barra */
+    align-items: center;
+    width: 100%;
+    padding: 0 20px; /* Añade algo de margen interno */
+    list-style: none; /* Elimina los estilos de lista predeterminados */
+}
+
+/* Elementos del menú */
+.menu li {
+    display: inline-block; /* Muestra los elementos en línea */
+}
+
+/* Enlaces del menú */
+.menu li a {
+    text-decoration: none;
+    color: white;
+    padding: 12px 20px;
+    font-size: 14px;
+    transition: 0.3s; /* Suaviza la transición de color */
+    border-radius: 5px;
+}
+
+/* Efecto hover en los enlaces del menú */
+.menu li a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Contenedor principal que organiza el contenido */
+main {
+    display: flex; /* Usa flexbox para organizar la sidebar y el contenido */
+    margin-top: 80px; /* Ajusta la posición debajo del menú */
+    height: calc(100vh - 80px); /* Resta el tamaño del header a la altura total */
+    padding: 20px;
+    gap: 20px; /* Espaciado entre la sidebar y el contenido */
+}
+
+/* Sidebar (barra lateral con botones) */
+.sidebar {
+    width: 280px;
+    background: rgba(255, 255, 255, 0.15); /* Fondo semitransparente */
+    backdrop-filter: blur(10px); /* Aplica desenfoque */
+    padding: 20px;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para resaltar */
+    text-align: center; /* Centra los elementos */
+}
+
+/* Título dentro de la sidebar */
+.sidebar h2 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+/* Botones dentro de la sidebar */
+.btn {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px; /* Espaciado entre botones */
+    transition: 0.3s ease; /* Suaviza la transición de color */
+    font-weight: bold;
+}
+
+/* Efecto hover en los botones */
+.btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Caja grande de bienvenida */
+.welcome-box {
+    flex: 1; /* Ocupa el espacio restante en el contenedor */
+    background: rgba(255, 255, 255, 0.1); /* Fondo semitransparente */
+    backdrop-filter: blur(15px); /* Aplica un desenfoque más fuerte */
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.4); /* Sombra para resaltar */
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Texto dentro de la caja de bienvenida */
+.welcome-box p {
+    margin-top: 10px;
+    font-size: 16px;
+    opacity: 0.8; /* Reduce un poco la opacidad para un mejor diseño */
+}

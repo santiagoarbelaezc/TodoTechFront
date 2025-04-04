@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TodoTech Shop</title>
+    <link rel="stylesheet" href="login.component.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-box">
+            <img src="assets/TigreCircle.png" alt="Logo TodoTech Shop" class="logo">
+            <form (ngSubmit)="onLogin()">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="usuario" 
+                        name="usuario" 
+                        required 
+                        [(ngModel)]="username"
+                        placeholder=" ">
+                    <label for="usuario">Usuario</label>
+                </div>
+    
+                <div class="input-group">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        [(ngModel)]="password"
+                        placeholder=" ">
+                    <label for="password">Contraseña</label>
+                </div>
+    
+                <button type="submit">Ingresar</button>
+    
+                <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+            </form>
+        </div>
+    
+        <footer>
+            © 2025 TodoTech Shop - Todos los derechos reservados.
+        </footer>
+    </div>    
+
+</body>
+</html>
