@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UsuarioDTO } from '../../models/usuario.dto'; // Asegúrate de importar el DTO
+import { UsuarioService } from '../../services/usuario.service';
+import { UsuarioDTO } from '../../models/usuario.dto';
 
 @Component({
   selector: 'app-login',
@@ -19,25 +20,36 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private usuarioService: UsuarioService
+  ) {}
 
   validarCredenciales(usuario: string, password: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/${usuario}/${password}`);
   }
-
-  
 
   onLogin() {
     if (!this.username || !this.password) {
       alert('Por favor ingresa usuario y contraseña');
       return;
     }
-  
+
     this.validarCredenciales(this.username, this.password).subscribe({
       next: (esValido) => {
         if (esValido) {
-          localStorage.setItem('usuario', this.username);
-          this.router.navigate(['/inicio']);
+          // Solo si es válido, solicitamos el DTO completo
+          this.http.get<UsuarioDTO>(`${this.apiUrl}/login/${this.username}/${this.password}`).subscribe({
+            next: (usuario) => {
+              this.usuarioService.setUsuario(usuario);
+              localStorage.setItem('usuario', JSON.stringify(usuario)); // opcional
+              this.router.navigate(['/ordenVenta']);
+            },
+            error: () => {
+              alert('Error al obtener los datos del usuario');
+            }
+          });
         } else {
           alert('Usuario o contraseña incorrectos');
         }
@@ -47,5 +59,4 @@ export class LoginComponent {
       }
     });
   }
-  
 }
