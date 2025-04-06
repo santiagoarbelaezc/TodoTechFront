@@ -21,8 +21,8 @@ export class LoginComponent {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  obtenerUsuario(usuario: string): Observable<UsuarioDTO> {
-    return this.http.get<UsuarioDTO>(`${this.apiUrl}/${usuario}`);
+  validarCredenciales(usuario: string, password: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/${usuario}/${password}`);
   }
 
   
@@ -32,21 +32,20 @@ export class LoginComponent {
       alert('Por favor ingresa usuario y contraseña');
       return;
     }
-
-    this.obtenerUsuario(this.username).subscribe({
-      next: (usuario) => {
-        console.log(usuario)
-        if (usuario.password === this.password) {
-          localStorage.setItem('usuario', JSON.stringify(usuario));
+  
+    this.validarCredenciales(this.username, this.password).subscribe({
+      next: (esValido) => {
+        if (esValido) {
+          localStorage.setItem('usuario', this.username);
           this.router.navigate(['/inicio']);
         } else {
-          alert('Contraseña incorrecta');
+          alert('Usuario o contraseña incorrectos');
         }
       },
       error: () => {
-        console.log('no lo trajo')
-        alert('Usuario no encontrado');
+        alert('Error al comunicarse con el servidor');
       }
     });
   }
+  
 }
