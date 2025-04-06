@@ -1,6 +1,9 @@
 import { Component, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router'; // Importar Router
+import { Observable } from 'rxjs';
+import { UsuarioDTO } from '../../models/usuario.dto';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-inicio',
@@ -11,10 +14,20 @@ import { Router } from '@angular/router'; // Importar Router
 })
 export class InicioComponent implements AfterViewInit {
 
+  private apiUrl = 'http://localhost:8080/api/usuarios';
+
   mostrarCarrito = false; // Controla si el carrito aparece al bajar
   carritoVisible = false; // Controla si el carrito está desplegado
 
-  constructor(private router: Router) {} // Inyectar el Router
+  usuarios: any = [];
+
+  constructor(private http: HttpClient,private router: Router) {
+    this.test().subscribe((data)=>{
+      this.usuarios=data
+      console.log(data)
+    })
+    
+  } // Inyectar el Router
 
   @HostListener('window:scroll', [])
   onScroll(): void {
@@ -22,8 +35,15 @@ export class InicioComponent implements AfterViewInit {
     this.mostrarCarrito = window.scrollY > bannerAltura;
   }
 
+  test(): Observable<UsuarioDTO> {
+    return this.http.get<UsuarioDTO>(`${this.apiUrl}`);
+  }
+
+  
+
   toggleCarrito(): void {
     this.carritoVisible = !this.carritoVisible;
+    
   }
 
   // Método para navegar a la página de PhoneComponent

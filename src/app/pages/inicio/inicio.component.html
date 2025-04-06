@@ -39,6 +39,8 @@
             </h2>
         </div>
     </section>
+   
+    
 
     <!-- Carrito (solo aparece al bajar el scroll) -->
     <div class="cart-wrapper" *ngIf="mostrarCarrito">
@@ -58,6 +60,10 @@
       </div>
     </div>
   </div>
+    
+   
+  @for (usuario of usuarios; track usuario) {
+    nombre del usuario: {{usuario.usuario}}
     
     <section class="products-section">
         <div class="carousel-container">
@@ -103,6 +109,7 @@
             <button id="nextBtn" class="carousel-btn">❯</button>
         </div>
     </section>
+}  
 
     <section class="products-section celulares-section">
         <div class="carousel-container">
