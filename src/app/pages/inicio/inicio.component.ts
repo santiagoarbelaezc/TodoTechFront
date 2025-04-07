@@ -69,6 +69,12 @@ export class InicioComponent implements AfterViewInit {
     this.router.navigate(['/laptops']);
   }
 
+  // 🛒 Función para agregar productos al carrito
+  agregarAlCarrito(producto: ProductoDTO): void {
+    console.log('Producto agregado al carrito:', producto);
+    // Aquí puedes añadir lógica para guardar en un array de carrito o en un servicio compartido
+  }
+
   private initCarousel(carouselSelector: string, prevBtnSelector: string, nextBtnSelector: string): void {
     const carousel = document.querySelector(carouselSelector) as HTMLElement;
     const prevBtn = document.querySelector(prevBtnSelector) as HTMLElement;
@@ -84,7 +90,7 @@ export class InicioComponent implements AfterViewInit {
 
     function updateCarousel() {
       const offset = -index * itemWidth;
-      carousel.style.transform = `translateX(${offset}px)`;
+      carousel.style.transform = `translateX(${offset}px)`; 
     }
 
     nextBtn.addEventListener('click', () => {

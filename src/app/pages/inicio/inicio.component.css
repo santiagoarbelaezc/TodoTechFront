@@ -774,4 +774,38 @@ footer {
     padding: 10px;
     border-radius: 5px;
   }
+
+  .carrito-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* opcional */
+    width: 100%;
+  }
+  
+  .btn-carrito {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 8px 16px; /* más delgado */
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 14px; /* más compacto */
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+  
+  .btn-carrito:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 6px 12px rgba(255, 255, 255, 0.08);
+  }
+  
+  .btn-carrito:active {
+    transform: scale(0.95);
+  }
   

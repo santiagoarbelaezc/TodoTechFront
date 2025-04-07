@@ -63,25 +63,29 @@
 
   <section class="products-section" *ngIf="productos.length > 0; else sinProductos">
     <div class="carousel-container">
-      
-      
       <div class="carousel">
         <div class="carousel-item" *ngFor="let producto of productos">
-          <img src="'assets/img/asus1.png" alt="{{ producto.nombre }}" />
+          <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
           <h3>{{ producto.nombre }}</h3>
           <p>{{ producto.descripcion }}</p>
           <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
+  
+          <!-- Botón Agregar al carrito -->
+          <div class="carrito-container">
+            <button class="btn-carrito" (click)="agregarAlCarrito(producto)">
+              Agregar al carrito 🛒
+            </button>
+          </div>
+          
         </div>
       </div>
-  
-      
     </div>
   </section>
-  
   
   <ng-template #sinProductos>
     <p>No hay productos disponibles.</p>
   </ng-template>
+  
   
     
    
