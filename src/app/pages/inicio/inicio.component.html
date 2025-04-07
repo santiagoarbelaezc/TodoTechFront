@@ -25,22 +25,22 @@
         <div class="icons">
             <i class="fas fa-search"></i>
             <i class="fas fa-shopping-cart"></i>
-            
+
         </div>
     </header>
-    
+
     <section class="banner">
         <div class="banner-content">
             <h2>
                 <span class="reveal-text delay-1">¡ Bienvenido a TodoTechShop Tecnología Sin Límites !</span>
                 <span class="reveal-text delay-2"></span>
-                <span class="reveal-text delay-3">Descubre innovación, calidad y asesoría experta en cada compra</span>       
+                <span class="reveal-text delay-3">Descubre innovación, calidad y asesoría experta en cada compra</span>
 
             </h2>
         </div>
     </section>
-   
-    
+
+
 
     <!-- Carrito (solo aparece al bajar el scroll) -->
     <div class="cart-wrapper" *ngIf="mostrarCarrito">
@@ -48,7 +48,7 @@
         <button class="cart-button" (click)="toggleCarrito()">
         🛒 <span>Carrito</span>
         </button>
-  
+
     <!-- Contenedor del carrito -->
     <div class="cart-panel" [ngClass]="{ 'open': carritoVisible }">
       <div class="cart-header">
@@ -60,11 +60,11 @@
       </div>
     </div>
   </div>
-    
-   
+
+
   @for (usuario of usuarios; track usuario) {
     nombre del usuario: {{usuario.usuario}}
-    
+
     <section class="products-section">
         <div class="carousel-container">
             <button id="prevBtn" class="carousel-btn">❮</button>
@@ -109,7 +109,7 @@
             <button id="nextBtn" class="carousel-btn">❯</button>
         </div>
     </section>
-}  
+}
 
     <section class="products-section celulares-section">
         <div class="carousel-container">
@@ -117,8 +117,8 @@
             <div class="carouselCelulares">
                 <div class="carousel-item">
                     <img src="assets/phone1.png" alt="Celular 1">
-                    <h3>iPhone 14 Pro</h3>
-                    <p>128GB, Pantalla OLED, A16 Bionic</p>
+                    <h3>Samsung Galaxy S25 Plus</h3>
+                    <p>512GB, Pantalla 6.7 pulgadas, Snapdragon 8 Elite Gen 4</p>
                     <span class="price">$5.499.900</span>
                 </div>
                 <div class="carousel-item">
@@ -129,7 +129,7 @@
                 </div>
                 <div class="carousel-item">
                     <img src="assets/phone3.png" alt="Celular 3">
-                    <h3>Google Pixel 7 Pro</h3>
+                    <h3>Galaxy S24 Ultra</h3>
                     <p>256GB, Pantalla 120Hz, Tensor G2</p>
                     <span class="price">$4.799.900</span>
                 </div>
@@ -187,20 +187,20 @@
             <div class="carouselCelulares">
                 <div class="carousel-item">
                     <img src="assets/iphone1.png" alt="Celular 1">
-                    <h3>iPhone 14 Pro</h3>
-                    <p>128GB, Pantalla OLED, A16 Bionic</p>
-                    <span class="price">$5.499.900</span>
+                    <h3>iPhone 13</h3>
+                    <p>128GB, Pantalla OLED de 6.1", Chip A15 Bionic </p>
+                    <span class="price">$2.800.000</span>
                 </div>
                 <div class="carousel-item">
                     <img src="assets/iphone2.png" alt="Celular 2">
                     <h3>iPhone 15 Pro Max</h3>
-                    <p>128GB, Pantalla OLED, A16 Bionic</p>
+                    <p>256GB, Pantalla OLED de 6.7", Chip A17 Pro</p>
                     <span class="price">$6.899.900</span>
                 </div>
                 <div class="carousel-item">
                     <img src="assets/iphone3.png" alt="Celular 3">
                     <h3>iPhone 14</h3>
-                    <p>128GB, Pantalla OLED, A16 Bionic</p>
+                    <p>128GB, Pantalla OLED de 6.1", Chip A16 Bionic</p>
                     <span class="price">$4.799.900</span>
                 </div>
                 <div class="carousel-item">
@@ -219,16 +219,16 @@
             <button id="nextBtnCel" class="carousel-btn">❯</button>
         </div>
     </section>
-    
 
-    
+
+
     <footer>
         <div class="footer-container">
             <div class="footer-section about">
                 <h2>TodoTech Shop</h2>
                 <p>Tu destino para lo último en tecnología. Encuentra laptops, smartphones, gaming y más.</p>
             </div>
-            
+
             <div class="footer-section links">
                 <h3>Enlaces rápidos</h3>
                 <ul>
@@ -238,12 +238,12 @@
                     <li><a href="#">Términos y condiciones</a></li>
                 </ul>
             </div>
-    
+
             <div class="footer-section contact">
                 <h3>Contacto</h3>
                 <p>Teléfono: +57 320 123 4567</p>
             </div>
-    
+
             <div class="footer-section social">
                 <h3>Síguenos</h3>
                 <div class="social-icons">
@@ -254,7 +254,7 @@
                 </div>
             </div>
         </div>
-    
+
         <div class="footer-bottom">
             <p>© 2025 TodoTech Shop. Todos los derechos reservados.</p>
         </div>
