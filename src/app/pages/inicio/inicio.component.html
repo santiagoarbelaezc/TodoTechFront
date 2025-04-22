@@ -61,40 +61,6 @@
     </div>
   </div>
 
-
-
-  <section class="products-section" *ngIf="productos.length > 0; else sinProductos">
-  <div class="carousel-container">
-    
-    <!-- Botón anterior -->
-    <button id="prevBtnInicio" class="carousel-nav prev">‹</button>
-
-    <div class="carousel">
-      <div class="carousel-item" *ngFor="let producto of productos">
-        <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
-        <h3>{{ producto.nombre }}</h3>
-        <p>{{ producto.descripcion }}</p>
-        <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
-
-        <div class="carrito-container">
-          <button class="btn-carrito" (click)="agregarAlCarrito(producto)">
-            Agregar al carrito 🛒
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Botón siguiente -->
-    <button id="nextBtnInicio" class="carousel-nav next">›</button>
-
-  </div>
-</section>
-
-  
-  <ng-template #sinProductos>
-    <p>No hay productos disponibles.</p>
-  </ng-template>
-
   
   <section class="products-section" *ngIf="productosAsus.length > 0">
     <div class="carousel-container">
