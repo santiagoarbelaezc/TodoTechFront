@@ -67,7 +67,7 @@
   <div class="carousel-container">
     
     <!-- Botón anterior -->
-    <button id="prevBtn" class="carousel-nav prev">‹</button>
+    <button id="prevBtnInicio" class="carousel-nav prev">‹</button>
 
     <div class="carousel">
       <div class="carousel-item" *ngFor="let producto of productos">
@@ -85,7 +85,7 @@
     </div>
 
     <!-- Botón siguiente -->
-    <button id="nextBtn" class="carousel-nav next">›</button>
+    <button id="nextBtnInicio" class="carousel-nav next">›</button>
 
   </div>
 </section>
@@ -94,59 +94,86 @@
   <ng-template #sinProductos>
     <p>No hay productos disponibles.</p>
   </ng-template>
+
   
+  <section class="products-section" *ngIf="productosAsus.length > 0">
+    <div class="carousel-container">
+      <button id="prevBtnAsus" class="carousel-nav prev">‹</button>
+      <div class="carousel carouselAsus">
+        <div class="carousel-item" *ngFor="let producto of productosAsus">
+          <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
+          <h3>{{ producto.nombre }}</h3>
+          <p>{{ producto.descripcion }}</p>
+          <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
+          <div class="carrito-container">
+            <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+          </div>
+        </div>
+      </div>
+      <button id="nextBtnAsus" class="carousel-nav next">›</button>
+    </div>
+  </section>
   
+  <section class="products-section" *ngIf="productosIphone.length > 0">
     
+    <div class="carousel-container">
+      <button id="prevBtnIphone" class="carousel-nav prev">‹</button>
+      <div class="carousel carouselIphone">
+        <div class="carousel-item" *ngFor="let producto of productosIphone">
+          <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
+          <h3>{{ producto.nombre }}</h3>
+          <p>{{ producto.descripcion }}</p>
+          <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
+          <div class="carrito-container">
+            <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+          </div>
+        </div>
+      </div>
+      <button id="nextBtnIphone" class="carousel-nav next">›</button>
+    </div>
+  </section>
+  
+  <section class="products-section" *ngIf="productosSamsung.length > 0">
+    
+    <div class="carousel-container">
+      <button id="prevBtnSamsung" class="carousel-nav prev">‹</button>
+      <div class="carousel carouselSamsung">
+        <div class="carousel-item" *ngFor="let producto of productosSamsung">
+          <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
+          <h3>{{ producto.nombre }}</h3>
+          <p>{{ producto.descripcion }}</p>
+          <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
+          <div class="carrito-container">
+            <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+          </div>
+        </div>
+      </div>
+      <button id="nextBtnSamsung" class="carousel-nav next">›</button>
+    </div>
+  </section>
+  
+  <section class="products-section" *ngIf="productosHp.length > 0">
+    
+    <div class="carousel-container">
+      <button id="prevBtnHp" class="carousel-nav prev">‹</button>
+      <div class="carousel carouselHp">
+        <div class="carousel-item" *ngFor="let producto of productosHp">
+          <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
+          <h3>{{ producto.nombre }}</h3>
+          <p>{{ producto.descripcion }}</p>
+          <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
+          <div class="carrito-container">
+            <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+          </div>
+        </div>
+      </div>
+      <button id="nextBtnHp" class="carousel-nav next">›</button>
+    </div>
+  </section>
    
   <!--@for (usuario of usuarios; track usuario) {
     nombre del usuario: {{usuario.usuario}} -->
     
-    <section class="products-section">
-        <div class="carousel-container">
-            <button id="prevBtn" class="carousel-btn">❮</button>
-            <div class="carousel">
-                <div class="carousel-item">
-                    <img src="assets/laptop1.png" alt="Laptop 1">
-                    <h3>MacBook Air M2</h3>
-                    <p>Chip M2, 256GB SSD, 8GB RAM</p>
-                    <span class="price">$6.899.900</span>
-                </div>
-                <div class="carousel-item">
-                    <img src="assets/laptop2.png" alt="Laptop 2">
-                    <h3>Dell XPS 15</h3>
-                    <p>Intel i7 13th, 16GB RAM, 512GB SSD</p>
-                    <span class="price">$8.899.900</span>
-                </div>
-                <div class="carousel-item">
-                    <img src="assets/laptop3.png" alt="Laptop 3">
-                    <h3>Asus ROG Strix G16</h3>
-                    <p>RTX 4060, Intel i9, 32GB RAM</p>
-                    <span class="price">$9.499.900</span>
-                </div>
-                <div class="carousel-item">
-                    <img src="assets/laptop4.png" alt="Laptop 4">
-                    <h3>HP Spectre x360</h3>
-                    <p>Intel i7 12th, 16GB RAM, OLED</p>
-                    <span class="price">$7.799.900</span>
-                </div>
-                <div class="carousel-item">
-                    <img src="assets/laptop5.png" alt="Laptop 5">
-                    <h3>Lenovo ThinkPad X1</h3>
-                    <p>Intel i7, 16GB RAM, 1TB SSD</p>
-                    <span class="price">$8.299.900</span>
-                </div>
-                <div class="carousel-item">
-                    <img src="assets/laptop6.png" alt="Laptop 6">
-                    <h3>MSI Katana GF66</h3>
-                    <p>RTX 3050, Intel i5, 16GB RAM</p>
-                    <span class="price">$6.299.900</span>
-                </div>
-            </div>
-            <button id="nextBtn" class="carousel-btn">❯</button>
-        </div>
-    </section>
-
-
     <section class="products-section celulares-section">
         <div class="carousel-container">
             <button id="prevBtnCel" class="carousel-btn">❮</button>

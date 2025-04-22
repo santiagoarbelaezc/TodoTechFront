@@ -27,7 +27,7 @@ export class LoginComponent {
   ) {}
 
   validarCredenciales(usuario: string, password: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.apiUrl}/${usuario}/${password}`);
+    return this.http.get<boolean>(`${this.apiUrl}/login/${usuario}/${password}`);
   }
 
   onLogin() {

@@ -347,6 +347,8 @@ nav ul li a:hover {
 }
 
 
+
+
 /* Estilo de las imágenes */
 .carousel-item img {
     width: 100%;
@@ -439,7 +441,8 @@ nav ul li a:hover {
 }
 
 /* Botones del carrusel */
-#prevBtnCel, #nextBtnCel {
+#prevBtnCel, #nextBtnCel, #nextBtnInicio, #prevBtnInicio, #nextBtnAsus, #prevBtnAsus, #nextBtnIphone, 
+#prevBtnIphone, #nextBtnSamsung,#prevBtnSamsung, #nextBtnHp,#prevBtnHp{
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -454,15 +457,15 @@ nav ul li a:hover {
     transition: background 0.3s ease;
 }
 
-#prevBtnCel:hover, #nextBtnCel:hover {
+#prevBtnCel:hover, #nextBtnCel:hover, #prevBtn:hover, #nextBtn:hover{
     background: rgba(0, 0, 0, 0.9);
 }
 
-#prevBtnCel {
+#prevBtnCel, #prevBtnInicio, #prevBtnAsus, #prevBtnIphone, #prevBtnSamsung,#prevBtnHp{
     left: 10px;
 }
 
-#nextBtnCel {
+#nextBtnCel, #nextBtnInicio, #nextBtnAsus, #nextBtnIphone, #nextBtnSamsung, #nextBtnHp{
     right: 10px;
 }
 
@@ -809,3 +812,13 @@ footer {
     transform: scale(0.95);
   }
   
+
+  .marca-titulo {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    width: 100%;
+}
+

@@ -15,6 +15,11 @@ export class InicioComponent implements AfterViewInit {
 
   productos: ProductoDTO[] = [];
 
+  productosAsus: ProductoDTO[] = [];
+  productosIphone: ProductoDTO[] = [];
+  productosSamsung: ProductoDTO[] = [];
+  productosHp: ProductoDTO[] = [];
+
   mostrarCarrito = false;
   carritoVisible = false;
 
@@ -27,8 +32,14 @@ export class InicioComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.initCarousel('.carousel', '#prevBtn', '#nextBtn');
-    this.initCarousel('.carouselCelulares', '#prevBtnCel', '#nextBtnCel');
+
+    this.cargarProductosPorMarca('asus', productos => this.productosAsus = productos, '.carouselAsus', '#prevBtnAsus', '#nextBtnAsus');
+    this.cargarProductosPorMarca('iphone', productos => this.productosIphone = productos, '.carouselIphone', '#prevBtnIphone', '#nextBtnIphone');
+    this.cargarProductosPorMarca('galaxy', productos => this.productosSamsung = productos, '.carouselSamsung', '#prevBtnSamsung', '#nextBtnSamsung');
+    this.cargarProductosPorMarca('hp', productos => this.productosHp = productos, '.carouselHp', '#prevBtnHp', '#nextBtnHp');
+
+    this.initCarruselGeneral('.carousel', '#prevBtnInicio', '#nextBtnInicio');  // Carrusel general
+    this.initCarruselGeneral('.carouselCelulares', '#prevBtnCel', '#nextBtnCel');
 
     this.cargarProductos();
   }
@@ -45,6 +56,26 @@ export class InicioComponent implements AfterViewInit {
     });
   }
 
+
+  cargarProductosPorMarca(
+    marca: string,
+    asignarProductos: (productos: ProductoDTO[]) => void,
+    carousel: string,
+    prevBtn: string,
+    nextBtn: string
+  ): void {
+    this.productoService.obtenerProductosPorMarca(marca).subscribe({
+      next: (data) => {
+        asignarProductos(data);
+        setTimeout(() => this.initCarruselGeneral(carousel, prevBtn, nextBtn), 0);
+      },
+      error: (err) => console.error(`Error cargando productos de ${marca}:`, err)
+    });
+  }
+  
+
+
+  
   toggleCarrito(): void {
     this.carritoVisible = !this.carritoVisible;
   }
@@ -75,12 +106,15 @@ export class InicioComponent implements AfterViewInit {
     // Aquí puedes añadir lógica para guardar en un array de carrito o en un servicio compartido
   }
 
-  private initCarousel(carouselSelector: string, prevBtnSelector: string, nextBtnSelector: string): void {
+  private initCarruselGeneral(carouselSelector: string, prevBtnSelector: string, nextBtnSelector: string): void {
     const carousel = document.querySelector(carouselSelector) as HTMLElement;
     const prevBtn = document.querySelector(prevBtnSelector) as HTMLElement;
     const nextBtn = document.querySelector(nextBtnSelector) as HTMLElement;
 
-    if (!carousel || !prevBtn || !nextBtn) return;
+    if (!carousel || !prevBtn || !nextBtn) {
+      console.error(`Error al inicializar carrusel: elementos no encontrados. Selector: ${carouselSelector}`);
+      return;
+    }
 
     let index = 0;
     const items = carousel.querySelectorAll('.carousel-item');

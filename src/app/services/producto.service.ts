@@ -14,4 +14,10 @@ export class ProductoService {
   obtenerProductos(): Observable<ProductoDTO[]> {
     return this.http.get<ProductoDTO[]>(this.apiUrl);
   }
+
+  obtenerProductosPorMarca(marca: string): Observable<ProductoDTO[]> {
+    return this.http.get<ProductoDTO[]>(`${this.apiUrl}/marca/${marca}`);
+  }
+  
+  
 }
