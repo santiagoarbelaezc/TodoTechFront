@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UsuarioService } from '../../services/usuario.service';
+import { OrdenVentaService } from '../../services/orden-venta.service';
 import { Router } from '@angular/router';
+
 import { ClienteDTO } from '../../models/cliente.dto';
 import { UsuarioDTO } from '../../models/usuario.dto';
+import { CrearOrdenDTO } from '../../models/CrearOrden.dto';
+import { OrdenVentaDTO } from '../../models/ordenventa.dto';
 
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CrearOrdenDTO } from '../../models/CrearOrden.dto';
 
 @Component({
   selector: 'app-orden-venta',
@@ -26,11 +29,13 @@ export class OrdenVentaComponent implements OnInit {
     clave: ''
   };
 
-  private apiUrl = 'http://localhost:8080/api/ordenes/crear';
+  private crearOrdenUrl = 'http://localhost:8080/api/ordenes/crear';
+  private ultimaOrdenUrl = 'http://localhost:8080/api/ordenes/ultima'; // tu endpoint para recuperar la orden recién creada
 
   constructor(
     private http: HttpClient,
     private usuarioService: UsuarioService,
+    private ordenVentaService: OrdenVentaService,
     private router: Router
   ) {}
 
@@ -63,14 +68,30 @@ export class OrdenVentaComponent implements OnInit {
 
     const request: CrearOrdenDTO = {
       cliente: this.cliente,
-      vendedor: vendedor.usuario // solo el nombre de usuario
+      vendedor: vendedor.usuario
     };
 
-    this.http.post(this.apiUrl, request).subscribe({
-      next: (respuesta) => {
-        console.log('Orden creada con éxito:', respuesta);
-        alert('Orden creada correctamente');
-        this.router.navigate(['/inicio']); // Redirigir si deseas
+    // Paso 1: Crear la orden
+    this.http.post(this.crearOrdenUrl, request).subscribe({
+      next: () => {
+        console.log('Orden creada con éxito');
+
+        // Paso 2: Obtener la orden recién creada
+        this.http.get<OrdenVentaDTO>(this.ultimaOrdenUrl).subscribe({
+          next: (orden) => {
+            console.log('Orden recuperada:', orden);
+
+            // Paso 3: Guardarla en el servicio
+            this.ordenVentaService.setOrden(orden);
+
+            // Paso 4: Redirigir o continuar flujo
+            this.router.navigate(['/inicio']); // ejemplo: ruta a componente de detalles
+          },
+          error: (error) => {
+            console.error('Error al obtener la orden recién creada:', error);
+            alert('Error al obtener los datos de la orden');
+          }
+        });
       },
       error: (error) => {
         console.error('Error al crear la orden:', error);
