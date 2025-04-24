@@ -6,4 +6,5 @@ export interface DetalleOrdenDTO {
   producto: ProductoDTO;
   cantidad: number;
   subtotal: number;
+  ordenVenta: number;
 }

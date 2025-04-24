@@ -57,46 +57,37 @@ export class OrdenVentaComponent implements OnInit {
     };
     this.fechaHora = ahora.toLocaleDateString('es-ES', opciones);
   }
+// src/app/components/orden-venta/orden-venta.component.ts
+onSubmit(): void {
+  const vendedor: UsuarioDTO | null = this.usuarioService.getUsuario();
 
-  onSubmit(): void {
-    const vendedor: UsuarioDTO | null = this.usuarioService.getUsuario();
-
-    if (!vendedor || !vendedor.usuario) {
-      alert('Error: no se encontró el usuario autenticado.');
-      return;
-    }
-
-    const request: CrearOrdenDTO = {
-      cliente: this.cliente,
-      vendedor: vendedor.usuario
-    };
-
-    // Paso 1: Crear la orden
-    this.http.post(this.crearOrdenUrl, request).subscribe({
-      next: () => {
-        console.log('Orden creada con éxito');
-
-        // Paso 2: Obtener la orden recién creada
-        this.http.get<OrdenVentaDTO>(this.ultimaOrdenUrl).subscribe({
-          next: (orden) => {
-            console.log('Orden recuperada:', orden);
-
-            // Paso 3: Guardarla en el servicio
-            this.ordenVentaService.setOrden(orden);
-
-            // Paso 4: Redirigir o continuar flujo
-            this.router.navigate(['/inicio']); // ejemplo: ruta a componente de detalles
-          },
-          error: (error) => {
-            console.error('Error al obtener la orden recién creada:', error);
-            alert('Error al obtener los datos de la orden');
-          }
-        });
-      },
-      error: (error) => {
-        console.error('Error al crear la orden:', error);
-        alert('Error al crear la orden');
-      }
-    });
+  if (!vendedor || !vendedor.usuario) {
+    alert('Error: no se encontró el usuario autenticado.');
+    return;
   }
+
+  const request: CrearOrdenDTO = {
+    cliente: this.cliente,
+    vendedor: vendedor.usuario
+  };
+
+  this.http.post<OrdenVentaDTO>(this.crearOrdenUrl, request).subscribe({
+    next: (ordenCreada) => {
+      console.log('Orden creada:', ordenCreada);
+
+      // Guardar en el servicio
+      this.ordenVentaService.setOrden(ordenCreada);
+
+      // ✅ Guardar en localStorage
+      localStorage.setItem('ordenId', ordenCreada.id.toString());
+
+      // Redirigir
+      this.router.navigate(['/inicio']); // cambia la ruta si lo deseas
+    },
+    error: (error) => {
+      console.error('Error al crear la orden:', error);
+      alert('Error al crear la orden');
+    }
+  });
+}
 }

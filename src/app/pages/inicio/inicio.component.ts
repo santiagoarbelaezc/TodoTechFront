@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProductoService } from '../../services/producto.service';
 import { ProductoDTO } from '../../models/producto.dto';
+import { CarritoService } from '../../services/carrito.service';
+import { CarruselService } from '../../services/carrusel.service';
+import { DetalleOrdenService } from '../../services/detalle-orden.service';
+import { OrdenVentaService } from '../../services/orden-venta.service';
 
 @Component({
   selector: 'app-inicio',
@@ -13,8 +17,8 @@ import { ProductoDTO } from '../../models/producto.dto';
 })
 export class InicioComponent implements AfterViewInit {
 
+  carrito: { detalle: any, producto: ProductoDTO }[] = [];
   productos: ProductoDTO[] = [];
-
   productosAsus: ProductoDTO[] = [];
   productosIphone: ProductoDTO[] = [];
   productosSamsung: ProductoDTO[] = [];
@@ -23,7 +27,14 @@ export class InicioComponent implements AfterViewInit {
   mostrarCarrito = false;
   carritoVisible = false;
 
-  constructor(private productoService: ProductoService, private router: Router) {}
+  constructor(
+    private productoService: ProductoService,
+    private router: Router,
+    private carritoService: CarritoService,
+    private carruselService: CarruselService,
+    private detalleOrdenService: DetalleOrdenService,
+    private ordenVentaService: OrdenVentaService
+  ) {}
 
   @HostListener('window:scroll', [])
   onScroll(): void {
@@ -32,115 +43,80 @@ export class InicioComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.productoService.cargarProductosPorMarcaConCarrusel('asus', '.carouselAsus', '#prevBtnAsus', '#nextBtnAsus', this.carruselService)
+      .subscribe({ next: productos => this.productosAsus = productos });
 
-    this.cargarProductosPorMarca('asus', productos => this.productosAsus = productos, '.carouselAsus', '#prevBtnAsus', '#nextBtnAsus');
-    this.cargarProductosPorMarca('iphone', productos => this.productosIphone = productos, '.carouselIphone', '#prevBtnIphone', '#nextBtnIphone');
-    this.cargarProductosPorMarca('galaxy', productos => this.productosSamsung = productos, '.carouselSamsung', '#prevBtnSamsung', '#nextBtnSamsung');
-    this.cargarProductosPorMarca('hp', productos => this.productosHp = productos, '.carouselHp', '#prevBtnHp', '#nextBtnHp');
+    this.productoService.cargarProductosPorMarcaConCarrusel('iphone', '.carouselIphone', '#prevBtnIphone', '#nextBtnIphone', this.carruselService)
+      .subscribe({ next: productos => this.productosIphone = productos });
 
-    this.initCarruselGeneral('.carousel', '#prevBtnInicio', '#nextBtnInicio');  // Carrusel general
-    this.initCarruselGeneral('.carouselCelulares', '#prevBtnCel', '#nextBtnCel');
+    this.productoService.cargarProductosPorMarcaConCarrusel('galaxy', '.carouselSamsung', '#prevBtnSamsung', '#nextBtnSamsung', this.carruselService)
+      .subscribe({ next: productos => this.productosSamsung = productos });
 
-    this.cargarProductos();
+    this.productoService.cargarProductosPorMarcaConCarrusel('hp', '.carouselHp', '#prevBtnHp', '#nextBtnHp', this.carruselService)
+      .subscribe({ next: productos => this.productosHp = productos });
+
+    this.carruselService.initCarruselGeneral('.carousel', '#prevBtnInicio', '#nextBtnInicio');
+
+    this.productoService.cargarProductosGenerales().subscribe({
+      next: productos => this.productos = productos
+    });
+
+    let ordenId = this.ordenVentaService.getOrdenIdDesdeLocalStorage();
+
+    if (!ordenId) {
+      this.ordenVentaService.crearOrdenTemporal().subscribe({
+        next: nuevaOrden => {
+          ordenId = nuevaOrden.id;
+          this.ordenVentaService.setOrdenIdEnLocalStorage(ordenId);
+          this.cargarDetallesCarrito(ordenId);
+        },
+        error: err => console.error('Error al crear orden temporal:', err)
+      });
+    } else {
+      this.cargarDetallesCarrito(ordenId);
+    }
   }
 
-  cargarProductos(): void {
-    this.productoService.obtenerProductos().subscribe({
-      next: (data) => {
-        this.productos = data;
-        console.log('Productos cargados:', this.productos);
+  cargarDetallesCarrito(ordenId: number): void {
+    this.carrito = [];
+
+    this.detalleOrdenService.obtenerCarritoConProductos(ordenId).subscribe({
+      next: carritoCompleto => {
+        this.carrito = carritoCompleto;
+        console.log('Carrito cargado:', this.carrito);
       },
-      error: (err) => {
-        console.error('Error al cargar productos:', err);
-      }
+      error: err => console.error('Error al cargar el carrito:', err)
     });
   }
 
-
-  cargarProductosPorMarca(
-    marca: string,
-    asignarProductos: (productos: ProductoDTO[]) => void,
-    carousel: string,
-    prevBtn: string,
-    nextBtn: string
-  ): void {
-    this.productoService.obtenerProductosPorMarca(marca).subscribe({
-      next: (data) => {
-        asignarProductos(data);
-        setTimeout(() => this.initCarruselGeneral(carousel, prevBtn, nextBtn), 0);
-      },
-      error: (err) => console.error(`Error cargando productos de ${marca}:`, err)
-    });
-  }
-  
-
-
-  
   toggleCarrito(): void {
     this.carritoVisible = !this.carritoVisible;
   }
 
-  irAInicio(): void {
-    this.router.navigate(['/inicio']);
-  }
+  irAInicio(): void { this.router.navigate(['/inicio']); }
+  irAPhone(): void { this.router.navigate(['/phone']); }
+  irAGaming(): void { this.router.navigate(['/gaming']); }
+  irAAccesorios(): void { this.router.navigate(['/accesorios']); }
+  irALaptops(): void { this.router.navigate(['/laptops']); }
 
-  irAPhone(): void {
-    this.router.navigate(['/phone']);
-  }
-
-  irAGaming(): void {
-    this.router.navigate(['/gaming']);
-  }
-
-  irAAccesorios(): void {
-    this.router.navigate(['/accesorios']);
-  }
-
-  irALaptops(): void {
-    this.router.navigate(['/laptops']);
-  }
-
-  // 🛒 Función para agregar productos al carrito
   agregarAlCarrito(producto: ProductoDTO): void {
-    console.log('Producto agregado al carrito:', producto);
-    // Aquí puedes añadir lógica para guardar en un array de carrito o en un servicio compartido
-  }
+    let ordenId = this.ordenVentaService.getOrdenIdDesdeLocalStorage();
 
-  private initCarruselGeneral(carouselSelector: string, prevBtnSelector: string, nextBtnSelector: string): void {
-    const carousel = document.querySelector(carouselSelector) as HTMLElement;
-    const prevBtn = document.querySelector(prevBtnSelector) as HTMLElement;
-    const nextBtn = document.querySelector(nextBtnSelector) as HTMLElement;
-
-    if (!carousel || !prevBtn || !nextBtn) {
-      console.error(`Error al inicializar carrusel: elementos no encontrados. Selector: ${carouselSelector}`);
-      return;
+    if (!ordenId) {
+      console.log('No hay orden activa, redirigiendo a la orden 1');
+      ordenId = 1;
+      this.ordenVentaService.setOrdenIdEnLocalStorage(ordenId);
+      this.router.navigate(['/orden-venta', ordenId]);
     }
 
-    let index = 0;
-    const items = carousel.querySelectorAll('.carousel-item');
-    const totalItems = items.length;
-    const visibleItems = 3;
-    const itemWidth = items[0].clientWidth + 20;
-
-    function updateCarousel() {
-      const offset = -index * itemWidth;
-      carousel.style.transform = `translateX(${offset}px)`; 
-    }
-
-    nextBtn.addEventListener('click', () => {
-      if (index < totalItems - visibleItems) {
-        index++;
-        updateCarousel();
+    this.carritoService.agregarAlCarrito(producto).subscribe({
+      next: () => {
+        console.log('Producto agregado correctamente');
+        this.cargarDetallesCarrito(ordenId); // Opcional: recargar el carrito
+      },
+      error: (err) => {
+        console.error('Error al agregar al carrito:', err);
       }
     });
-
-    prevBtn.addEventListener('click', () => {
-      if (index > 0) {
-        index--;
-        updateCarousel();
-      }
-    });
-
-    updateCarousel();
   }
 }
