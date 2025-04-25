@@ -7,6 +7,8 @@ import { GamingComponent } from './pages/gaming/gaming.component';
 import { LaptopsComponent } from './pages/laptops/laptops.component';
 import { AccesoriosComponent } from './pages/accesorios/accesorios.component';
 import { OrdenVentaComponent } from './pages/orden-venta/orden-venta.component';
+import { CajaComponent } from './pages/caja/caja.component';
+import { DespachoComponent } from './pages/despacho/despacho.component';
 
 export const routes: Routes = [
    { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redirigir a login al inicio
@@ -18,6 +20,9 @@ export const routes: Routes = [
    { path: 'laptops', component: LaptopsComponent },
    { path: 'accesorios', component: AccesoriosComponent },
    { path: 'ordenVenta', component: OrdenVentaComponent },
+   { path: 'caja', component: CajaComponent },
+   { path: 'despacho', component: DespachoComponent },
+   
 
    { path: '**', redirectTo: 'login', pathMatch: 'full' } // Rutas no encontradas -> login
 ];
