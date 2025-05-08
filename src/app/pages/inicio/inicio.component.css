@@ -692,7 +692,7 @@ footer {
     position: fixed;
     top: 0;
     right: -300px; /* Oculto por defecto */
-    width: 280px;
+    width: 300px;
     height: 100vh;
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
@@ -846,4 +846,50 @@ footer {
     color: #333;
     width: 100%;
 }
-
+/* Contenedor para los botones de cantidad */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  
+  /* Botones + y - */
+  .quantity-btn {
+    background: linear-gradient(135deg, #111, #333);
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 24px;
+    text-align: center;
+  }
+  
+  .quantity-btn:hover {
+    background: linear-gradient(135deg, #222, #444);
+    transform: scale(1.05);
+  }
+  
+  /* Botón de eliminar */
+  .remove-btn {
+    background: linear-gradient(135deg, #ff003c, #c2002f);
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 4px rgba(255, 0, 60, 0.3);
+  }
+  
+  .remove-btn:hover {
+    background: linear-gradient(135deg, #ff1a52, #d1003d);
+    transform: scale(1.05);
+  }
+  

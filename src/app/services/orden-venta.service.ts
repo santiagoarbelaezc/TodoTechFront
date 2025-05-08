@@ -21,6 +21,11 @@ export class OrdenVentaService {
     return this.ordenActual;
   }
 
+  obtenerOrdenPorId(id: number): Observable<OrdenVentaDTO> {
+    return this.http.get<OrdenVentaDTO>(`${this.apiUrl}/${id}`);
+  }
+  
+
   limpiarOrden(): void {
     this.ordenActual = null;
   }

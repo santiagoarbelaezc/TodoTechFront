@@ -1,3 +1,4 @@
+// src/app/components/orden-venta/orden-venta.component.ts
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UsuarioService } from '../../services/usuario.service';
@@ -30,7 +31,6 @@ export class OrdenVentaComponent implements OnInit {
   };
 
   private crearOrdenUrl = 'http://localhost:8080/api/ordenes/crear';
-  private ultimaOrdenUrl = 'http://localhost:8080/api/ordenes/ultima'; // tu endpoint para recuperar la orden recién creada
 
   constructor(
     private http: HttpClient,
@@ -57,37 +57,35 @@ export class OrdenVentaComponent implements OnInit {
     };
     this.fechaHora = ahora.toLocaleDateString('es-ES', opciones);
   }
-// src/app/components/orden-venta/orden-venta.component.ts
-onSubmit(): void {
-  const vendedor: UsuarioDTO | null = this.usuarioService.getUsuario();
 
-  if (!vendedor || !vendedor.usuario) {
-    alert('Error: no se encontró el usuario autenticado.');
-    return;
-  }
+  onSubmit(): void {
+    const vendedor: UsuarioDTO | null = this.usuarioService.getUsuario();
 
-  const request: CrearOrdenDTO = {
-    cliente: this.cliente,
-    vendedor: vendedor.usuario
-  };
-
-  this.http.post<OrdenVentaDTO>(this.crearOrdenUrl, request).subscribe({
-    next: (ordenCreada) => {
-      console.log('Orden creada:', ordenCreada);
-
-      // Guardar en el servicio
-      this.ordenVentaService.setOrden(ordenCreada);
-
-      // ✅ Guardar en localStorage
-      localStorage.setItem('ordenId', ordenCreada.id.toString());
-
-      // Redirigir
-      this.router.navigate(['/inicio']); // cambia la ruta si lo deseas
-    },
-    error: (error) => {
-      console.error('Error al crear la orden:', error);
-      alert('Error al crear la orden');
+    if (!vendedor || !vendedor.usuario) {
+      alert('Error: no se encontró el usuario autenticado.');
+      return;
     }
-  });
-}
+
+    const request: CrearOrdenDTO = {
+      cliente: this.cliente,
+      vendedor: vendedor.usuario
+    };
+
+    this.http.post<OrdenVentaDTO>(this.crearOrdenUrl, request).subscribe({
+      next: (ordenCreada) => {
+        console.log('Orden creada:', ordenCreada);
+
+        // Guardar la orden en el servicio y en localStorage
+        this.ordenVentaService.setOrden(ordenCreada);
+        this.ordenVentaService.setOrdenIdEnLocalStorage(ordenCreada.id);
+
+        // Redirigir
+        this.router.navigate(['/inicio']);
+      },
+      error: (error) => {
+        console.error('Error al crear la orden:', error);
+        alert('Error al crear la orden');
+      }
+    });
+  }
 }

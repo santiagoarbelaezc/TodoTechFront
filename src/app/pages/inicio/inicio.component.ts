@@ -17,7 +17,8 @@ import { OrdenVentaService } from '../../services/orden-venta.service';
 })
 export class InicioComponent implements AfterViewInit {
 
-  carrito: { detalle: any, producto: ProductoDTO }[] = [];
+  carrito: { detalle: any, nombreProducto: string }[] = [];
+
   productos: ProductoDTO[] = [];
   productosAsus: ProductoDTO[] = [];
   productosIphone: ProductoDTO[] = [];
@@ -43,51 +44,147 @@ export class InicioComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.productoService.cargarProductosPorMarcaConCarrusel('asus', '.carouselAsus', '#prevBtnAsus', '#nextBtnAsus', this.carruselService)
-      .subscribe({ next: productos => this.productosAsus = productos });
-
-    this.productoService.cargarProductosPorMarcaConCarrusel('iphone', '.carouselIphone', '#prevBtnIphone', '#nextBtnIphone', this.carruselService)
-      .subscribe({ next: productos => this.productosIphone = productos });
-
-    this.productoService.cargarProductosPorMarcaConCarrusel('galaxy', '.carouselSamsung', '#prevBtnSamsung', '#nextBtnSamsung', this.carruselService)
-      .subscribe({ next: productos => this.productosSamsung = productos });
-
-    this.productoService.cargarProductosPorMarcaConCarrusel('hp', '.carouselHp', '#prevBtnHp', '#nextBtnHp', this.carruselService)
-      .subscribe({ next: productos => this.productosHp = productos });
-
-    this.carruselService.initCarruselGeneral('.carousel', '#prevBtnInicio', '#nextBtnInicio');
-
+    this.inicializarCarruseles();
     this.productoService.cargarProductosGenerales().subscribe({
       next: productos => this.productos = productos
     });
-
-    let ordenId = this.ordenVentaService.getOrdenIdDesdeLocalStorage();
-
-    if (!ordenId) {
+  
+    const ordenEnMemoria = this.ordenVentaService.getOrden();
+    const ordenIdLocal = this.ordenVentaService.getOrdenIdDesdeLocalStorage();
+  
+    if (ordenEnMemoria) {
+      this.cargarDetallesCarrito(ordenEnMemoria.id);
+    } else if (ordenIdLocal) {
+      this.ordenVentaService.obtenerOrdenPorId(ordenIdLocal).subscribe({
+        next: ordenRecuperada => {
+          this.ordenVentaService.setOrden(ordenRecuperada);
+          this.cargarDetallesCarrito(ordenRecuperada.id);
+        },
+        error: err => console.error('Error al obtener la orden por ID:', err)
+      });
+    } else {
       this.ordenVentaService.crearOrdenTemporal().subscribe({
         next: nuevaOrden => {
-          ordenId = nuevaOrden.id;
-          this.ordenVentaService.setOrdenIdEnLocalStorage(ordenId);
-          this.cargarDetallesCarrito(ordenId);
+          this.ordenVentaService.setOrden(nuevaOrden);
+          this.ordenVentaService.setOrdenIdEnLocalStorage(nuevaOrden.id);
+          this.cargarDetallesCarrito(nuevaOrden.id);
         },
         error: err => console.error('Error al crear orden temporal:', err)
       });
-    } else {
-      this.cargarDetallesCarrito(ordenId);
     }
+
+     // Suscribirse al carrito observable
+     this.carritoService.carrito$.subscribe(carrito => {
+      this.carrito = carrito;
+      console.log('Carrito actualizado:', this.carrito);
+    });
+  }    
+  
+  private inicializarCarruseles(): void {
+    this.productoService.cargarProductosPorMarcaConCarrusel('asus', '.carouselAsus', '#prevBtnAsus', '#nextBtnAsus', this.carruselService)
+      .subscribe({ next: productos => this.productosAsus = productos });
+  
+    this.productoService.cargarProductosPorMarcaConCarrusel('iphone', '.carouselIphone', '#prevBtnIphone', '#nextBtnIphone', this.carruselService)
+      .subscribe({ next: productos => this.productosIphone = productos });
+  
+    this.productoService.cargarProductosPorMarcaConCarrusel('galaxy', '.carouselSamsung', '#prevBtnSamsung', '#nextBtnSamsung', this.carruselService)
+      .subscribe({ next: productos => this.productosSamsung = productos });
+  
+    this.productoService.cargarProductosPorMarcaConCarrusel('hp', '.carouselHp', '#prevBtnHp', '#nextBtnHp', this.carruselService)
+      .subscribe({ next: productos => this.productosHp = productos });
+  
+    this.carruselService.initCarruselGeneral('.carousel', '#prevBtnInicio', '#nextBtnInicio');
   }
-
+  
   cargarDetallesCarrito(ordenId: number): void {
-    this.carrito = [];
-
     this.detalleOrdenService.obtenerCarritoConProductos(ordenId).subscribe({
       next: carritoCompleto => {
         this.carrito = carritoCompleto;
-        console.log('Carrito cargado:', this.carrito);
+        console.log('Carrito cargado correctamente:', this.carrito);
       },
       error: err => console.error('Error al cargar el carrito:', err)
     });
   }
+  
+  agregarAlCarrito(producto: ProductoDTO): void {
+    const orden = this.ordenVentaService.getOrden();
+    const ordenId = orden?.id;
+  
+    if (!orden || !ordenId) {
+      console.error('No hay orden activa para agregar al carrito.');
+      return;
+    }
+  
+    this.carritoService.agregarAlCarrito(producto).subscribe({
+      next: (ok) => {
+        if (ok) {
+          this.cargarDetallesCarrito(ordenId);
+        }
+      },
+      error: err => console.error('Error al agregar al carrito:', err)
+    });
+  }  
+
+
+  actualizarCarrito(): void {
+    const orden = this.ordenVentaService.getOrden();
+    const ordenId = orden?.id;
+
+    if (ordenId) {
+      this.cargarDetallesCarrito(ordenId);
+    } else {
+      console.error('No hay una orden activa para actualizar el carrito');
+    }
+  }
+
+  eliminarProducto(index: number): void {
+    const item = this.carrito[index];
+    const ordenId = this.ordenVentaService.getOrden()?.id;
+  
+    const productoId = item?.detalle?.producto?.id;
+
+    if (!ordenId || !productoId) {
+      console.error('No se puede eliminar: faltan datos.');
+      return;
+    }
+
+    const request = {
+      productoId: productoId,
+      ordenVentaId: ordenId
+    };
+
+    this.detalleOrdenService.eliminarDetalle(request).subscribe({
+      next: () => this.cargarDetallesCarrito(ordenId),
+      error: err => console.error('Error al eliminar el producto del carrito:', err)
+    });
+  }
+
+
+  ajustarCantidad(index: number, cambio: number): void {
+    const item = this.carrito[index];
+    const ordenId = this.ordenVentaService.getOrden()?.id;
+    const productoId = item?.detalle?.producto?.id;
+
+    if (!ordenId || !productoId) {
+      console.error('Faltan datos para ajustar cantidad.');
+      return;
+    }
+
+    const request = {
+      productoId: productoId,
+      ordenVentaId: ordenId
+    };
+  
+    const llamada = cambio > 0
+      ? this.detalleOrdenService.aumentarCantidad(request)
+      : this.detalleOrdenService.disminuirCantidad(request);
+  
+    llamada.subscribe({
+      next: () => this.cargarDetallesCarrito(ordenId),
+      error: err => console.error('Error al ajustar cantidad:', err)
+    });
+  }
+  
 
   toggleCarrito(): void {
     this.carritoVisible = !this.carritoVisible;
@@ -99,24 +196,5 @@ export class InicioComponent implements AfterViewInit {
   irAAccesorios(): void { this.router.navigate(['/accesorios']); }
   irALaptops(): void { this.router.navigate(['/laptops']); }
 
-  agregarAlCarrito(producto: ProductoDTO): void {
-    let ordenId = this.ordenVentaService.getOrdenIdDesdeLocalStorage();
-
-    if (!ordenId) {
-      console.log('No hay orden activa, redirigiendo a la orden 1');
-      ordenId = 1;
-      this.ordenVentaService.setOrdenIdEnLocalStorage(ordenId);
-      this.router.navigate(['/orden-venta', ordenId]);
-    }
-
-    this.carritoService.agregarAlCarrito(producto).subscribe({
-      next: () => {
-        console.log('Producto agregado correctamente');
-        this.cargarDetallesCarrito(ordenId); // Opcional: recargar el carrito
-      },
-      error: (err) => {
-        console.error('Error al agregar al carrito:', err);
-      }
-    });
-  }
+  
 }

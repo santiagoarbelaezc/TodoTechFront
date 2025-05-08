@@ -56,29 +56,32 @@
     </div>
 
     <div class="cart-body">
-      <div *ngIf="carrito.length > 0; else carritoVacio">
-
-        <!-- Encabezados -->
-        <div class="cart-row cart-header-row">
-          <span class="cart-col">Código</span>
-          <span class="cart-col">Producto</span>
-          <span class="cart-col">Cantidad</span>
-          <span class="cart-col">Subtotal</span>
-        </div>
-
-        <!-- Detalles del carrito -->
-        <div *ngFor="let item of carrito" class="cart-row">
-          <span class="cart-col">{{ item.producto.codigo }}</span>
-          <span class="cart-col">{{ item.producto.nombre }}</span>
-          <span class="cart-col">{{ item.detalle.cantidad }}</span>
-          <span class="cart-col">${{ item.detalle.subtotal }}</span>
-        </div>
-
+      <!-- Encabezados de la tabla -->
+      <div class="cart-row cart-header-row">
+        <span class="cart-col">Producto</span>
+        <span class="cart-col">Cantidad</span>
+        <span class="cart-col">Subtotal</span>
+        <span class="cart-col">Acciones</span> <!-- Nueva columna para acciones -->
       </div>
 
-      <ng-template #carritoVacio>
-        <p class="empty-text">Tu carrito está vacío</p>
-      </ng-template>
+      <!-- Detalles del carrito -->
+      <div *ngFor="let item of carrito; let i = index" class="cart-row">
+        <span class="cart-col">{{ item.nombreProducto }}</span>
+        <span class="cart-col">
+          <div class="quantity-controls">
+            <button class="quantity-btn" (click)="ajustarCantidad(i, -1)">−</button>
+            <span>{{ item.detalle.cantidad }}</span>
+            <button class="quantity-btn" (click)="ajustarCantidad(i, 1)">+</button>
+          </div>
+        </span>
+        <span class="cart-col">${{ item.detalle.subtotal | number:'1.2-2' }}</span>
+        <span class="cart-col">
+          <button class="remove-btn" (click)="eliminarProducto(i)">🗑️</button>
+        </span>
+      </div>
+
+      <!-- Botón para actualizar el carrito -->
+      <button class="update-cart-btn" (click)="actualizarCarrito()">Actualizar Carrito</button>
     </div>
   </div>
 </div>

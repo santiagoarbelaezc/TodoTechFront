@@ -24,18 +24,33 @@ export class DetalleOrdenService {
   obtenerDetallesPorOrden(ordenId: number): Observable<DetalleOrdenDTO[]> {
     return this.http.get<DetalleOrdenDTO[]>(`${this.apiUrl}/orden/${ordenId}`);
   }
-  
 
-  obtenerCarritoConProductos(ordenId: number): Observable<{ detalle: DetalleOrdenDTO, producto: ProductoDTO }[]> {
-    return this.obtenerDetallesPorOrden(ordenId).pipe(
-      map(detalles =>
-        detalles
-          .filter(detalle => detalle.producto != null)
-          .map(detalle => ({
-            detalle: detalle,
-            producto: detalle.producto
-          }))
-      )
+  aumentarCantidad(request: { productoId: number, ordenVentaId: number }): Observable<any> {
+    return this.http.put(`${this.apiUrl}/aumentar-cantidad`, request);
+  }
+  
+  disminuirCantidad(request: { productoId: number, ordenVentaId: number }): Observable<any> {
+    return this.http.put(`${this.apiUrl}/disminuir-cantidad`, request);
+  }
+  
+  eliminarDetalle(request: { productoId: number, ordenVentaId: number }): Observable<any> {
+    return this.http.request('delete', `${this.apiUrl}/eliminar`, { body: request, responseType: 'text' }).pipe(
+      map(response => JSON.parse(response)) // Analizar la respuesta como JSON
     );
   }
+  
+  
+  
+  
+  
+  obtenerCarritoConProductos(ordenId: number): Observable<{ detalle: DetalleOrdenDTO, nombreProducto: string }[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/orden/${ordenId}`).pipe(
+      map(detalles => detalles.map(d => ({
+        detalle: d,
+        nombreProducto: d.producto?.nombre || 'Desconocido'
+      })))
+    );
+  }
+  
+  
 }
