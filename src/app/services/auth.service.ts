@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { UsuarioDTO } from '../models/usuario.dto';
 import { Observable, of, catchError, tap } from 'rxjs';
+import { UsuarioService } from './usuario.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,20 +33,26 @@ export class AuthService {
   redirigirPorRol(rol: UsuarioDTO['tipoUsuario']): void {
     switch (rol) {
       case 'ADMINISTRADOR':
-        this.router.navigate(['/admin']);
-        break;
+      this.router.navigate(['/admin']);
+      break;
       case 'VENDEDOR':
-        this.router.navigate(['/ordenVenta']);
-        break;
+      this.router.navigate(['/ordenVenta']);
+      break;
       case 'CAJERO':
-        this.router.navigate(['/caja']);
-        break;
+      this.router.navigate(['/caja']);
+      break;
       case 'DESPACHADOR':
-        this.router.navigate(['/despacho']);
-        break;
+      this.router.navigate(['/despacho']);
+      break;
       default:
-        this.router.navigate(['/']);
-        break;
+      this.router.navigate(['/']);
+      break;
+    }
+
+    // Setear el usuario actual en UsuarioService
+    if (this.usuarioActual) {
+      const usuarioService = new UsuarioService(this.http); // Crear instancia de UsuarioService
+      usuarioService.setUsuario(this.usuarioActual); // Setear el usuario actual
     }
   }
 

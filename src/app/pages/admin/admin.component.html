@@ -1,48 +1,268 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - TodoTech</title>
-    <link rel="stylesheet" href="admin.component.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - TodoTech</title>
+  <link rel="stylesheet" href="admin.component.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 <body>
 
-    <!-- Capa de desenfoque -->
-    <div class="overlay"></div>
+<div class="overlay"></div>
 
-    <!-- Menú de navegación -->
-    <header>
-        <nav>
-            <ul class="menu">
-                <li><a href="#">TodoTechAdmin</a></li>
-                <li><a href="#">Usuarios</a></li>
-                <li><a href="#">Productos</a></li>
-                <li><a href="#">Órdenes de Venta</a></li>
-                <li><a href="#">Reportes</a></li>
-                <li><a href="#">Inventario</a></li>
-                <li><a href="#">Configuración del Sistema</a></li>
-                <li><a href="#" class="logout">Salir</a></li>
-            </ul>
-        </nav>
-    </header>
+<header>
+  <nav>
+    <ul class="menu">
+      <li><span class="logo">TodoTechAdmin</span></li>
+      <li><a href="#" (click)="mostrarSeccion('usuarios'); $event.preventDefault()">Usuarios</a></li>
+      <li><a href="#" (click)="mostrarSeccion('productos'); $event.preventDefault()">Productos</a></li>
+      <li><a href="#" (click)="mostrarSeccion('ordenes'); $event.preventDefault()">Órdenes de Venta</a></li>
+      <li><a href="#" (click)="mostrarSeccion('reportes'); $event.preventDefault()">Reportes</a></li>
+      <li><a href="#" (click)="mostrarSeccion('inventario'); $event.preventDefault()">Inventario</a></li>
+      <li><a href="#" (click)="mostrarSeccion('configuracion'); $event.preventDefault()">Configuración</a></li>
+      <li><a href="#" class="logout" (click)="$event.preventDefault()">Salir</a></li>
+    </ul>
+  </nav>
+</header>
 
-    <!-- Contenido principal -->
-    <main>
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <h2>Generar Reporte</h2>
-            <button class="btn">Generar Reporte</button>
-            <button class="btn">Generar PDF</button>
-        </aside>
-        
-        <!-- Caja de bienvenida -->
-        <section class="welcome-box">
-            <h1>Bienvenido al Panel de Administración</h1>
-            <p>Gestiona usuarios, productos, reportes e inventario.</p>
-        </section>
-    </main>
+<main>
+  <aside class="sidebar">
+    <h2>Panel de Control</h2>
+    <button class="btn">Generar Reporte</button>
+    <button class="btn">Generar PDF</button>
+  </aside>
+
+  <section class="content">
+    <div *ngIf="seccionActiva === 'bienvenida'">
+      <h1>Bienvenido al Panel de Administración</h1>
+      <p>Gestiona usuarios, productos, reportes e inventario.</p>
+    </div>
+
+    <div *ngIf="seccionActiva === 'usuarios'">
+      <h2>Crear Usuario</h2>
+      <form #formUsuario="ngForm" (ngSubmit)="guardarUsuario()">
+        <input
+          type="text"
+          name="usuario"
+          [(ngModel)]="usuario.usuario"
+          placeholder="Usuario"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="usuario.password"
+          placeholder="Contraseña"
+          required
+        />
+        <input
+          type="text"
+          name="nombre"
+          [(ngModel)]="persona.nombre"
+          placeholder="Nombre completo"
+          required
+        />
+        <input
+          type="email"
+          name="correo"
+          [(ngModel)]="persona.correo"
+          placeholder="Correo electrónico"
+          required
+        />
+        <input
+          type="tel"
+          name="telefono"
+          [(ngModel)]="persona.telefono"
+          placeholder="Teléfono"
+          required
+        />
+    
+        <select
+          name="tipoUsuario"
+          [(ngModel)]="usuario.tipoUsuario"
+          class="select-usuario"
+          required
+        >
+          <option value="" disabled selected>Tipo de Usuario</option>
+          <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+          <option value="VENDEDOR">VENDEDOR</option>
+          <option value="CAJERO">CAJERO</option>
+          <option value="DESPACHADOR">DESPACHADOR</option>
+        </select>
+    
+        <button type="submit">Guardar</button>
+      </form>
+    
+      <table class="tabla-usuarios">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Contraseña</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuarios">
+            <td>{{ u.usuario }}</td>
+            <td>{{ u.usuario }}</td>
+            <td>{{ u.password }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+
+    <div *ngIf="seccionActiva === 'productos'">
+      <h2>Crear Producto</h2>
+      <form (ngSubmit)="guardarProducto()" #formProducto="ngForm">
+        <input type="text" placeholder="Nombre" [(ngModel)]="nuevoProducto.nombre" name="nombre" required />
+        <input type="text" placeholder="Código" [(ngModel)]="nuevoProducto.codigo" name="codigo" required />
+        <textarea placeholder="Descripción" [(ngModel)]="nuevoProducto.descripcion" name="descripcion"></textarea>
+        <input type="text" placeholder="Categoría" [(ngModel)]="nuevoProducto.categoria" name="categoria" required />
+        <input type="number" placeholder="Precio" step="0.01" [(ngModel)]="nuevoProducto.precio" name="precio" required />
+        <input type="number" placeholder="Stock" [(ngModel)]="nuevoProducto.stock" name="stock" required />
+        <input type="text" placeholder="URL de Imagen" [(ngModel)]="nuevoProducto.imagen" name="imagen" />
+        <button type="submit">Guardar</button>
+      </form>
+
+      <div class="tabla-productos-scroll">
+        <table class="tabla-productos">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Código</th>
+             
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let producto of productos">
+              <td>{{ producto.id }}</td>
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.codigo }}</td>
+              
+              <td>{{ producto.categoria }}</td>
+              <td>{{ producto.precio }}</td>
+              <td>{{ producto.stock }}</td>
+              <td>
+                <div class="acciones-producto">
+                  <div class="botones-superiores">
+                    <button (click)="editarProducto(producto)">Editar</button>
+                    <button (click)="eliminarProducto(producto)">Eliminar</button>
+                  </div>
+                  <div class="boton-inferior">
+                    <button (click)="verDetallesProducto(producto)">Ver Detalles</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+      
+
+    <div *ngIf="seccionActiva === 'ordenes'">
+      <h2>Órdenes de Venta</h2>
+      <input type="text" placeholder="Buscar orden..." />
+      <table class="tabla-ordenes">
+        <thead>
+          <tr>
+            <th>N° Orden</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Lista de órdenes -->
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="seccionActiva === 'reportes'" class="reportes-container">
+      <h2>Reportes y Estadísticas</h2>
+      <button>Generar Reporte General</button>
+      <button>Ver Estadísticas</button>
+      <table class="tabla-reportes">
+        <thead>
+          <tr>
+            <th>Reporte</th>
+            <th>Fecha</th>
+            <th>Generado Por</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Datos de reportes -->
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="seccionActiva === 'inventario'">
+      <h2>Inventario</h2>
+      <input type="text" placeholder="Buscar producto..." />
+      <table class="tabla-inventario">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Código</th>
+            <th>Stock</th>
+            <th>Categoría</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Lista de productos -->
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="seccionActiva === 'configuracion'" class="configuracion-container">
+      <h2>Configuración del Sistema</h2>
+      <form>
+        <label>Nombre de la Tienda</label>
+        <input type="text" placeholder="Ej. TodoTech Shop" required />
+        <label>Logo (URL)</label>
+        <input type="text" placeholder="https://example.com/logo.png" />
+        <label>Tasa de Impuesto (IVA %)</label>
+        <input type="number" placeholder="Ej. 19" step="0.01" />
+        <label>Moneda por Defecto</label>
+        <select required>
+          <option value="COP">Peso Colombiano (COP)</option>
+          <option value="USD">Dólar (USD)</option>
+          <option value="EUR">Euro (EUR)</option>
+        </select>
+        <label>Mantenimiento</label>
+        <select>
+          <option value="false">Desactivado</option>
+          <option value="true">Activado</option>
+        </select>
+        <button type="submit">Guardar Cambios</button>
+      </form>
+
+      <table class="tabla-configuracion">
+        <thead>
+          <tr>
+            <th>Parámetro</th>
+            <th>Valor Actual</th>
+            <th>Última Modificación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Configuración registrada -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
 
 </body>
 </html>

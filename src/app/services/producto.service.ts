@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ProductoDTO } from '../models/producto.dto';
 import { CarruselService } from './carrusel.service';
+import { CrearProductoDTO } from '../models/crearProducto.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +24,19 @@ export class ProductoService {
   obtenerProductoPorId(id: number): Observable<ProductoDTO> {
     return this.http.get<ProductoDTO>(`${this.apiUrl}/productos/${id}`);
   }
-  
-  // producto.service.ts
+
+  eliminarProducto(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 
   cargarProductosGenerales(): Observable<ProductoDTO[]> {
     return this.obtenerProductos();
   }
+
+  crearProducto(producto: CrearProductoDTO): Observable<CrearProductoDTO> {
+    return this.http.post<CrearProductoDTO>(`${this.apiUrl}/crear`, producto);
+  }
+  
 
   cargarProductosPorMarcaConCarrusel(
     marca: string,
@@ -48,5 +56,4 @@ export class ProductoService {
       });
     });
   }
-
 }
