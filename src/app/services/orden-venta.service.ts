@@ -46,4 +46,9 @@ export class OrdenVentaService {
   crearOrdenTemporal(): Observable<OrdenVentaDTO> {
     return this.http.post<OrdenVentaDTO>(`${this.apiUrl}/crear-temporal`, {});
   }
+
+  obtenerOrdenes(): Observable<OrdenVentaDTO[]> {
+    return this.http.get<OrdenVentaDTO[]>(`${this.apiUrl}/obtenerTodos`);
+  }
+  
 }

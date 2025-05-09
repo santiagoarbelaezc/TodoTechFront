@@ -27,71 +27,54 @@
 </header>
 
 <main>
-  <aside class="sidebar">
-    <h2>Panel de Control</h2>
-    <button class="btn">Generar Reporte</button>
-    <button class="btn">Generar PDF</button>
-  </aside>
-
   <section class="content">
-    <div *ngIf="seccionActiva === 'bienvenida'">
-      <h1>Bienvenido al Panel de Administración</h1>
-      <p>Gestiona usuarios, productos, reportes e inventario.</p>
+    <div *ngIf="seccionActiva === 'bienvenida'" class="bienvenida-box">
+      <img src="assets/logoTech.png" alt="Panel de administración" class="bienvenida-img" />
+      <h1>¡Bienvenido al Panel de Administración!</h1>
+      <p>
+        Desde aquí podrás gestionar <strong>usuarios</strong>, <strong>productos</strong>,
+        <strong>reportes</strong> e <strong>inventario</strong>. Todo en un solo lugar,
+        con una experiencia intuitiva y eficiente.
+      </p>
+      <div class="bienvenida-iconos">
+        <span>👤</span>
+        <span>🛒</span>
+        <span>📊</span>
+        <span>📦</span>
+      </div>
     </div>
+ 
 
     <div *ngIf="seccionActiva === 'usuarios'">
       <h2>Crear Usuario</h2>
       <form #formUsuario="ngForm" (ngSubmit)="guardarUsuario()">
-        <input
-          type="text"
-          name="usuario"
-          [(ngModel)]="usuario.usuario"
-          placeholder="Usuario"
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          [(ngModel)]="usuario.password"
-          placeholder="Contraseña"
-          required
-        />
-        <input
-          type="text"
-          name="nombre"
-          [(ngModel)]="persona.nombre"
-          placeholder="Nombre completo"
-          required
-        />
-        <input
-          type="email"
-          name="correo"
-          [(ngModel)]="persona.correo"
-          placeholder="Correo electrónico"
-          required
-        />
-        <input
-          type="tel"
-          name="telefono"
-          [(ngModel)]="persona.telefono"
-          placeholder="Teléfono"
-          required
-        />
-    
-        <select
-          name="tipoUsuario"
-          [(ngModel)]="usuario.tipoUsuario"
-          class="select-usuario"
-          required
-        >
-          <option value="" disabled selected>Tipo de Usuario</option>
-          <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-          <option value="VENDEDOR">VENDEDOR</option>
-          <option value="CAJERO">CAJERO</option>
-          <option value="DESPACHADOR">DESPACHADOR</option>
-        </select>
-    
-        <button type="submit">Guardar</button>
+        <div class="form-group">
+          <input type="text" name="usuario" [(ngModel)]="usuario.usuario" placeholder="Usuario" required />
+        </div>
+        <div class="form-group">
+          <input type="password" name="password" [(ngModel)]="usuario.password" placeholder="Contraseña" required />
+        </div>
+        <div class="form-group">
+          <input type="text" name="nombre" [(ngModel)]="persona.nombre" placeholder="Nombre completo" required />
+        </div>
+        <div class="form-group">
+          <input type="email" name="correo" [(ngModel)]="persona.correo" placeholder="Correo electrónico" required />
+        </div>
+        <div class="form-group">
+          <input type="tel" name="telefono" [(ngModel)]="persona.telefono" placeholder="Teléfono" required />
+        </div>
+        <div class="form-group">
+          <select name="tipoUsuario" [(ngModel)]="usuario.tipoUsuario" class="select-usuario" required>
+            <option value="" disabled selected>Tipo de Usuario</option>
+            <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+            <option value="VENDEDOR">VENDEDOR</option>
+            <option value="CAJERO">CAJERO</option>
+            <option value="DESPACHADOR">DESPACHADOR</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <button type="submit">Guardar</button>
+        </div>
       </form>
     
       <table class="tabla-usuarios">
@@ -111,19 +94,34 @@
         </tbody>
       </table>
     </div>
-    
 
     <div *ngIf="seccionActiva === 'productos'">
       <h2>Crear Producto</h2>
       <form (ngSubmit)="guardarProducto()" #formProducto="ngForm">
-        <input type="text" placeholder="Nombre" [(ngModel)]="nuevoProducto.nombre" name="nombre" required />
-        <input type="text" placeholder="Código" [(ngModel)]="nuevoProducto.codigo" name="codigo" required />
-        <textarea placeholder="Descripción" [(ngModel)]="nuevoProducto.descripcion" name="descripcion"></textarea>
-        <input type="text" placeholder="Categoría" [(ngModel)]="nuevoProducto.categoria" name="categoria" required />
-        <input type="number" placeholder="Precio" step="0.01" [(ngModel)]="nuevoProducto.precio" name="precio" required />
-        <input type="number" placeholder="Stock" [(ngModel)]="nuevoProducto.stock" name="stock" required />
-        <input type="text" placeholder="URL de Imagen" [(ngModel)]="nuevoProducto.imagen" name="imagen" />
-        <button type="submit">Guardar</button>
+        <div class="form-group">
+          <input type="text" placeholder="Nombre" [(ngModel)]="nuevoProducto.nombre" name="nombre" required />
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Código" [(ngModel)]="nuevoProducto.codigo" name="codigo" required />
+        </div>
+        <div class="form-group">
+          <textarea placeholder="Descripción" [(ngModel)]="nuevoProducto.descripcion" name="descripcion"></textarea>
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Categoría" [(ngModel)]="nuevoProducto.categoria" name="categoria" required />
+        </div>
+        <div class="form-group">
+          <input type="number" placeholder="Precio" step="0.01" [(ngModel)]="nuevoProducto.precio" name="precio" required />
+        </div>
+        <div class="form-group">
+          <input type="number" placeholder="Stock" [(ngModel)]="nuevoProducto.stock" name="stock" required />
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="URL de Imagen" [(ngModel)]="nuevoProducto.imagen" name="imagen" />
+        </div>
+        <div class="form-group">
+          <button type="submit">Guardar</button>
+        </div>
       </form>
 
       <div class="tabla-productos-scroll">
@@ -133,7 +131,6 @@
               <th>ID</th>
               <th>Nombre</th>
               <th>Código</th>
-             
               <th>Categoría</th>
               <th>Precio</th>
               <th>Stock</th>
@@ -145,19 +142,14 @@
               <td>{{ producto.id }}</td>
               <td>{{ producto.nombre }}</td>
               <td>{{ producto.codigo }}</td>
-              
               <td>{{ producto.categoria }}</td>
               <td>{{ producto.precio }}</td>
               <td>{{ producto.stock }}</td>
               <td>
                 <div class="acciones-producto">
-                  <div class="botones-superiores">
-                    <button (click)="editarProducto(producto)">Editar</button>
-                    <button (click)="eliminarProducto(producto)">Eliminar</button>
-                  </div>
-                  <div class="boton-inferior">
-                    <button (click)="verDetallesProducto(producto)">Ver Detalles</button>
-                  </div>
+                  <button (click)="editarProducto(producto)">Editar</button>
+                  <button (click)="eliminarProducto(producto)">Eliminar</button>
+                  <button (click)="verDetallesProducto(producto)">Ver Detalles</button>
                 </div>
               </td>
             </tr>
@@ -165,7 +157,6 @@
         </table>
       </div>
     </div>
-      
 
     <div *ngIf="seccionActiva === 'ordenes'">
       <h2>Órdenes de Venta</h2>
@@ -182,29 +173,53 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Lista de órdenes -->
+          <tr *ngFor="let orden of ordenes">
+            <td>{{ orden.id }}</td>
+            <td>{{ orden.cliente.nombre }}</td>
+            <td>{{ orden.fecha | date: 'shortDate' }}</td>
+            <td>{{ orden.total | currency:'USD' }}</td>
+            <td>{{ orden.estado }}</td>
+            <td>
+              <button (click)="verDetallesOrden(orden)">Ver Detalles</button>
+              <!-- puedes agregar botones para editar o eliminar -->
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
 
     <div *ngIf="seccionActiva === 'reportes'" class="reportes-container">
       <h2>Reportes y Estadísticas</h2>
-      <button>Generar Reporte General</button>
-      <button>Ver Estadísticas</button>
-      <table class="tabla-reportes">
+      <div class="form-group botones-reportes">
+        <button class="btn-reporte" type="button" (click)="cargarReportePorVendedor()">Generar Reporte por Vendedor</button>
+      </div>
+    
+      <table class="tabla-reportes" *ngIf="reportesPorVendedor.length > 0">
         <thead>
           <tr>
-            <th>Reporte</th>
-            <th>Fecha</th>
-            <th>Generado Por</th>
-            <th>Acciones</th>
+            <th>ID del Vendedor</th>
+            <th>Nombre del Vendedor</th>
+            <th>Correo</th>
+            <th>Telefono</th>
+            <th>Total de Ventas</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Datos de reportes -->
+          <tr *ngFor="let reporte of reportesPorVendedor">
+            <td>{{ reporte.vendedorDTO.id }}</td>
+            <td>{{ reporte.vendedorDTO.nombre }}</td>
+            <td>{{ reporte.vendedorDTO.correo }}</td>
+            <td>{{ reporte.vendedorDTO.telefono }}</td>
+            <td>{{ reporte.totalVentas | number:'1.2-2' }}</td>
+
+          </tr>
+                   
         </tbody>
       </table>
+    
+      <p *ngIf="reportesPorVendedor.length === 0">No hay datos de reporte por vendedor disponibles.</p>
     </div>
+    
 
     <div *ngIf="seccionActiva === 'inventario'">
       <h2>Inventario</h2>
@@ -228,24 +243,36 @@
     <div *ngIf="seccionActiva === 'configuracion'" class="configuracion-container">
       <h2>Configuración del Sistema</h2>
       <form>
-        <label>Nombre de la Tienda</label>
-        <input type="text" placeholder="Ej. TodoTech Shop" required />
-        <label>Logo (URL)</label>
-        <input type="text" placeholder="https://example.com/logo.png" />
-        <label>Tasa de Impuesto (IVA %)</label>
-        <input type="number" placeholder="Ej. 19" step="0.01" />
-        <label>Moneda por Defecto</label>
-        <select required>
-          <option value="COP">Peso Colombiano (COP)</option>
-          <option value="USD">Dólar (USD)</option>
-          <option value="EUR">Euro (EUR)</option>
-        </select>
-        <label>Mantenimiento</label>
-        <select>
-          <option value="false">Desactivado</option>
-          <option value="true">Activado</option>
-        </select>
-        <button type="submit">Guardar Cambios</button>
+        <div class="form-group">
+          <label>Nombre de la Tienda</label>
+          <input type="text" placeholder="Ej. TodoTech Shop" required />
+        </div>
+        <div class="form-group">
+          <label>Logo (URL)</label>
+          <input type="text" placeholder="https://example.com/logo.png" />
+        </div>
+        <div class="form-group">
+          <label>Tasa de Impuesto (IVA %)</label>
+          <input type="number" placeholder="Ej. 19" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label>Moneda por Defecto</label>
+          <select required>
+            <option value="COP">Peso Colombiano (COP)</option>
+            <option value="USD">Dólar (USD)</option>
+            <option value="EUR">Euro (EUR)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mantenimiento</label>
+          <select>
+            <option value="false">Desactivado</option>
+            <option value="true">Activado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <button type="submit">Guardar Cambios</button>
+        </div>
       </form>
 
       <table class="tabla-configuracion">

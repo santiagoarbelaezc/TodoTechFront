@@ -7,6 +7,12 @@ import { PersonaDTO } from '../../models/persona.dto';
 import { ProductoService } from '../../services/producto.service';
 import { ProductoDTO } from '../../models/producto.dto';
 import { CrearProductoDTO } from '../../models/crearProducto.dto';
+import { OrdenVentaService } from '../../services/orden-venta.service';
+import { OrdenVentaDTO } from '../../models/ordenventa.dto';
+import { ReporteService } from '../../services/reporte.service';
+import { ReporteRendimientoDTO } from '../../models/reporteRendimiento.dto';
+
+
 
 
 @Component({
@@ -19,8 +25,10 @@ import { CrearProductoDTO } from '../../models/crearProducto.dto';
 export class AdminComponent implements OnInit {
 
 
+
   ngOnInit() {
     this.cargarUsuarios();
+    this.cargarReportePorVendedor();
   }
 
   mostrarSeccion(seccion: string) {
@@ -28,9 +36,15 @@ export class AdminComponent implements OnInit {
     if (seccion === 'usuarios') {
       this.cargarUsuarios();
     } else if (seccion === 'productos') {
-      this.cargarProductos(); // <- aquí cargas productos
+      this.cargarProductos();
+    } else if (seccion === 'ordenes') {
+      this.cargarOrdenes();
+    } else if (seccion === 'ordenes') {
+      this.cargarReportePorVendedor();
     }
+
   }
+  
 
   seccionActiva: string = 'bienvenida';
   usuario: UsuarioDTO = {
@@ -62,22 +76,60 @@ export class AdminComponent implements OnInit {
 
 
   constructor(private usuarioService: UsuarioService
-, private productoService: ProductoService) {}
+, private productoService: ProductoService, private ordenVentaService: OrdenVentaService, private reporteService: ReporteService) {}
  
-productos: ProductoDTO[] = [];
+  productos: ProductoDTO[] = [];
+  ordenes: OrdenVentaDTO[] = [];
+  reportesPorVendedor: ReporteRendimientoDTO[] = [];
 
-cargarProductos() {
-  this.productoService.obtenerProductos().subscribe(
-    (data) => {
-      this.productos = data;
-    },
-    (error) => {
-      console.error('Error al obtener productos:', error);
-      alert('Error al cargar los productos');
-    }
-  );
-}
 
+  cargarProductos() {
+    this.productoService.obtenerProductos().subscribe(
+      (data) => {
+        this.productos = data;
+      },
+      (error) => {
+        console.error('Error al obtener productos:', error);
+        alert('Error al cargar los productos');
+      }
+    );
+  }
+
+  cargarReportePorVendedor() {
+    console.log('Cargando reporte de rendimiento por vendedor...');
+  
+    this.reporteService.obtenerReporteRendimiento().subscribe({
+      next: (data) => {
+        console.log('Datos recibidos:', data);
+        this.reportesPorVendedor = data;
+      },
+      error: (error) => {
+        console.error('Error al cargar reporte por vendedor:', error);
+        alert('Error al obtener el reporte');
+      },
+      complete: () => {
+        console.log('Carga de reporte finalizada');
+      }
+    });
+  }
+  
+
+  cargarOrdenes() {
+    this.ordenVentaService.obtenerOrdenes().subscribe(
+      (data) => {
+        this.ordenes = data;
+      },
+      (error) => {
+        console.error('Error al obtener órdenes de venta:', error);
+        alert('Error al cargar las órdenes de venta');
+      }
+    );
+  }
+  
+  verDetallesOrden(orden: OrdenVentaDTO) {
+    console.log('Orden seleccionada:', orden);
+    // Aquí puedes abrir un modal o redirigir a otra vista
+  }
 
 
   cargarUsuarios() {
