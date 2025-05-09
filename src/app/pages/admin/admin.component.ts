@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UsuarioDTO } from '../../models/usuario.dto'; // Ajusta la ruta según tu estructura
-import { UsuarioService } from '../../services/usuario.service'; // Servicio de usuarios
+import { UsuarioDTO } from '../../models/usuario.dto';
+import { UsuarioService } from '../../services/usuario.service';
 import { PersonaDTO } from '../../models/persona.dto';
 import { ProductoService } from '../../services/producto.service';
 import { ProductoDTO } from '../../models/producto.dto';
@@ -11,56 +11,46 @@ import { OrdenVentaService } from '../../services/orden-venta.service';
 import { OrdenVentaDTO } from '../../models/ordenventa.dto';
 import { ReporteService } from '../../services/reporte.service';
 import { ReporteRendimientoDTO } from '../../models/reporteRendimiento.dto';
-
-
-
+import { VendedorService } from '../../services/vendedor.service';
+import { DespachadorService } from '../../services/despachador.service';
+import { CajeroService } from '../../services/cajero.service';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.css'
+  styleUrls: ['./admin.component.css'] // <- corregido
 })
 export class AdminComponent implements OnInit {
-
-
-
-  ngOnInit() {
-    this.cargarUsuarios();
-    this.cargarReportePorVendedor();
-  }
-
-  mostrarSeccion(seccion: string) {
-    this.seccionActiva = seccion;
-    if (seccion === 'usuarios') {
-      this.cargarUsuarios();
-    } else if (seccion === 'productos') {
-      this.cargarProductos();
-    } else if (seccion === 'ordenes') {
-      this.cargarOrdenes();
-    } else if (seccion === 'ordenes') {
-      this.cargarReportePorVendedor();
-    }
-
-  }
   
-
+  // Información personal del usuario
+  nombre: string = '';
+  correo: string = '';
+  telefono: string = '';
   seccionActiva: string = 'bienvenida';
+
+  // Listas
+  usuarios: UsuarioDTO[] = [];
+  productos: ProductoDTO[] = [];
+  ordenes: OrdenVentaDTO[] = [];
+  reportesPorVendedor: ReporteRendimientoDTO[] = [];
+
+  // Objetos de trabajo
   usuario: UsuarioDTO = {
     usuario: '',
     password: '',
     tipoUsuario: 'ADMINISTRADOR'
-  }; // Valores por defecto
+  };
 
   persona: PersonaDTO = {
     nombre: '',
     correo: '',
     telefono: '',
     usuario: this.usuario
-  }; // Inicializa la persona con valores por defecto
+  };
 
-  nuevoProducto: CrearProductoDTO= {
+  nuevoProducto: CrearProductoDTO = {
     id: 0,
     nombre: '',
     codigo: '',
@@ -70,118 +60,97 @@ export class AdminComponent implements OnInit {
     categoria: '',
     imagen: ''
   };
-  
 
-  usuarios: UsuarioDTO[] = []; // Lista para mostrar en la tabla
+  constructor(
+    private usuarioService: UsuarioService,
+    private productoService: ProductoService,
+    private ordenVentaService: OrdenVentaService,
+    private reporteService: ReporteService,
+    private vendedorService: VendedorService,
+    private despachadorService: DespachadorService,
+    private cajeroService: CajeroService
+  ) {}
 
+  ngOnInit() {
+    this.cargarUsuarios();
+    this.cargarReportePorVendedor();
+  }
 
-  constructor(private usuarioService: UsuarioService
-, private productoService: ProductoService, private ordenVentaService: OrdenVentaService, private reporteService: ReporteService) {}
- 
-  productos: ProductoDTO[] = [];
-  ordenes: OrdenVentaDTO[] = [];
-  reportesPorVendedor: ReporteRendimientoDTO[] = [];
+  mostrarSeccion(seccion: string) {
+    this.seccionActiva = seccion;
+    switch (seccion) {
+      case 'usuarios':
+        this.cargarUsuarios();
+        break;
+      case 'productos':
+        this.cargarProductos();
+        break;
+      case 'ordenes':
+        this.cargarOrdenes();
+        break;
+      case 'reportes':
+        this.cargarReportePorVendedor();
+        break;
+    }
+  }
 
+  cargarUsuarios() {
+    this.usuarioService.obtenerUsuarios().subscribe({
+      next: (data) => this.usuarios = data,
+      error: (err) => {
+        console.error('Error al obtener usuarios:', err);
+        alert('Error al cargar los usuarios');
+      }
+    });
+  }
 
   cargarProductos() {
-    this.productoService.obtenerProductos().subscribe(
-      (data) => {
-        this.productos = data;
-      },
-      (error) => {
-        console.error('Error al obtener productos:', error);
+    this.productoService.obtenerProductos().subscribe({
+      next: (data) => this.productos = data,
+      error: (err) => {
+        console.error('Error al obtener productos:', err);
         alert('Error al cargar los productos');
       }
-    );
+    });
+  }
+
+  cargarOrdenes() {
+    this.ordenVentaService.obtenerOrdenes().subscribe({
+      next: (data) => this.ordenes = data,
+      error: (err) => {
+        console.error('Error al obtener órdenes de venta:', err);
+        alert('Error al cargar las órdenes de venta');
+      }
+    });
   }
 
   cargarReportePorVendedor() {
     console.log('Cargando reporte de rendimiento por vendedor...');
-  
     this.reporteService.obtenerReporteRendimiento().subscribe({
       next: (data) => {
         console.log('Datos recibidos:', data);
         this.reportesPorVendedor = data;
       },
-      error: (error) => {
-        console.error('Error al cargar reporte por vendedor:', error);
+      error: (err) => {
+        console.error('Error al cargar reporte por vendedor:', err);
         alert('Error al obtener el reporte');
       },
-      complete: () => {
-        console.log('Carga de reporte finalizada');
-      }
+      complete: () => console.log('Carga de reporte finalizada')
     });
   }
-  
 
-  cargarOrdenes() {
-    this.ordenVentaService.obtenerOrdenes().subscribe(
-      (data) => {
-        this.ordenes = data;
-      },
-      (error) => {
-        console.error('Error al obtener órdenes de venta:', error);
-        alert('Error al cargar las órdenes de venta');
-      }
-    );
-  }
-  
-  verDetallesOrden(orden: OrdenVentaDTO) {
-    console.log('Orden seleccionada:', orden);
-    // Aquí puedes abrir un modal o redirigir a otra vista
-  }
-
-
-  cargarUsuarios() {
-    this.usuarioService.obtenerUsuarios().subscribe(
-      (data) => {
-        this.usuarios = data;
-      },
-      (error) => {
-        console.error('Error al obtener usuarios:', error);
-        alert('Error al cargar los usuarios');
-      }
-    );
-  }
-  
-  editarProducto(producto: ProductoDTO) {
-    console.log('Editar producto:', producto);
-    // Aquí puedes abrir un formulario de edición, por ejemplo:
-    // this.productoSeleccionado = producto;
-    // this.mostrarFormularioEdicion = true;
-  }
-  
-  eliminarProducto(producto: ProductoDTO) {
-    const confirmacion = confirm(`¿Estás seguro de que deseas eliminar el producto "${producto.nombre}"?`);
-    if (confirmacion) {
-      this.productoService.eliminarProducto(producto.id).subscribe(
-        () => {
-          alert('Producto eliminado con éxito');
-          this.cargarProductos(); // Refresca la lista
-        },
-        (error) => {
-          console.error('Error al eliminar el producto:', error);
-          alert('No se pudo eliminar el producto');
-        }
-      );
-    }
-  }
-  
-  verDetallesProducto(producto: ProductoDTO) {
-    console.log('Detalles del producto:', producto);
-    // Puedes abrir un modal, mostrar otra vista, etc.
-  }
   guardarProducto() {
-    if (!this.nuevoProducto.nombre || !this.nuevoProducto.codigo || !this.nuevoProducto.precio || !this.nuevoProducto.stock || !this.nuevoProducto.categoria || !this.nuevoProducto.imagen) {
+    const p = this.nuevoProducto;
+    if (!p.nombre || !p.codigo || !p.precio || !p.stock || !p.categoria || !p.imagen) {
       alert('Por favor completa todos los campos obligatorios');
       return;
     }
-  
-    this.productoService.crearProducto(this.nuevoProducto).subscribe({
+
+    this.productoService.crearProducto(p).subscribe({
       next: () => {
         alert('Producto creado exitosamente');
-        this.cargarProductos(); // Recarga la lista
-        this.nuevoProducto = { // Reinicia el formulario
+        this.cargarProductos();
+        this.nuevoProducto = {
           id: 0,
           nombre: '',
           codigo: '',
@@ -192,44 +161,112 @@ export class AdminComponent implements OnInit {
           imagen: ''
         };
       },
-      error: (error) => {
-        console.error('Error al crear el producto:', error);
+      error: (err) => {
+        console.error('Error al crear el producto:', err);
         alert('Error al crear el producto. Intenta de nuevo.');
       }
     });
   }
-  
+
+  editarProducto(producto: ProductoDTO) {
+    console.log('Editar producto:', producto);
+    // Implementar lógica
+  }
+
+  eliminarProducto(producto: ProductoDTO) {
+    if (confirm(`¿Estás seguro de que deseas eliminar el producto "${producto.nombre}"?`)) {
+      this.productoService.eliminarProducto(producto.id).subscribe({
+        next: () => {
+          alert('Producto eliminado con éxito');
+          this.cargarProductos();
+        },
+        error: (err) => {
+          console.error('Error al eliminar el producto:', err);
+          alert('No se pudo eliminar el producto');
+        }
+      });
+    }
+  }
+
+  verDetallesProducto(producto: ProductoDTO) {
+    console.log('Detalles del producto:', producto);
+    // Implementar lógica
+  }
+
+  verDetallesOrden(orden: OrdenVentaDTO) {
+    console.log('Orden seleccionada:', orden);
+    // Implementar lógica
+  }
 
   guardarUsuario() {
     if (!this.usuario.usuario || !this.usuario.password || !this.usuario.tipoUsuario) {
       alert('Por favor completa todos los campos');
       return;
     }
-
-    console.log('Guardando usuario:', this.usuario);
-
-    this.usuarioService.crearUsuario(this.usuario).subscribe(
-      (response) => {
-        console.log('Respuesta del backend:', response);
+  
+    // Verificar si los campos de persona están completos
+    if (!this.persona.nombre || !this.persona.correo || !this.persona.telefono) {
+      alert('Por favor completa todos los campos de información personal.');
+      return;
+    }
+  
+    this.usuarioService.crearUsuario(this.usuario).subscribe({
+      next: (response) => {
         alert(response.mensaje);
-
-        // Obtener el último usuario creado después de guardar
-        this.usuarioService.obtenerUltimoUsuario().subscribe(
-          (usuarioCreado) => {
-            console.log('Usuario recién creado:', usuarioCreado);
-            this.usuarioService.setUsuario(usuarioCreado); // Guardar si lo necesitas en el estado global
-            // Aquí podrías redirigir, mostrarlo, etc.
+        this.usuarioService.obtenerUltimoUsuario().subscribe({
+          next: (usuarioCreado) => {
+            const persona: PersonaDTO = {
+              nombre: this.persona.nombre,  // Usar persona.nombre, persona.correo, persona.telefono
+              correo: this.persona.correo,
+              telefono: this.persona.telefono,
+              usuario: usuarioCreado
+            };
+  
+            console.log('PersonaDTO a enviar:', persona);  // Para depurar
+  
+            switch (usuarioCreado.tipoUsuario) {
+              case 'VENDEDOR':
+                this.vendedorService.crearVendedor(persona).subscribe(
+                  () => alert('Vendedor creado con éxito'),
+                  (error) => {
+                    console.error('Error al crear el vendedor:', error);
+                    alert('Error al crear el vendedor');
+                  }
+                );
+                break;
+              case 'CAJERO':
+                this.cajeroService.crearCajero(persona).subscribe(
+                  () => alert('Cajero creado con éxito'),
+                  (error) => {
+                    console.error('Error al crear el cajero:', error);
+                    alert('Error al crear el cajero');
+                  }
+                );
+                break;
+              case 'DESPACHADOR':
+                this.despachadorService.crearDespachador(persona).subscribe(
+                  () => alert('Despachador creado con éxito'),
+                  (error) => {
+                    console.error('Error al crear el despachador:', error);
+                    alert('Error al crear el despachador');
+                  }
+                );
+                break;
+              default:
+                alert('Tipo de usuario no reconocido');
+            }
           },
-          (error) => {
-            console.error('Error al obtener el usuario recién creado:', error);
+          error: (err) => {
+            console.error('Error al obtener el usuario recién creado:', err);
             alert('Error al recuperar el usuario creado.');
           }
-        );
+        });
       },
-      (error) => {
-        console.error('Error al guardar el usuario:', error);
+      error: (err) => {
+        console.error('Error al guardar el usuario:', err);
         alert('Error al crear el usuario. Por favor intenta de nuevo.');
       }
-    );
+    });
   }
+  
 }

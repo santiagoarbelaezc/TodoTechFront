@@ -82,6 +82,7 @@
           <tr>
             <th>ID</th>
             <th>Usuario</th>
+            <th>Tipo</th>
             <th>Contraseña</th>
           </tr>
         </thead>
@@ -89,6 +90,7 @@
           <tr *ngFor="let u of usuarios">
             <td>{{ u.usuario }}</td>
             <td>{{ u.usuario }}</td>
+            <td>{{ u.tipoUsuario }}</td>
             <td>{{ u.password }}</td>
           </tr>
         </tbody>
