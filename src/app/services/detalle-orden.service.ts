@@ -39,8 +39,7 @@ export class DetalleOrdenService {
     );
   }
   
-  
-  
+
   
   
   obtenerCarritoConProductos(ordenId: number): Observable<{ detalle: DetalleOrdenDTO, nombreProducto: string }[]> {

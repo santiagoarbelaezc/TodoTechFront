@@ -40,7 +40,6 @@
         </div>
     </section>
    
-    
 <!-- Carrito (solo aparece al bajar el scroll) -->
 <div class="cart-wrapper" *ngIf="mostrarCarrito">
   <!-- Botón para abrir/cerrar el carrito -->
@@ -80,8 +79,18 @@
         </span>
       </div>
 
-      <!-- Botón para actualizar el carrito -->
-      <button class="update-cart-btn" (click)="actualizarCarrito()">Actualizar Carrito</button>
+      <!-- Botones nuevos -->
+      <div class="cart-actions">
+        <button class="btn-carrito btn-pagar" (click)="pagarCarrito()">
+          <i class="fas fa-shopping-cart"></i> Pagar Carrito
+        </button>
+      
+        <div class="bottom-buttons">
+          <button class="btn-carrito btn-descuento" (click)="aplicarDescuento()">🎟 Aplicar Descuento</button>
+          <button class="btn-carrito btn-cancelar" (click)="cancelarOrden()">🗑 Cancelar Orden</button>
+        </div>
+      </div>
+      
     </div>
   </div>
 </div>
@@ -99,6 +108,7 @@
           <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
           <div class="carrito-container">
             <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+            <span class="stock-info">Stock: {{ producto.stock }}</span>
           </div>
         </div>
       </div>
@@ -119,7 +129,9 @@
           <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
           <div class="carrito-container">
             <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+            <span class="stock-info">Stock: {{ producto.stock }}</span>
           </div>
+          
         </div>
       </div>
       <button id="nextBtnIphone" class="carousel-nav next">›</button>
@@ -163,6 +175,7 @@
           <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
           <div class="carrito-container">
             <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+            <span class="stock-info">Stock: {{ producto.stock }}</span>
           </div>
         </div>
       </div>
@@ -182,6 +195,7 @@
           <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
           <div class="carrito-container">
             <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+            <span class="stock-info">Stock: {{ producto.stock }}</span>
           </div>
         </div>
       </div>
@@ -213,7 +227,7 @@
     
             <div class="footer-section contact">
                 <h3>Contacto</h3>
-                <p>Teléfono: +57 320 123 4567</p>
+                <p>Teléfono: +57 305 407 8225</p>
             </div>
     
             <div class="footer-section social">

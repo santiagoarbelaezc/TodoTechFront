@@ -1,1 +1,100 @@
-<p>caja works!</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facturación</title>
+  <link rel="stylesheet" href="caja.component.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+  <main class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Cajero</h2>
+      <button class="btn" type="button">Órdenes de Venta</button>
+      <button class="btn" type="button">Configuración</button>
+      <button class="btn" type="button">Cerrar Sesión</button>
+    </aside>
+
+    <!-- Content Area -->
+    <section class="content">
+      <header class="content-header">
+        <h1>Órdenes de Venta Pendientes</h1>
+      </header>
+
+      <!-- Orders Table -->
+      <article class="tabla-ordenes">
+        <ul class="ordenes-lista">
+          <li>No hay órdenes pendientes.</li>
+        </ul>
+      </article>
+
+      <!-- Order Details -->
+      <article id="detalle-orden" class="detalle-orden">
+        <h2>Detalle de la Orden</h2>
+        <form id="form-detalle-orden">
+          <div class="form-group">
+            <label for="vendedor">Vendedor:</label>
+            <input type="text" id="vendedor" value="Luis Romero" readonly />
+          </div>
+          <div class="form-group">
+            <label for="cliente">Cliente:</label>
+            <input type="text" id="cliente" value="Juan Pérez" readonly />
+          </div>
+          <div class="form-group">
+            <label for="metodo-seleccionado">Método de Pago:</label>
+            <input type="text" id="metodo-seleccionado" readonly />
+          </div>
+          <div class="form-group">
+            <label for="impuestos">Impuestos:</label>
+            <input type="text" id="impuestos" value="$1,200" readonly />
+          </div>
+          <div class="form-group">
+            <label for="valor-total">Valor Total:</label>
+            <input type="text" id="valor-total" value="$13,200" readonly />
+          </div>
+          <div class="form-group">
+            <label for="valor-pagar">Valor a Pagar:</label>
+            <input type="text" id="valor-pagar" value="$13,200" readonly />
+          </div>
+
+          <!-- Payment Methods Section -->
+          <section class="metodos-pago">
+            <h3>Seleccionar Método de Pago</h3>
+            <div class="metodos-pago-icons">
+              <img src="assets/paypal.png" alt="PayPal" width="100" onclick="seleccionarMetodo('PayPal')" />
+              <img src="assets/visa.png" alt="Visa" width="100" onclick="seleccionarMetodo('Visa')" />
+              <img src="assets/mastercard.png" alt="MasterCard" width="100" onclick="seleccionarMetodo('MasterCard')" />
+              <img src="assets/visadevito.png" alt="Visa" width="100" onclick="seleccionarMetodo('VisaDevito')" />
+              
+              <img src="assets/efectivo.png" alt="Efectivo" width="100" onclick="seleccionarMetodo('Efectivo')" />
+              
+            </div>
+          </section>
+
+          <!-- Payment Details Section -->
+          <section class="detalles-pago">
+            <h3>Detalles del Pago</h3>
+            <div class="form-group">
+              <input type="text" name="numeroReferencia" placeholder="Número de tarjeta / referencia" />
+            </div>
+            <div class="form-group">
+              <input type="text" name="nombreTitular" placeholder="Nombre del titular / pagador" />
+            </div>
+            <div class="form-group">
+              <input type="text" name="codigoSeguridad" placeholder="Código de seguridad / comprobante" />
+            </div>
+          </section>
+
+          <!-- Action Buttons -->
+          <div class="acciones">
+            <button type="button" onclick="cancelarOrden()" class="btn">Cancelar Orden</button>
+            <button type="button" onclick="pagarOrden()" class="btn">Pagar Orden</button>
+          </div>
+        </form>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

@@ -13,9 +13,10 @@ import { OrdenVentaService } from '../../services/orden-venta.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './inicio.component.html',
-  styleUrl: './inicio.component.css'
+  styleUrls: ['./inicio.component.css']
 })
 export class InicioComponent implements AfterViewInit {
+
 
   carrito: { detalle: any, nombreProducto: string }[] = [];
 
@@ -45,9 +46,25 @@ export class InicioComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.inicializarCarruseles();
+
     this.productoService.cargarProductosGenerales().subscribe({
-      next: productos => this.productos = productos
+      next: productos => {
+        this.productos = productos;
+        console.log('Productos cargados:', this.productos);
+        this.productoService.setProductos(productos); // Guardar productos en el servicio
+        
+      }
     });
+
+    // Suscribirse al método de actualizar productos para actualizar el componente automáticamente
+    this.productoService.productos$.subscribe({
+      next: productos => {
+        this.productos = productos;
+        console.log('Productos actualizados automáticamente:', this.productos);
+      }
+    });
+    
+    
   
     const ordenEnMemoria = this.ordenVentaService.getOrden();
     const ordenIdLocal = this.ordenVentaService.getOrdenIdDesdeLocalStorage();
@@ -115,15 +132,23 @@ export class InicioComponent implements AfterViewInit {
       return;
     }
   
+    if (producto.stock <= 0) {
+      console.warn('Producto sin stock disponible.');
+      return;
+    }
+  
     this.carritoService.agregarAlCarrito(producto).subscribe({
       next: (ok) => {
         if (ok) {
           this.cargarDetallesCarrito(ordenId);
+          this.productoService.actualizarStockLocal(producto.id, 1); // Restar 1 unidad del stock local
         }
       },
       error: err => console.error('Error al agregar al carrito:', err)
     });
-  }  
+    
+  }
+    
 
 
   actualizarCarrito(): void {
@@ -153,10 +178,15 @@ export class InicioComponent implements AfterViewInit {
       ordenVentaId: ordenId
     };
 
+    const cantidad = item.detalle.cantidad || 1;
     this.detalleOrdenService.eliminarDetalle(request).subscribe({
-      next: () => this.cargarDetallesCarrito(ordenId),
+      next: () => {
+        this.cargarDetallesCarrito(ordenId);
+        this.productoService.restaurarStockLocal(productoId, cantidad);
+      },
       error: err => console.error('Error al eliminar el producto del carrito:', err)
     });
+
   }
 
 
@@ -164,12 +194,12 @@ export class InicioComponent implements AfterViewInit {
     const item = this.carrito[index];
     const ordenId = this.ordenVentaService.getOrden()?.id;
     const productoId = item?.detalle?.producto?.id;
-
+  
     if (!ordenId || !productoId) {
       console.error('Faltan datos para ajustar cantidad.');
       return;
     }
-
+  
     const request = {
       productoId: productoId,
       ordenVentaId: ordenId
@@ -179,16 +209,41 @@ export class InicioComponent implements AfterViewInit {
       ? this.detalleOrdenService.aumentarCantidad(request)
       : this.detalleOrdenService.disminuirCantidad(request);
   
-    llamada.subscribe({
-      next: () => this.cargarDetallesCarrito(ordenId),
-      error: err => console.error('Error al ajustar cantidad:', err)
-    });
+      llamada.subscribe({
+        next: () => {
+          this.cargarDetallesCarrito(ordenId);
+          if (cambio > 0) {
+            this.productoService.actualizarStockLocal(productoId, 1);
+          } else {
+            this.productoService.restaurarStockLocal(productoId, 1);
+          }
+        },
+        error: err => console.error('Error al ajustar cantidad:', err)
+      });
+      
   }
   
 
   toggleCarrito(): void {
     this.carritoVisible = !this.carritoVisible;
   }
+
+  aplicarDescuento(): void {
+    // TODO: Lógica para aplicar un código de descuento
+    console.log('Aplicar descuento clickeado');
+  }
+  
+  pagarCarrito(): void {
+    // TODO: Lógica para aplicar un código de descuento
+    console.log('Pagar Carrito clickeado');
+  }
+  
+  cancelarOrden(): void {
+    // TODO: Lógica para cancelar la orden y limpiar el carrito
+    console.log('Cancelar orden clickeado');
+  }
+
+  
 
   irAInicio(): void { this.router.navigate(['/inicio']); }
   irAPhone(): void { this.router.navigate(['/phone']); }
