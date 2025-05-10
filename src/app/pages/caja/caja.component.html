@@ -8,93 +8,135 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 <body>
-  <main class="container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h2>Cajero</h2>
-      <button class="btn" type="button">Órdenes de Venta</button>
-      <button class="btn" type="button">Configuración</button>
-      <button class="btn" type="button">Cerrar Sesión</button>
-    </aside>
+  <div class="container">
+  <!-- Sidebar -->
+  <!-- Sidebar -->
+<aside class="sidebar">
+  <h1>TodoTech Caja</h1>
+  <h2>Cajero: {{orderDetails.seller}}</h2>
 
-    <!-- Content Area -->
-    <section class="content">
-      <header class="content-header">
-        <h1>Órdenes de Venta Pendientes</h1>
-      </header>
+  <button *ngFor="let item of menuItems" 
+          class="btn" 
+          [class.active]="item.active"
+          (click)="selectItem(item)">
+    <i class="fas {{item.icon}}"></i> {{item.text}}
+  </button>
 
-      <!-- Orders Table -->
-      <article class="tabla-ordenes">
-        <ul class="ordenes-lista">
-          <li>No hay órdenes pendientes.</li>
-        </ul>
-      </article>
+  <button class="btn">
+    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+  </button>
 
-      <!-- Order Details -->
-      <article id="detalle-orden" class="detalle-orden">
-        <h2>Detalle de la Orden</h2>
-        <form id="form-detalle-orden">
-          <div class="form-group">
-            <label for="vendedor">Vendedor:</label>
-            <input type="text" id="vendedor" value="Luis Romero" readonly />
-          </div>
-          <div class="form-group">
-            <label for="cliente">Cliente:</label>
-            <input type="text" id="cliente" value="Juan Pérez" readonly />
-          </div>
-          <div class="form-group">
-            <label for="metodo-seleccionado">Método de Pago:</label>
-            <input type="text" id="metodo-seleccionado" readonly />
-          </div>
-          <div class="form-group">
-            <label for="impuestos">Impuestos:</label>
-            <input type="text" id="impuestos" value="$1,200" readonly />
-          </div>
-          <div class="form-group">
-            <label for="valor-total">Valor Total:</label>
-            <input type="text" id="valor-total" value="$13,200" readonly />
-          </div>
-          <div class="form-group">
-            <label for="valor-pagar">Valor a Pagar:</label>
-            <input type="text" id="valor-pagar" value="$13,200" readonly />
-          </div>
+  <h3 class="titulo-ordenes">Órdenes activas</h3>
+  <div class="contenedor-tabla-scroll">
+    <div class="tabla-ordenes">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let orden of ordenes">
+            <td>{{ orden.id }}</td>
+            <td>{{ orden.cliente.nombre }}</td>
+            <td>${{ orden.total }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</aside>
 
-          <!-- Payment Methods Section -->
-          <section class="metodos-pago">
-            <h3>Seleccionar Método de Pago</h3>
-            <div class="metodos-pago-icons">
-              <img src="assets/paypal.png" alt="PayPal" width="100" onclick="seleccionarMetodo('PayPal')" />
-              <img src="assets/visa.png" alt="Visa" width="100" onclick="seleccionarMetodo('Visa')" />
-              <img src="assets/mastercard.png" alt="MasterCard" width="100" onclick="seleccionarMetodo('MasterCard')" />
-              <img src="assets/visadevito.png" alt="Visa" width="100" onclick="seleccionarMetodo('VisaDevito')" />
-              
-              <img src="assets/efectivo.png" alt="Efectivo" width="100" onclick="seleccionarMetodo('Efectivo')" />
-              
-            </div>
-          </section>
 
-          <!-- Payment Details Section -->
-          <section class="detalles-pago">
-            <h3>Detalles del Pago</h3>
-            <div class="form-group">
-              <input type="text" name="numeroReferencia" placeholder="Número de tarjeta / referencia" />
-            </div>
-            <div class="form-group">
-              <input type="text" name="nombreTitular" placeholder="Nombre del titular / pagador" />
-            </div>
-            <div class="form-group">
-              <input type="text" name="codigoSeguridad" placeholder="Código de seguridad / comprobante" />
-            </div>
-          </section>
+  <!-- Order Details -->
+  <article id="detalle-orden" class="detalle-orden">
+    <h2>Detalle de la Orden</h2>
+    <form id="form-detalle-orden">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="vendedor">Vendedor:</label>
+          <input type="text" id="vendedor" [value]="orderDetails.seller" readonly />
+        </div>
+        <div class="form-group">
+          <label for="cliente">Cliente:</label>
+          <input type="text" id="cliente" [value]="orderDetails.client" readonly />
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fecha">Fecha:</label>
+          <input type="text" id="fecha" [value]="orderDetails.date" readonly />
+        </div>
+        <div class="form-group">
+          <label for="estado">Estado:</label>
+          <input type="text" id="estado" [value]="orderDetails.status" readonly />
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="metodo-seleccionado">Método de Pago:</label>
+        <input type="text" id="metodo-seleccionado" [value]="selectedPaymentMethod" readonly />
+      </div>
+      
+      <div class="resumen-orden">
+  <div class="resumen-item">
+    <label for="impuestos">Impuestos:</label>
+    <input type="text" id="impuestos" [value]="orderDetails.taxes" readonly class="resumen-input" />
+  </div>
+  <div class="resumen-item">
+    <label for="valor-total">Valor Total:</label>
+    <input type="text" id="valor-total" [value]="orderDetails.total" readonly class="resumen-input" />
+  </div>
+  <div class="resumen-item">
+    <label for="valor-pagar">Valor a Pagar:</label>
+    <input type="text" id="valor-pagar" [value]="orderDetails.toPay" readonly class="resumen-input valor-final" />
+  </div>
+</div>
 
-          <!-- Action Buttons -->
-          <div class="acciones">
-            <button type="button" onclick="cancelarOrden()" class="btn">Cancelar Orden</button>
-            <button type="button" onclick="pagarOrden()" class="btn">Pagar Orden</button>
-          </div>
-        </form>
-      </article>
-    </section>
-  </main>
-</body>
-</html>
+
+      <!-- Payment Methods Section -->
+      <section class="metodos-pago">
+        <h3>Seleccionar Método de Pago</h3>
+        <div class="metodos-pago-icons">
+          <img src="assets/paypal.png" alt="PayPal" (click)="selectPaymentMethod('PayPal')" [class.active]="selectedPaymentMethod === 'PayPal'" />
+          <img src="assets/visa.png" alt="Visa" (click)="selectPaymentMethod('Visa')" [class.active]="selectedPaymentMethod === 'Visa'" />
+          <img src="assets/mastercard.png" alt="MasterCard" (click)="selectPaymentMethod('MasterCard')" [class.active]="selectedPaymentMethod === 'MasterCard'" />
+          <img src="assets/redcompra.png" alt="RedCompra" (click)="selectPaymentMethod('RedCompra')" [class.active]="selectedPaymentMethod === 'RedCompra'" />
+          <img src="assets/visadevito.png" alt="Visa Débito" (click)="selectPaymentMethod('Visa Débito')" [class.active]="selectedPaymentMethod === 'Visa Débito'" />
+          <img src="assets/efectivo.png" alt="Efectivo" (click)="selectPaymentMethod('Efectivo')" [class.active]="selectedPaymentMethod === 'Efectivo'" />
+          
+        </div>
+      </section>
+
+      <!-- Payment Details Section -->
+      <section class="detalles-pago">
+        <h3>Detalles del Pago</h3>
+        <div class="form-group">
+          <label for="numeroReferencia">Número de tarjeta / referencia</label>
+          <input type="text" id="numeroReferencia" placeholder="Ingrese el número" />
+        </div>
+        <div class="form-group">
+          <label for="nombreTitular">Nombre del titular / pagador</label>
+          <input type="text" id="nombreTitular" placeholder="Nombre completo" />
+        </div>
+        <div class="form-group">
+          <label for="codigoSeguridad">Código de seguridad / comprobante</label>
+          <input type="text" id="codigoSeguridad" placeholder="CVV / Código" />
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <div class="acciones">
+        <button type="button" (click)="cancelOrder()" class="btn-cancelar">
+          Cancelar Orden
+        </button>
+        <button type="button" (click)="processPayment()" class="btn-pagar">
+          Procesar Pago
+        </button>
+      </div>
+    </form>
+  </article>
+</div>

@@ -1,123 +1,178 @@
 /* Reset y fuente */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 40px;
-    background: url('/assets/loginFondo.png') no-repeat center center/cover;
-    background-attachment: fixed;
-  }
-  
-  /* Contenedor principal más grande */
-  .orden-venta-container {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 50px;
-    border-radius: 20px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    width: 100%;
-    max-width: 600px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .orden-venta-container:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-  }
-  
-  /* Título */
-  h2 {
-    color: #ffffff;
-    font-size: 32px;
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  /* Reloj */
-  .orden-venta-horario {
-    position: absolute;
-    top: 30px;
-    right: 20px;
-    font-size: 18px;
-    color: white;
-    background: rgba(255, 255, 255, 0.08);
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  
-  /* Formulario */
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-  }
-  
-  /* Grupo de input */
-  .input-group {
-    position: relative;
-  }
-  
-  /* Inputs amplios sin neón */
-  input {
-    width: 100%;
-    padding: 16px 14px;
-    border: none;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-    background: transparent;
-    font-size: 17px;
-    color: #ffffff;
-    transition: all 0.3s ease;
-  }
-  
-  input:focus {
-    border-bottom: 2px solid #ffffff;
-    outline: none;
-  }
-  
-  /* Label flotante */
-  label {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 15px;
-    transition: 0.3s ease;
-    pointer-events: none;
-  }
-  
-  input:focus + label,
-  input:valid + label {
-    top: -8px;
-    font-size: 12px;
-    color: #ffffff;
-  }
-  
-  /* Botón amplio y limpio */
-  button {
-    padding: 16px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #ffffff;
-    font-size: 17px;
-    font-weight: 500;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  button:hover {
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
+body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 60px 20px; /* Más espacio vertical y lateral */
+  background: url('/assets/loginFondo.png') no-repeat center center/cover;
+  background-attachment: fixed;
+}
+
+/* Contenedor principal */
+.orden-venta-container {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 40px 35px;
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 40px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.orden-venta-container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Título */
+h2, h3 {
+  color: #ffffff;
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* Reloj */
+.orden-venta-horario {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  font-size: 15px;
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Ligero ajuste para mejor equilibrio */
+}
+
+/* Grupo de input */
+.input-group {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+/* Inputs elegantes */
+input {
+  width: 100%;
+  padding: 16px 14px;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  font-size: 17px;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  border-bottom: 2px solid #ffffff;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Label flotante */
+label {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 15px;
+  transition: 0.3s ease;
+  pointer-events: none;
+}
+
+input:focus + label,
+input:valid + label {
+  top: -8px;
+  font-size: 12px;
+  color: #ffffff;
+}
+
+/* Botón elegante */
+button {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenedor tabla */
+.tabla-container {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 20px;
+  margin-bottom: 60px;
+  width: 100%;
+  max-width: 900px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 25px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Tabla */
+.tabla-ordenes {
+  width: 100%;
+  border-collapse: collapse;
+  color: #f5f5f5;
+  font-size: 14px;
+}
+
+.tabla-ordenes th,
+.tabla-ordenes td {
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+
+.tabla-ordenes th {
+  background-color: rgba(255, 255, 255, 0.08);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tabla-ordenes tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}

@@ -233,10 +233,10 @@ export class InicioComponent implements AfterViewInit {
     console.log('Aplicar descuento clickeado');
   }
   
-  pagarCarrito(): void {
-    // TODO: Lógica para aplicar un código de descuento
-    console.log('Pagar Carrito clickeado');
+  pagarCarrito() {
+    this.router.navigate(['/caja']);
   }
+
   
   cancelarOrden(): void {
     // TODO: Lógica para cancelar la orden y limpiar el carrito

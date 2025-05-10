@@ -31,6 +31,7 @@ export class OrdenVentaComponent implements OnInit {
   };
 
   private crearOrdenUrl = 'http://localhost:8080/api/ordenes/crear';
+  ordenes: OrdenVentaDTO[] = [];
 
   constructor(
     private http: HttpClient,
@@ -42,7 +43,18 @@ export class OrdenVentaComponent implements OnInit {
   ngOnInit(): void {
     this.actualizarFechaHora();
     setInterval(() => this.actualizarFechaHora(), 1000);
+    this.cargarOrdenes();
   }
+
+  cargarOrdenes() {
+  this.ordenVentaService.obtenerOrdenes().subscribe({
+    next: (data) => this.ordenes = data,
+    error: (err) => {
+      console.error('Error al obtener órdenes:', err);
+      alert('Error al cargar las órdenes');
+    }
+  });
+}
 
   actualizarFechaHora(): void {
     const ahora = new Date();

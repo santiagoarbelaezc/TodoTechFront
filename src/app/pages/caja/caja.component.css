@@ -1,431 +1,292 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
+/* Estilo general */
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #1e1e1e;
-    color: white;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #0f0f0f;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px; /* Aumentado desde el valor por defecto */
 }
 
-header {
-    width: 100%;
-    background: #111;
-    padding: 15px 30px;
-    position: fixed;
-    top: 0;
-    z-index: 100;
-}
-
-.menu {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    list-style: none;
-}
-
-.menu li {
-    display: inline-block;
-}
-
-.menu li a {
-    text-decoration: none;
-    color: white;
-    padding: 10px 20px;
-    font-size: 15px;
-    border-radius: 6px;
-}
-
-.menu li a:hover {
-    background: #333;
-}
-
-main {
-    display: flex;
-    flex-direction: row;
-    padding-top: 80px;
-    gap: 30px;
-    width: 100%;
-}
-
-.bienvenida-box {
-    background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
-    padding: 50px 30px;
-    border-radius: 15px;
-    box-shadow: 0 0 25px rgba(165, 165, 165, 0.08);
-    text-align: center;
-    animation: fadeIn 1s ease-in-out;
-    transition: all 0.3s ease;
-}
-
-.bienvenida-box h1 {
-    font-size: 30px;
-    margin-bottom: 15px;
-    color: #e2e2e2;
-    text-shadow: 0 0 8px rgba(148, 148, 148, 0.4);
-}
-
-.bienvenida-box p {
-    font-size: 18px;
-    color: #ddd;
-    margin-bottom: 25px;
-}
-
-.bienvenida-iconos {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    font-size: 26px;
-    margin-top: 10px;
-}
-
-.bienvenida-iconos span {
-    transition: transform 0.3s ease;
-}
-
-.bienvenida-iconos span:hover {
-    transform: scale(1.3);
-    text-shadow: 0 0 10px rgba(175, 175, 175, 0.5);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+/* Contenedor principal */
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}/* Sidebar */
 .sidebar {
-    width: 220px;
-    padding: 20px;
-    background: #2c2c2c;
-    border-radius: 10px;
-    position: sticky;
-    top: 80px;
-    height: fit-content;
+  width: 220px;
+  background: #1a1a1a;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 4px 0 10px rgba(0,0,0,0.5);
+}
+
+.sidebar h1 {
+  font-size: 18px; /* reducido desde 22px */
+  margin-bottom: 5px;
+  color: #ffffff;
 }
 
 .sidebar h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 18px;
+  font-size: 14px; /* reducido desde 16px */
+  color: #aaa;
+  margin-bottom: 20px;
 }
 
 .sidebar .btn {
-    width: 100%;
-    padding: 12px;
-    background: #444;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 12px;
+  background: #2b2b2b;
+  color: #ffffff;
+  border: none;
+  padding: 10px; /* reducido desde 12px */
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.3s;
+  font-size: 13px; /* reducido desde 15px */
 }
 
-.sidebar .btn:hover {
-    background: #555;
+.sidebar .btn:hover, .sidebar .btn.active {
+  background: #3c3c3c;
 }
 
-.sidebar .btn.active {
-    background: #777;
-    color: black;
+/* Detalle de orden */
+.detalle-orden {
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 30px;
+  padding: 30px;
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
 }
 
-.main-content {
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
-    padding: 0 20px;
-    max-width: calc(100% - 250px);
+.detalle-orden h2 {
+  margin-bottom: 20px;
+  font-size: 24px; /* Aumentado */
+  color: #fff;
 }
 
-.welcome-box {
-    background: #2a2a2a;
-    padding: 40px;
-    border-radius: 12px;
-    text-align: center;
-    font-size: 20px;
+/* Formularios */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.welcome-box p {
-    margin-top: 10px;
-    font-size: 16px;
+.form-row {
+  display: flex;
+  gap: 20px;
 }
 
-.content {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    width: 100%;
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.content h1, .content h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    text-align: center;
+label {
+  font-size: 15px; /* Aumentado */
+  color: #aaa;
+  margin-bottom: 5px;
 }
 
-.content form {
-    display: flex;
-    gap: 30px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    max-width: 1000px;
-    margin: 0 auto;
+input {
+  background: #2a2a2a;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 15px; /* Aumentado */
 }
 
-.content form label {
-    font-size: 15px;
+input[readonly] {
+  background: #1c1c1c;
 }
 
-.content input,
-.content select,
-.content textarea {
-    width: 100%;
-    padding: 12px;
-    background: #3a3a3a;
-    border: 1px solid #555;
-    border-radius: 8px;
-    color: white;
-    font-size: 14px;
+/* Métodos de pago */
+.metodos-pago-icons {
+  display: flex;
+  gap: 25px;
+  margin: 10px 0;
+  justify-content: space-evenly;
 }
 
-.content input::placeholder,
-.content textarea::placeholder {
-    color: #bbb;
+.metodos-pago-icons img {
+  width: 90px;
+  height: 70px;
+  padding: 10px;
+  border-radius: 15px;
+  background: #2a2a2a;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.content form button[type="submit"] {
-    background: #555;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 15px;
+.metodos-pago-icons img.active {
+  outline: 2px solid #00ffff;
+  background: #404040;
 }
 
-.content form button[type="submit"]:hover {
-    background: #777;
+/* Botones de acción */
+.acciones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
-/* Estilos de tabla (mantener) */
-.tabla-usuarios,
-.tabla-productos,
-.tabla-ordenes,
-.tabla-reportes,
-.tabla-inventario,
-.tabla-configuracion {
-    margin: 2rem auto;
-    padding: 1.5rem;
-    width: 100%;
-    max-width: 900px;
-    background-color: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    color: #f5f5f5;
-    font-size: 15px;
-    overflow-x: auto;
+.btn-cancelar, .btn-pagar {
+  flex: 1;
+  margin: 5px;
+  padding: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 16px; /* Aumentado */
 }
 
-.tabla-usuarios table,
-.tabla-productos table,
-.tabla-ordenes table,
-.tabla-reportes table,
-.tabla-inventario table,
-.tabla-configuracion table {
-    width: 100%;
-    border-collapse: collapse;
+.btn-cancelar {
+  background: #8b0000;
 }
 
-.tabla-usuarios th,
-.tabla-productos th,
-.tabla-ordenes th,
-.tabla-reportes th,
-.tabla-inventario th,
-.tabla-configuracion th {
-    padding: 12px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-    text-align: left;
+.btn-cancelar:hover {
+  background: #a00000;
 }
 
-.tabla-usuarios td,
-.tabla-productos td,
-.tabla-ordenes td,
-.tabla-reportes td,
-.tabla-inventario td,
-.tabla-configuracion td {
-    padding: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.btn-pagar {
+  background: #008080;
 }
 
-.botones-reportes {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin: 20px 0;
+.btn-pagar:hover {
+  background: #00aaaa;
 }
 
-.btn-reporte {
-    background: #555;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 15px;
-    transition: background 0.3s ease;
-}
-
-.btn-reporte:hover {
-    background: #777;
-}
-
+/* Acciones por producto */
 .acciones-producto {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 8px;
 }
 
 .acciones-producto button {
-    padding: 4px 8px;
-    font-size: 12px;
-    border: 1px solid #252525; /* Contorno negro */
-    border-radius: 5px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    background-color: #333;
-    color: white;
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #252525;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  background-color: #333;
+  color: white;
 }
 
 .acciones-producto button:nth-child(1) {
-    background-color: #4caf50; /* verde para editar */
+  background-color: #4caf50;
 }
 
 .acciones-producto button:nth-child(2) {
-    background-color: #f44336; /* rojo para eliminar */
+  background-color: #f44336;
 }
 
 .acciones-producto button:nth-child(3) {
-    background-color: #2196f3; /* azul para detalles */
+  background-color: #2196f3;
 }
 
 .acciones-producto button:hover {
-    opacity: 0.8;
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  opacity: 0.8;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .acciones-producto button:focus {
-    outline: none;
-    box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
+  outline: none;
+  box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
 }
 
-/* Mejora visual y distribución más profesional del formulario */
 
-.content form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px 40px;
-    padding: 30px;
-    background: #2b2b2b;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.03);
-    margin: 0 auto;
-    max-width: 1100px;
-}
-/* Estilo general de las imágenes */
-img {
-    width: 40%; /* Reducido al 40% del tamaño original */
-    height: auto;
-    max-width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* sombra más sutil */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    object-fit: cover;
+/* Contenedor de la tabla con scroll */
+.contenedor-tabla-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 10px;
 }
 
-/* Efecto de hover sutil */
-img:hover {
-    transform: scale(1.05); /* aumento suave */
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); /* sombra suave */
+/* Estilos para la tabla de órdenes */
+.tabla-ordenes {
+  margin: 1rem auto; /* Reducido */
+  padding: 1rem; /* Reducido */
+  width: 100%;
+  max-width: 800px; /* Reducido */
+  background-color: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px; /* Reducido */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* Reducido */
+  color: #f5f5f5;
+  font-size: 13px; /* Reducido */
+  overflow-x: auto;
 }
 
-/* Contenedor para las imágenes */
-.image-container {
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* sombra suave */
-    display: inline-block; /* Para mantener la imagen centrada */
-    width: 100%;
-    max-width: 54%; /* Ajustado para que las imágenes se vean más pequeñas y organizadas */
-    margin: 15px auto; /* Espacio alrededor */
+.tabla-ordenes table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-/* Estilo para la imagen dentro del contenedor */
-.image-container img {
-    transition: transform 0.4s ease, filter 0.3s ease;
+.tabla-ordenes th,
+.tabla-ordenes td {
+  padding: 8px; /* Reducido */
+  text-align: left;
 }
 
-/* Hover dentro del contenedor */
-.image-container:hover img {
-    transform: scale(1.08); /* Aumento más sutil */
-    filter: brightness(1.15); /* Aumento de brillo para destacarla */
+.tabla-ordenes th {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  font-size: 14px; /* Reducido */
 }
 
-/* Mejorar el layout de las imágenes */
-.image-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); /* Reducción en el tamaño mínimo de las columnas */
-    gap: 20px; /* Espacio entre las imágenes */
-    margin-top: 30px;
-    padding: 0 20px;
+.tabla-ordenes td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13px; /* Reducido */
 }
 
-/* Ajustes generales para imágenes dentro de contenedores */
-.image-gallery .image-container {
-    max-width: 100%; /* Permite que las imágenes se ajusten al contenedor */
-    border-radius: 15px;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+
+.resumen-orden {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
 }
 
-/* Animación al pasar el mouse */
-.image-gallery .image-container:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15); /* Sombra sutil al estar sobre ella */
+.resumen-item {
+  display: flex;
+  flex-direction: column;
 }
 
-/* Estilos de contenedores de imágenes dentro de secciones */
-.section-images {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 40px;
+.resumen-item label {
+  font-size: 16px;
+  margin-bottom: 5px;
+  font-weight: 600;
 }
 
-.section-images .image-container {
-    width: 168px; /* Reducido al 40% del tamaño original */
-    height: 108px; /* Ajustado proporcionalmente */
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+.resumen-input {
+  font-size: 20px;
+  padding: 10px;
+  font-weight: 600;
+  background-color: #f1f1f1;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  text-align: right;
+  color: #333;
+}
+
+.valor-final {
+  color: #007bff;
+  font-size: 22px;
+  border-color: #007bff;
 }

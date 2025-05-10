@@ -14,6 +14,7 @@ import { ReporteRendimientoDTO } from '../../models/reporteRendimiento.dto';
 import { VendedorService } from '../../services/vendedor.service';
 import { DespachadorService } from '../../services/despachador.service';
 import { CajeroService } from '../../services/cajero.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -68,7 +69,8 @@ export class AdminComponent implements OnInit {
     private reporteService: ReporteService,
     private vendedorService: VendedorService,
     private despachadorService: DespachadorService,
-    private cajeroService: CajeroService
+    private cajeroService: CajeroService,
+    private router: Router // <- inyectado aquí
   ) {}
 
   ngOnInit() {
