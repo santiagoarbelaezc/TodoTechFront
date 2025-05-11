@@ -13,7 +13,7 @@
   <!-- Sidebar -->
 <aside class="sidebar">
   <h1>TodoTech Caja</h1>
-  <h2>Cajero: {{orderDetails.seller}}</h2>
+  <h2>Cajero: {{currentOrderDetails.seller}}</h2>
 
   <button *ngFor="let item of menuItems" 
           class="btn" 
@@ -50,51 +50,52 @@
 </aside>
 
 
-  <!-- Order Details -->
-  <article id="detalle-orden" class="detalle-orden">
-    <h2>Detalle de la Orden</h2>
-    <form id="form-detalle-orden">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="vendedor">Vendedor:</label>
-          <input type="text" id="vendedor" [value]="orderDetails.seller" readonly />
-        </div>
-        <div class="form-group">
-          <label for="cliente">Cliente:</label>
-          <input type="text" id="cliente" [value]="orderDetails.client" readonly />
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="fecha">Fecha:</label>
-          <input type="text" id="fecha" [value]="orderDetails.date" readonly />
-        </div>
-        <div class="form-group">
-          <label for="estado">Estado:</label>
-          <input type="text" id="estado" [value]="orderDetails.status" readonly />
-        </div>
-      </div>
-      
+ <!-- Order Details -->
+<article id="detalle-orden" class="detalle-orden">
+  <h2>Detalle de la Orden</h2>
+  <form id="form-detalle-orden">
+    <div class="form-row">
       <div class="form-group">
-        <label for="metodo-seleccionado">Método de Pago:</label>
-        <input type="text" id="metodo-seleccionado" [value]="selectedPaymentMethod" readonly />
+        <label for="vendedor">Vendedor:</label>
+        <input type="text" id="vendedor" [value]="currentOrderDetails.seller" readonly />
       </div>
-      
-      <div class="resumen-orden">
-  <div class="resumen-item">
-    <label for="impuestos">Impuestos:</label>
-    <input type="text" id="impuestos" [value]="orderDetails.taxes" readonly class="resumen-input" />
-  </div>
-  <div class="resumen-item">
-    <label for="valor-total">Valor Total:</label>
-    <input type="text" id="valor-total" [value]="orderDetails.total" readonly class="resumen-input" />
-  </div>
-  <div class="resumen-item">
-    <label for="valor-pagar">Valor a Pagar:</label>
-    <input type="text" id="valor-pagar" [value]="orderDetails.toPay" readonly class="resumen-input valor-final" />
-  </div>
-</div>
+      <div class="form-group">
+        <label for="cliente">Cliente:</label>
+        <input type="text" id="cliente" [value]="currentOrderDetails.client" readonly />
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label for="fecha">Fecha:</label>
+        <input type="text" id="fecha" [value]="currentOrderDetails.date" readonly />
+      </div>
+      <div class="form-group">
+        <label for="estado">Estado:</label>
+        <input type="text" id="estado" [value]="currentOrderDetails.status" readonly />
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="metodo-seleccionado">Método de Pago:</label>
+      <input type="text" id="metodo-seleccionado" [value]="selectedPaymentMethod" readonly />
+    </div>
+    
+    <div class="resumen-orden">
+      <div class="resumen-item">
+        <label for="impuestos">Impuestos:</label>
+        <input type="text" id="impuestos" [value]="currentOrderDetails.taxes" readonly class="resumen-input" />
+      </div>
+      <div class="resumen-item">
+        <label for="valor-total">Valor Total:</label>
+        <input type="text" id="valor-total" [value]="currentOrderDetails.total" readonly class="resumen-input" />
+      </div>
+      <div class="resumen-item">
+        <label for="valor-pagar">Valor a Pagar:</label>
+        <input type="text" id="valor-pagar" [value]="currentOrderDetails.toPay" readonly class="resumen-input valor-final" />
+      </div>
+    </div>
+ 
 
 
       <!-- Payment Methods Section -->

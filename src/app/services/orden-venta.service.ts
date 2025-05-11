@@ -50,5 +50,10 @@ export class OrdenVentaService {
   obtenerOrdenes(): Observable<OrdenVentaDTO[]> {
     return this.http.get<OrdenVentaDTO[]>(`${this.apiUrl}/obtenerTodos`);
   }
+
+  // Nuevo método para obtener la última orden
+  obtenerUltimaOrden(): Observable<OrdenVentaDTO> {
+    return this.http.get<OrdenVentaDTO>(`${this.apiUrl}/ultima`);
+  }
   
 }

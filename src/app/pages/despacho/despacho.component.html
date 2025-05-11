@@ -1,1 +1,160 @@
-<p>despacho works!</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Despacho de Órdenes</title>
+  <link rel="stylesheet" href="despacho.component.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h1>TodoTech Despachos</h1>
+      <h2>Despachador: {{currentOrderDetails.seller}}</h2>
+
+      <button *ngFor="let item of menuItems" 
+              class="btn" 
+              [class.active]="item.active"
+              (click)="selectItem(item)">
+        <i class="fas {{item.icon}}"></i> {{item.text}}
+      </button>
+
+      <button class="btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+
+      <h3 class="titulo-ordenes">Órdenes para despachar</h3>
+      <div class="contenedor-tabla-scroll">
+        <div class="tabla-ordenes">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Dirección</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let orden of ordenes" (click)="seleccionarOrden(orden)">
+                <td>{{ orden.id }}</td>
+                <td>{{ orden.cliente.nombre }}</td>
+                <td>{{ orden.cliente.correo }}</td>
+                <td>{{ orden.estado }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Detalles de Despacho -->
+    <article id="detalle-despacho" class="detalle-despacho">
+      <h2>Gestión de Despacho</h2>
+      <form id="form-despacho">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="orden-id">N° Orden:</label>
+            <input type="text" id="orden-id" [value]="currentOrderDetails.client" readonly />
+          </div>
+          <div class="form-group">
+            <label for="cliente">Cliente:</label>
+            <input type="text" id="cliente" [value]="currentOrderDetails.client" readonly />
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" [value]="currentOrderDetails.client" readonly />
+          </div>
+          <div class="form-group">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" [value]="currentOrderDetails.client" readonly />
+          </div>
+        </div>
+
+        <!-- Sección de Método de Despacho -->
+        <section class="metodos-despacho">
+          <h3>Método de Despacho</h3>
+          <div class="metodos-despacho-options">
+            <div class="form-group">
+              <input type="radio" id="mensajeria" name="metodo-despacho" value="mensajeria" 
+                     [(ngModel)]="metodoDespacho" (change)="mostrarCamposMensajeria(true)">
+              <label for="mensajeria">Servicio de Mensajería</label>
+            </div>
+            
+            <div class="form-group">
+              <input type="radio" id="entrega-directa" name="metodo-despacho" value="directa"
+                     [(ngModel)]="metodoDespacho" (change)="mostrarCamposMensajeria(false)">
+              <label for="entrega-directa">Entrega Directa</label>
+            </div>
+          </div>
+        </section>
+
+        <!-- Campos para mensajería (se muestran solo si está seleccionado) -->
+        <section class="detalles-mensajeria" *ngIf="mostrarMensajeria">
+          <h3>Datos de Mensajería</h3>
+          <div class="form-group">
+            <label for="empresa-mensajeria">Empresa:</label>
+            <select id="empresa-mensajeria" [(ngModel)]="empresaMensajeria" name="empresa-mensajeria">
+              <option value="servientrega">Servientrega</option>
+              <option value="coordinadora">Coordinadora</option>
+              <option value="interrapidisimo">Interrapidísimo</option>
+              <option value="envia">Envía</option>
+              <option value="otra">Otra</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="numero-guia">Número de Guía:</label>
+            <input type="text" id="numero-guia" [(ngModel)]="numeroGuia" name="numero-guia" 
+                   placeholder="Ingrese el número de guía" />
+          </div>
+          
+          <div class="form-group">
+            <label for="fecha-despacho">Fecha de Despacho:</label>
+            <input type="date" id="fecha-despacho" [(ngModel)]="fechaDespacho" name="fecha-despacho" />
+          </div>
+        </section>
+
+        <!-- Sección de Rastreo -->
+        <section class="rastreo-pedido">
+          <h3>Rastrear Pedido</h3>
+          <div class="form-group">
+            <label for="codigo-rastreo">Código de Rastreo:</label>
+            <input type="text" id="codigo-rastreo" [(ngModel)]="codigoRastreo" name="codigo-rastreo" 
+                   placeholder="Ingrese el código de rastreo" />
+            <button type="button" (click)="rastrearPedido()" class="btn-rastrear">
+              <i class="fas fa-search"></i> Rastrear
+            </button>
+          </div>
+          
+          <div class="estado-rastreo" *ngIf="estadoRastreo">
+            <h4>Estado del Envío:</h4>
+            <div class="timeline">
+              <div class="evento" *ngFor="let evento of eventosRastreo">
+                <div class="fecha">{{evento.fecha}}</div>
+                <div class="descripcion">{{evento.descripcion}}</div>
+                <div class="estado">{{evento.estado}}</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Botones de Acción -->
+        <div class="acciones">
+          <button type="button" (click)="cancelarDespacho()" class="btn-cancelar">
+            Cancelar Despacho
+          </button>
+          <button type="button" (click)="confirmarDespacho()" class="btn-confirmar">
+            Confirmar Despacho
+          </button>
+        </div>
+      </form>
+    </article>
+  </div>
+</body>
+</html>

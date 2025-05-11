@@ -1,24 +1,33 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OrdenVentaDTO } from '../../models/ordenventa.dto';
 import { OrdenVentaService } from '../../services/orden-venta.service';
 import { PagoService } from '../../services/pago.service';
-
+import { CrearPagoDTO } from '../../models/crearPago.dto';
 
 @Component({
   selector: 'app-caja',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './caja.component.html',
-  styleUrls: ['./caja.component.css']
+  styleUrls: ['./caja.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CajaComponent implements OnInit {
-
-  orden: OrdenVentaDTO | null = null;
+  private _orden: OrdenVentaDTO | null = null;
   ordenes: OrdenVentaDTO[] = [];
   selectedPaymentMethod = 'No seleccionado';
+  
+  currentOrderDetails = {
+    seller: '',
+    client: '',
+    date: '',
+    status: '',
+    taxes: '',
+    total: '',
+    toPay: ''
+  };
 
   menuItems = [
     { icon: 'fa-receipt', text: 'Órdenes de Venta', active: true },
@@ -29,39 +38,28 @@ export class CajaComponent implements OnInit {
     { icon: 'fa-cog', text: 'Configuración', active: false }
   ];
 
-  constructor(private ordenVentaService: OrdenVentaService, private pagoService: PagoService,
-    private cdRef: ChangeDetectorRef // Inyección de ChangeDetectorRef
+
+  
+  
+  constructor(
+    private ordenVentaService: OrdenVentaService, 
+    private pagoService: PagoService,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-
-    this.orderDetails;
-
-    const ordenMemoria = this.ordenVentaService.getOrden();
-    if (ordenMemoria) {
-      this.orden = ordenMemoria;
-    } else {
-      const id = this.ordenVentaService.getOrdenIdDesdeLocalStorage();
-      if (id !== null) {
-        this.ordenVentaService.obtenerOrdenPorId(id).subscribe({
-          next: (orden) => this.orden = orden,
-          error: (err) => console.error('Error al recuperar la orden', err)
-        });
-      }
-    }
-
-    this.ordenVentaService.obtenerOrdenes().subscribe({
-      next: (data) => {
-        console.log('Órdenes cargadas:', data);
-        this.ordenes = data;
-      },
-      error: (err) => console.error('Error al cargar órdenes', err)
-    });
+    this.refreshPage();
   }
 
-  get orderDetails() {
-  if (!this.orden) {
-    return {
+  // Función para refrescar toda la página al ingresar
+  refreshPage(): void {
+    console.log('Refrescando datos del componente...');
+    
+    // Limpiar datos existentes
+    this._orden = null;
+    this.ordenes = [];
+    this.selectedPaymentMethod = 'No seleccionado';
+    this.currentOrderDetails = {
       seller: '',
       client: '',
       date: '',
@@ -70,32 +68,101 @@ export class CajaComponent implements OnInit {
       total: '',
       toPay: ''
     };
+    
+    // Forzar detección de cambios
+    this.cdRef.detectChanges();
+    
+    // Cargar datos frescos
+    this.loadInitialData();
   }
 
-  const impuestos = this.orden.total * 0.19;
-  const totalConImpuestos = this.orden.total + impuestos;
+  get orden(): OrdenVentaDTO | null {
+    return this._orden;
+  }
 
-  // Formatear los valores a moneda con separador de miles
-  const formatearValor = (valor: number) => valor.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
+  set orden(value: OrdenVentaDTO | null) {
+    this._orden = value;
+    this.updateOrderDetails();
+    this.cdRef.detectChanges();
+  }
 
-  return {
-    seller: this.orden.vendedor?.nombre ?? '',
-    client: this.orden.cliente?.nombre ?? '',
-    date: this.orden.fecha,
-    status: this.orden.estado,
+  private loadInitialData(): void {
+    const ordenMemoria = this.ordenVentaService.getOrden();
+    if (ordenMemoria) {
+      this.orden = ordenMemoria;
+    } else {
+      const id = this.ordenVentaService.getOrdenIdDesdeLocalStorage();
+      if (id !== null) {
+        this.ordenVentaService.obtenerOrdenPorId(id).subscribe({
+          next: (orden) => {
+            this.orden = orden;
+            this.cdRef.detectChanges();
+          },
+          error: (err) => console.error('Error al recuperar la orden', err)
+        });
+      }
+    }
+
+    this.ordenVentaService.obtenerOrdenes().subscribe({
+      next: (data) => {
+        this.ordenes = data;
+        this.cdRef.detectChanges();
+      },
+      error: (err) => console.error('Error al cargar órdenes', err)
+    });
+  }
+
+  private updateOrderDetails(): void {
+  if (!this._orden) {
+    this.currentOrderDetails = {
+      seller: '',
+      client: '',
+      date: '',
+      status: '',
+      taxes: '',
+      total: '',
+      toPay: ''
+    };
+    this.cdRef.detectChanges();
+    return;
+  }
+
+  // Calcular valores como enteros
+  const impuestos = Math.round(this._orden.total * 0.19);
+  const totalConImpuestos = Math.round(this._orden.total + impuestos);
+  
+  // Función para formatear como moneda sin decimales
+  const formatearValor = (valor: number) => 
+    valor.toLocaleString('es-CO', { 
+      style: 'currency', 
+      currency: 'COP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+
+  this.currentOrderDetails = {
+    seller: this._orden.vendedor?.nombre ?? '',
+    client: this._orden.cliente?.nombre ?? '',
+    date: this._orden.fecha,
+    status: this._orden.estado,
     taxes: formatearValor(impuestos),
-    total: formatearValor(this.orden.total),
+    total: formatearValor(Math.round(this._orden.total)),
     toPay: formatearValor(totalConImpuestos)
   };
+
+  this.cdRef.detectChanges();
 }
 
+  // ... (resto de métodos se mantienen igual)
   selectItem(selectedItem: { icon: string; text: string; active: boolean }) {
     this.menuItems.forEach(item => item.active = false);
     selectedItem.active = true;
+    this.cdRef.detectChanges();
   }
 
   selectPaymentMethod(method: string): void {
     this.selectedPaymentMethod = method;
+    this.cdRef.detectChanges();
   }
 
   cancelOrder(): void {
@@ -104,64 +171,79 @@ export class CajaComponent implements OnInit {
       this.ordenVentaService.limpiarOrdenId();
       this.orden = null;
       alert('Orden cancelada');
+      this.cdRef.detectChanges();
     }
   }
 
   processPayment(): void {
-  if (!this.orden) {
-    alert('No hay orden seleccionada');
-    return;
-  }
+  this.ordenVentaService.obtenerUltimaOrden().subscribe({
+    next: (ultimaOrden) => {
+      console.log('Última orden recibida:', ultimaOrden);
+      
+      if (!ultimaOrden?.id) {
+        throw new Error('Orden no tiene ID válido');
+      }
 
-  if (this.selectedPaymentMethod === 'No seleccionado') {
-    alert('Por favor seleccione un método de pago');
-    return;
-  }
+      if (this.selectedPaymentMethod === 'No seleccionado') {
+        alert('Por favor seleccione un método de pago');
+        return;
+      }
 
-  const metodoPagoEnum = this.mapMetodoPagoToEnum(this.selectedPaymentMethod);
+      // Redondear valores a enteros
+      const montoRedondeado = Math.round(ultimaOrden.total * 1.19);
+      
+      const pagoData = {
+        ordenId: ultimaOrden.id,
+        monto: montoRedondeado, // Usamos el valor redondeado
+        metodoPago: this.mapMetodoPagoToEnum(this.selectedPaymentMethod)
+      };
 
-  const crearPagoDTO = {
-    orden: this.orden,
-    monto: this.orden.total * 1.19,
-    metodoPago: metodoPagoEnum
-  };
+      console.log('Enviando pago:', pagoData);
 
-  this.pagoService.crearPago(crearPagoDTO).subscribe({
-    next: (respuesta) => {
-      alert(respuesta.mensaje);
-      console.log('Pago creado:', respuesta);
-
-      // ✅ Limpiar formulario
-      this.orden = null;
-      this.selectedPaymentMethod = 'No seleccionado';
-
-      // Si usas un formulario reactivo:
-      // this.formularioPago.reset();
-
+      this.pagoService.crearPago(pagoData).subscribe({
+        next: (respuesta) => {
+          alert(`Pago exitoso: ${respuesta.mensaje}`);
+          this.resetAfterPayment();
+        },
+        error: (error) => {
+          console.error('Error en el pago:', error);
+          alert('Error al procesar el pago');
+        }
+      });
     },
     error: (error) => {
-      console.error('Error al crear el pago:', error);
-      alert('Error al procesar el pago');
+      console.error('Error al obtener última orden:', error);
+      alert('No se pudo obtener la orden para procesar el pago');
     }
   });
-  }
-
-
-
-  private mapMetodoPagoToEnum(metodo: string): string {
-  switch (metodo) {
-    case 'Visa':
-    case 'MasterCard':
-    case 'Visa Débito':
-    case 'PayPal':
-      return 'TARJETA_BANCARIA';
-    case 'RedCompra':
-      return 'REDCOMPRA';
-    case 'Efectivo':
-      return 'EFECTIVO';
-    default:
-      return 'EFECTIVO'; // Valor por defecto o puedes lanzar un error
-  }
 }
 
+private resetAfterPayment(): void {
+  this.orden = null;
+  this.selectedPaymentMethod = 'No seleccionado';
+  this.cdRef.detectChanges();
+}
+
+private handlePaymentError(error: any): void {
+  if (error.error.includes('ORA-01400')) {
+    alert('Error: El ID de la orden no fue enviado correctamente al servidor');
+  } else {
+    alert('Error al procesar el pago. Por favor intente nuevamente.');
+  }
+}
+  private mapMetodoPagoToEnum(metodo: string): string {
+    switch (metodo) {
+      case 'Visa':
+      case 'MasterCard':
+      case 'Visa Débito':
+      case 'PayPal':
+        return 'TARJETA_BANCARIA';
+      case 'RedCompra':
+        return 'REDCOMPRA';
+      case 'Efectivo':
+        return 'EFECTIVO';
+      default:
+        return 'EFECTIVO';
+    }
+  }
 }

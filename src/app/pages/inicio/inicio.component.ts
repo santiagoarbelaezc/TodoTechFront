@@ -234,9 +234,11 @@ export class InicioComponent implements AfterViewInit {
   }
   
   pagarCarrito() {
-    this.router.navigate(['/caja']);
-  }
-
+  // Navega al componente y recarga los datos
+  this.router.navigate(['/caja']).then(() => {
+    window.location.reload(); // Solución simple pero efectiva
+  });
+}
   
   cancelarOrden(): void {
     // TODO: Lógica para cancelar la orden y limpiar el carrito
