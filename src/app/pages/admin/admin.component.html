@@ -162,42 +162,53 @@
       </div>
     </div>
 
-    <div *ngIf="seccionActiva === 'ordenes'">
-      <h2>Órdenes de Venta</h2>
-      <input type="text" placeholder="Buscar orden..." />
-      <table class="tabla-ordenes">
-        <thead>
-          <tr>
-            <th>N° Orden</th>
-            <th>Cliente</th>
-            <th>Fecha</th>
-            <th>Total</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let orden of ordenes">
-            <td>{{ orden.id }}</td>
-            <td>{{ orden.cliente.nombre }}</td>
-            <td>{{ orden.fecha | date: 'shortDate' }}</td>
-            <td>{{ orden.total | currency:'USD' }}</td>
-            <td>{{ orden.estado }}</td>
-            <td>
-              <button (click)="verDetallesOrden(orden)">Ver Detalles</button>
-              <!-- puedes agregar botones para editar o eliminar -->
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+<div *ngIf="seccionActiva === 'ordenes'">
+  <h2>Órdenes de Venta</h2>
+  
+  <!-- Botones de filtrado -->
+  <div class="filtros-ordenes">
+    <button (click)="filtrarOrdenes('fecha')">Listar órdenes por fecha</button>
+    <button (click)="filtrarOrdenes('valor')">Listar órdenes por valor</button>
+    <button (click)="filtrarOrdenes('pagadas')">Listar órdenes pagadas</button>
+    <button (click)="filtrarOrdenes('pendientes')">Listar órdenes pendientes</button>
+    <button (click)="filtrarOrdenes('despachadas')">Listar órdenes despachadas</button>
+    <button (click)="filtrarOrdenes('cerradas')">Listar órdenes cerradas</button>
+  </div>
+  
+  <input type="text" placeholder="Buscar orden..." [(ngModel)]="terminoBusqueda" (input)="filtrarOrdenes()" />
+  
+  <table class="tabla-ordenes">
+    <thead>
+      <tr>
+        <th>N° Orden</th>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let orden of ordenesFiltradas">
+        <td>{{ orden.id }}</td>
+        <td>{{ orden.cliente.nombre }}</td>
+        <td>{{ orden.fecha | date: 'shortDate' }}</td>
+        <td>{{ orden.total | currency:'USD' }}</td>
+        <td>{{ orden.estado }}</td>
+        <td>
+          <button (click)="verDetallesOrden(orden)">Ver Detalles</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-    <div *ngIf="seccionActiva === 'reportes'" class="reportes-container">
-      <h2>Reportes y Estadísticas</h2>
-      <div class="form-group botones-reportes">
-        <button class="btn-reporte" type="button" (click)="cargarReportePorVendedor()">Generar Reporte por Vendedor</button>
-      </div>
-    
+<div *ngIf="seccionActiva === 'reportes'" class="reportes-container">
+  <h2>Reportes y Estadísticas</h2>
+  <div class="form-group botones-reportes">
+    <button class="btn-reporte" type="button" (click)="cargarReportePorVendedor()">Generar Reporte por Vendedor</button>
+  </div>
+
       <table class="tabla-reportes" *ngIf="reportesPorVendedor.length > 0">
         <thead>
           <tr>
@@ -223,26 +234,40 @@
     
       <p *ngIf="reportesPorVendedor.length === 0">No hay datos de reporte por vendedor disponibles.</p>
     </div>
-    
+   
 
     <div *ngIf="seccionActiva === 'inventario'">
-      <h2>Inventario</h2>
-      <input type="text" placeholder="Buscar producto..." />
-      <table class="tabla-inventario">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Código</th>
-            <th>Stock</th>
-            <th>Categoría</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Lista de productos -->
-        </tbody>
-      </table>
-    </div>
+  <h2>Inventario</h2>
+  <input type="text" placeholder="Buscar producto..." />
+
+  <table class="tabla-inventario">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Código</th>
+        <th>Stock</th>
+        <th>Categoría</th>
+        <th>Cantidad Ventas</th>
+        <th>Valor Ventas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of productosReporte">
+  <td>{{ item.producto.nombre || 'Sin nombre' }}</td>
+<td>{{ item.producto.codigo || 'Sin código' }}</td>
+<td>{{ item.producto.stock}}</td>
+<td>{{ item.producto.categoria.nombre || 'Sin categoría' }}</td>
+<td>{{ item.cantidadVentas}}</td>
+<td>{{ item.valorVentas}}</td>
+
+  <td>
+    <button>Ver</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
 
     <div *ngIf="seccionActiva === 'configuracion'" class="configuracion-container">
       <h2>Configuración del Sistema</h2>

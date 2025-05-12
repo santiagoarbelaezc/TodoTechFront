@@ -15,6 +15,7 @@ import { VendedorService } from '../../services/vendedor.service';
 import { DespachadorService } from '../../services/despachador.service';
 import { CajeroService } from '../../services/cajero.service';
 import { Router } from '@angular/router';
+import { ProductoReporteRequest } from '../../models/productoReporteRequest.dto';
 
 @Component({
   selector: 'app-admin',
@@ -36,6 +37,12 @@ export class AdminComponent implements OnInit {
   productos: ProductoDTO[] = [];
   ordenes: OrdenVentaDTO[] = [];
   reportesPorVendedor: ReporteRendimientoDTO[] = [];
+
+  productosReporte: ProductoReporteRequest[] = [];
+
+  
+  ordenesFiltradas: OrdenVentaDTO[] = [];
+  terminoBusqueda: string = '';
 
   // Objetos de trabajo
   usuario: UsuarioDTO = {
@@ -76,7 +83,9 @@ export class AdminComponent implements OnInit {
   ngOnInit() {
     this.cargarUsuarios();
     this.cargarReportePorVendedor();
+    this.cargarProductosReporte(); 
   }
+
 
   mostrarSeccion(seccion: string) {
     this.seccionActiva = seccion;
@@ -115,6 +124,44 @@ export class AdminComponent implements OnInit {
       }
     });
   }
+
+cargarProductosReporte(): void {
+  console.log('Iniciando carga de productos para el reporte...');
+
+  this.productoService.obtenerReporteVentas().subscribe({
+    next: (data) => {
+      console.log('Datos recibidos del servicio:', data);
+
+      // Validar y filtrar datos corruptos
+      const productosValidos = data.filter((item, index) => {
+      const valido =
+        item &&
+        item.producto &&
+        item.producto.categoria;
+
+      if (!valido) {
+        console.warn(`Elemento inválido en índice ${index}:`, item);
+      }
+
+      return valido;
+    });
+      console.log('Productos válidos después de la validación:', productosValidos);
+      this.productosReporte = productosValidos;
+
+      console.log('Productos válidos asignados:', this.productosReporte.length);
+      if (this.productosReporte.length > 0) {
+        console.log('Primer producto del reporte:', this.productosReporte[0]);
+      } else {
+        console.warn('No se recibieron productos válidos en el reporte.');
+      }
+    },
+    error: (err) => {
+      console.error('Error al obtener el reporte de ventas:', err);
+    }
+  });
+}
+
+
 
   cargarOrdenes() {
     this.ordenVentaService.obtenerOrdenes().subscribe({
@@ -169,6 +216,60 @@ export class AdminComponent implements OnInit {
       }
     });
   }
+
+  filtrarOrdenes(tipo?: string): void {
+  switch (tipo) {
+    case 'fecha':
+      this.ordenVentaService.obtenerOrdenesPorFecha().subscribe(data => {
+        this.ordenes = data;
+        this.aplicarFiltroBusqueda();
+      });
+      break;
+    case 'valor':
+      this.ordenVentaService.obtenerOrdenesPorValor().subscribe(data => {
+        this.ordenes = data;
+        this.aplicarFiltroBusqueda();
+      });
+      break;
+    case 'pagadas':
+      this.ordenVentaService.obtenerOrdenesPagadas().subscribe(data => {
+        this.ordenes = data;
+        this.aplicarFiltroBusqueda();
+      });
+      break;
+    case 'pendientes':
+      this.ordenVentaService.obtenerOrdenesPendientes().subscribe(data => {
+        this.ordenes = data;
+        this.aplicarFiltroBusqueda();
+      });
+      break;
+    case 'despachadas':
+      this.ordenVentaService.obtenerOrdenesDespachadas().subscribe(data => {
+        this.ordenes = data;
+        this.aplicarFiltroBusqueda();
+      });
+      break;
+    case 'cerradas':
+      this.ordenVentaService.obtenerOrdenesCerradas().subscribe(data => {
+        this.ordenes = data;
+        this.aplicarFiltroBusqueda();
+      });
+      break;
+    default:
+      // Si no se pasa un tipo, se aplica solo el filtro de búsqueda
+      this.aplicarFiltroBusqueda();
+      break;
+  }
+}
+aplicarFiltroBusqueda(): void {
+  const termino = this.terminoBusqueda.toLowerCase();
+  this.ordenesFiltradas = this.ordenes.filter(orden =>
+    orden.id.toString().includes(termino) ||
+    orden.cliente.nombre.toLowerCase().includes(termino) ||
+    orden.estado.toLowerCase().includes(termino)
+  );
+}
+
 
   editarProducto(producto: ProductoDTO) {
     console.log('Editar producto:', producto);

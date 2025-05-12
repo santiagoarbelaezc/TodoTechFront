@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, interval, switchMap } from 'rxjs';
 import { ProductoDTO } from '../models/producto.dto';
 import { CarruselService } from './carrusel.service';
 import { CrearProductoDTO } from '../models/crearProducto.dto';
+import { ProductoReporteRequest } from '../models/productoReporteRequest.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -122,6 +123,10 @@ export class ProductoService {
     );
   }
 
+
+  obtenerReporteVentas(): Observable<ProductoReporteRequest[]> {
+  return this.http.get<ProductoReporteRequest[]>(`${this.apiUrl}/reporte/ventas`);
+}
 
 
 }

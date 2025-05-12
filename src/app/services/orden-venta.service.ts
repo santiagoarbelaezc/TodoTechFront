@@ -1,6 +1,5 @@
-// src/app/services/orden-venta.service.ts
 import { Injectable } from '@angular/core';
-import { OrdenVentaDTO } from '../models/ordenventa.dto';
+import { OrdenVentaDTO, EstadoOrden } from '../models/ordenventa.dto';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -8,11 +7,12 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class OrdenVentaService {
-  private apiUrl = 'http://localhost:8080/api/ordenes'; // Ajusta la URL si es diferente
+  private apiUrl = 'http://localhost:8080/api/ordenes';
   private ordenActual: OrdenVentaDTO | null = null;
 
   constructor(private http: HttpClient) { }
 
+  // Métodos existentes
   setOrden(orden: OrdenVentaDTO): void {
     this.ordenActual = orden;
   }
@@ -24,7 +24,6 @@ export class OrdenVentaService {
   obtenerOrdenPorId(id: number): Observable<OrdenVentaDTO> {
     return this.http.get<OrdenVentaDTO>(`${this.apiUrl}/${id}`);
   }
-  
 
   limpiarOrden(): void {
     this.ordenActual = null;
@@ -51,9 +50,42 @@ export class OrdenVentaService {
     return this.http.get<OrdenVentaDTO[]>(`${this.apiUrl}/obtenerTodos`);
   }
 
-  // Nuevo método para obtener la última orden
   obtenerUltimaOrden(): Observable<OrdenVentaDTO> {
     return this.http.get<OrdenVentaDTO>(`${this.apiUrl}/ultima`);
   }
-  
+
+  // Nuevos métodos para los filtros
+  obtenerOrdenesPorFecha(): Observable<OrdenVentaDTO[]> {
+    return this.http.get<OrdenVentaDTO[]>(`${this.apiUrl}/por-fecha`);
+  }
+
+  obtenerOrdenesPorValor(): Observable<OrdenVentaDTO[]> {
+    return this.http.get<OrdenVentaDTO[]>(`${this.apiUrl}/por-valor`);
+  }
+
+  obtenerOrdenesPorEstado(estado: EstadoOrden): Observable<OrdenVentaDTO[]> {
+    return this.http.get<OrdenVentaDTO[]>(`${this.apiUrl}/estado/${estado}`);
+  }
+
+  // Métodos específicos para los estados comunes
+  obtenerOrdenesPagadas(): Observable<OrdenVentaDTO[]> {
+    return this.obtenerOrdenesPorEstado('PAGADA');
+  }
+
+  obtenerOrdenesPendientes(): Observable<OrdenVentaDTO[]> {
+    return this.obtenerOrdenesPorEstado('PENDIENTE');
+  }
+
+  obtenerOrdenesDespachadas(): Observable<OrdenVentaDTO[]> {
+    return this.obtenerOrdenesPorEstado('DESPACHADA');
+  }
+
+  obtenerOrdenesCerradas(): Observable<OrdenVentaDTO[]> {
+    return this.obtenerOrdenesPorEstado('CERRADA');
+  }
+
+  // Método para crear una orden completa
+  crearOrden(ordenData: any): Observable<OrdenVentaDTO> {
+    return this.http.post<OrdenVentaDTO>(`${this.apiUrl}/crear`, ordenData);
+  }
 }

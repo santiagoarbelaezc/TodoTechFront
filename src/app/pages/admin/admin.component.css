@@ -341,3 +341,34 @@ main {
     box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
   }
   
+  /* Contenedor de botones de filtrado */
+.filtros-ordenes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+    justify-content: center;
+}
+
+/* Estilo para los botones de filtrado */
+.filtros-ordenes button {
+    background: #555;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+.filtros-ordenes button:hover {
+    background: #777;
+    transform: translateY(-2px);
+}
+.filtros-ordenes button:focus {
+    outline: none;
+    box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
+}
