@@ -175,20 +175,39 @@ export class AdminComponent implements OnInit {
     // Implementar lógica
   }
 
-  eliminarProducto(producto: ProductoDTO) {
-    if (confirm(`¿Estás seguro de que deseas eliminar el producto "${producto.nombre}"?`)) {
-      this.productoService.eliminarProducto(producto.id).subscribe({
-        next: () => {
-          alert('Producto eliminado con éxito');
-          this.cargarProductos();
-        },
-        error: (err) => {
-          console.error('Error al eliminar el producto:', err);
-          alert('No se pudo eliminar el producto');
-        }
-      });
-    }
+ // tu-componente.component.ts
+eliminarProducto(producto: ProductoDTO) {
+  if (!producto.id) {
+    console.error('El producto no tiene ID');
+    return;
   }
+
+  const confirmacion = confirm(`¿Estás seguro de eliminar el producto "${producto.nombre}"?`);
+  
+  if (confirmacion) {
+    this.productoService.eliminarProducto(producto.id).subscribe({
+      next: () => {
+        // Actualizar la lista de productos después de eliminar
+        this.cargarProductos; // Asume que tienes este método para refrescar la lista
+        this.mostrarMensaje(`Producto "${producto.nombre}" eliminado correctamente`);
+      },
+      error: (err) => {
+        console.error('Error al eliminar producto:', err);
+        this.mostrarError(`Error al eliminar producto: ${err.error?.error || err.message}`);
+      }
+    });
+  }
+}
+
+// Métodos auxiliares (deberías tenerlos o implementarlos)
+mostrarMensaje(mensaje: string) {
+  // Puedes usar un snackbar, toast, alert, etc.
+  alert(mensaje);
+}
+
+mostrarError(mensaje: string) {
+  alert(mensaje);
+}
 
   verDetallesProducto(producto: ProductoDTO) {
     console.log('Detalles del producto:', producto);
@@ -270,5 +289,11 @@ export class AdminComponent implements OnInit {
       }
     });
   }
+
+
+  actualizarProducto() {
+  // Lógica para actualizar el producto
+  }
+
   
 }

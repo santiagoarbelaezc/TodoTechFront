@@ -290,3 +290,130 @@ input[readonly] {
   font-size: 22px;
   border-color: #007bff;
 }
+
+
+/* Estilo específico para el formulario de efectivo */
+.cash-form {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.03);
+}
+
+.cash-form .form-group {
+  margin-bottom: 15px;
+}
+
+.cash-form label {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8); /* Más visible que el #aaa original */
+  margin-bottom: 8px;
+  font-weight: 500;
+  display: block;
+}
+
+.cash-form input {
+  background: rgba(42, 42, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 15px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 15px;
+  width: 100%;
+  transition: border-color 0.3s ease;
+  width: 95%;
+}
+
+.cash-form input:focus {
+  outline: none;
+  border-color: #26a69a;
+  box-shadow: 0 0 0 2px rgba(38, 166, 154, 0.2);
+}
+
+.cash-form input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+}
+
+/* Efecto hover sutil */
+.cash-form input:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.payment-summary, .change-section {
+  margin-top: 15px;
+}
+
+.change-section {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(0, 255, 200, 0.05);
+  box-shadow: 0 0 10px rgba(0, 255, 200, 0.1);
+  border: 1px solid #00ffc860;
+  backdrop-filter: blur(6px);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.summary-row.total {
+  font-weight: bold;
+  margin-top: 5px;
+  border-bottom: none;
+}
+
+.summary-row.change {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #4CAF50;
+}
+
+.summary-row.negative {
+  color: #FF5252;
+}
+
+.alert {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(255, 82, 82, 0.1);
+  border-left: 3px solid #FF5252;
+  border-radius: 4px;
+  color: #FF5252;
+  font-size: 14px;
+}
+
+
+.payment-processing-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.payment-processing-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.payment-processing-content img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1rem;
+}

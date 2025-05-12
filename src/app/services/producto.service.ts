@@ -30,9 +30,9 @@ export class ProductoService {
     return this.http.get<ProductoDTO>(`${this.apiUrl}/productos/${id}`);
   }
 
-  eliminarProducto(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
+  eliminarProducto(id: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/eliminar/${id}`);
+}
 
   cargarProductosGenerales(): Observable<ProductoDTO[]> {
     return this.obtenerProductos();

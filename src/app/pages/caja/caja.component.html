@@ -99,35 +99,117 @@
 
 
       <!-- Payment Methods Section -->
-      <section class="metodos-pago">
-        <h3>Seleccionar Método de Pago</h3>
-        <div class="metodos-pago-icons">
-          <img src="assets/paypal.png" alt="PayPal" (click)="selectPaymentMethod('PayPal')" [class.active]="selectedPaymentMethod === 'PayPal'" />
-          <img src="assets/visa.png" alt="Visa" (click)="selectPaymentMethod('Visa')" [class.active]="selectedPaymentMethod === 'Visa'" />
-          <img src="assets/mastercard.png" alt="MasterCard" (click)="selectPaymentMethod('MasterCard')" [class.active]="selectedPaymentMethod === 'MasterCard'" />
-          <img src="assets/redcompra.png" alt="RedCompra" (click)="selectPaymentMethod('RedCompra')" [class.active]="selectedPaymentMethod === 'RedCompra'" />
-          <img src="assets/visadevito.png" alt="Visa Débito" (click)="selectPaymentMethod('Visa Débito')" [class.active]="selectedPaymentMethod === 'Visa Débito'" />
-          <img src="assets/efectivo.png" alt="Efectivo" (click)="selectPaymentMethod('Efectivo')" [class.active]="selectedPaymentMethod === 'Efectivo'" />
-          
-        </div>
-      </section>
+<section class="metodos-pago">
+  <h3>Seleccionar Método de Pago</h3>
+  <div class="metodos-pago-icons">
+    <img src="assets/paypal.png" alt="PayPal" (click)="selectPaymentMethod('PayPal')" [class.active]="selectedPaymentMethod === 'PayPal'" />
+    <img src="assets/visa.png" alt="Visa" (click)="selectPaymentMethod('Visa')" [class.active]="selectedPaymentMethod === 'Visa'" />
+    <img src="assets/mastercard.png" alt="MasterCard" (click)="selectPaymentMethod('MasterCard')" [class.active]="selectedPaymentMethod === 'MasterCard'" />
+    <img src="assets/redcompra.png" alt="RedCompra" (click)="selectPaymentMethod('RedCompra')" [class.active]="selectedPaymentMethod === 'RedCompra'" />
+    <img src="assets/visadevito.png" alt="Visa Débito" (click)="selectPaymentMethod('Visa Débito')" [class.active]="selectedPaymentMethod === 'Visa Débito'" />
+    <img src="assets/efectivo.png" alt="Efectivo" (click)="selectPaymentMethod('Efectivo')" [class.active]="selectedPaymentMethod === 'Efectivo'" />
+  </div>
 
-      <!-- Payment Details Section -->
-      <section class="detalles-pago">
-        <h3>Detalles del Pago</h3>
-        <div class="form-group">
-          <label for="numeroReferencia">Número de tarjeta / referencia</label>
-          <input type="text" id="numeroReferencia" placeholder="Ingrese el número" />
-        </div>
-        <div class="form-group">
-          <label for="nombreTitular">Nombre del titular / pagador</label>
-          <input type="text" id="nombreTitular" placeholder="Nombre completo" />
-        </div>
-        <div class="form-group">
-          <label for="codigoSeguridad">Código de seguridad / comprobante</label>
-          <input type="text" id="codigoSeguridad" placeholder="CVV / Código" />
-        </div>
-      </section>
+  <!-- Formulario de tarjeta (existente) -->
+  <div class="card-form" *ngIf="showCardForm">
+    <!-- ... (mantén tu formulario de tarjeta actual) ... -->
+  </div>
+
+ <!-- Sección de efectivo -->
+<div class="cash-form" *ngIf="selectedPaymentMethod === 'Efectivo'">
+  <div class="form-group">
+    <label for="cashAmount" class="form-label">Efectivo recibido ($):</label>
+    <input
+      type="number"
+      id="cashAmount"
+      name="cashAmount"
+      [(ngModel)]="cashAmount"
+      (input)="calculateChange()"
+      min="0"
+      placeholder="Ingrese monto recibido" />
+  </div>
+
+  <!-- Resumen de pago -->
+<div class="payment-summary">
+  <div class="summary-row">
+    <span>Subtotal:</span>
+    <span>{{ orden?.total | currency:'COP':'symbol':'1.0-0' }}</span>
+  </div>
+  <div class="summary-row">
+    <span>IVA (19%):</span>
+    <span>{{ (orden?.total || 0) * 0.19 | currency:'COP':'symbol':'1.0-0' }}</span>
+  </div>
+  <div class="summary-row total">
+    <span>Total a pagar:</span>
+    <span>{{ (orden?.total || 0) * 1.19 | currency:'COP':'symbol':'1.0-0' }}</span>
+  </div>
+</div>
+
+  <!-- Sección de cambio -->
+  <div class="change-section" *ngIf="cashAmount > 0">
+    <div class="summary-row">
+      <span>Efectivo recibido:</span>
+      <span>{{ cashAmount | currency:'COP':'symbol':'1.0-0' }}</span>
+    </div>
+    <div class="summary-row change" [class.negative]="changeAmount < 0">
+      <span>Cambio:</span>
+      <span>{{ changeAmount | currency:'COP':'symbol':'1.0-0' }}</span>
+    </div>
+    
+    <div class="alert" *ngIf="changeAmount < 0">
+      ¡Faltan {{ (-1 * changeAmount) | currency:'COP':'symbol':'1.0-0' }}!
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Payment Details Section -->
+<section class="detalles-pago" *ngIf="showCardForm">
+  <h3>Detalles del Pago</h3>
+  <div class="form-group">
+    <label for="numeroReferencia">Número de tarjeta / referencia</label>
+    <input type="text" id="numeroReferencia" placeholder="Ingrese el número" 
+           [(ngModel)]="cardDetails.referenceNumber" 
+           name="referenceNumber"
+           (input)="validateCardForm()" />
+  </div>
+  <div class="form-group">
+    <label for="nombreTitular">Nombre del titular / pagador</label>
+    <input type="text" id="nombreTitular" placeholder="Nombre completo" 
+           [(ngModel)]="cardDetails.cardName" 
+           name="cardName"
+           (input)="validateCardForm()" />
+  </div>
+  <div class="form-group">
+    <label for="codigoSeguridad">Código de seguridad / comprobante</label>
+    <input type="text" id="codigoSeguridad" placeholder="CVV / Código" 
+           [(ngModel)]="cardDetails.securityCode" 
+           name="securityCode"
+           (input)="validateCardForm()" />
+  </div>
+  <!-- Campos existentes de la tarjeta -->
+  <div class="form-group">
+    <label for="cardNumber">Número de Tarjeta</label>
+    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" 
+           [(ngModel)]="cardDetails.cardNumber" 
+           name="cardNumber"
+           (input)="validateCardForm()" />
+  </div>
+  <div class="form-group">
+    <label for="expiryDate">Fecha de Expiración</label>
+    <input type="text" id="expiryDate" placeholder="MM/YY" 
+           [(ngModel)]="cardDetails.expiryDate" 
+           name="expiryDate"
+           (input)="validateCardForm()" />
+  </div>
+  <div class="form-group">
+    <label for="cvv">CVV</label>
+    <input type="text" id="cvv" placeholder="123" 
+           [(ngModel)]="cardDetails.cvv" 
+           name="cvv"
+           (input)="validateCardForm()" />
+  </div>
+</section>
 
       <!-- Action Buttons -->
       <div class="acciones">
@@ -136,6 +218,7 @@
         </button>
         <button type="button" (click)="processPayment()" class="btn-pagar">
           Procesar Pago
+          
         </button>
       </div>
     </form>

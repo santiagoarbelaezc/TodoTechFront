@@ -7,11 +7,12 @@ import { CarritoService } from '../../services/carrito.service';
 import { CarruselService } from '../../services/carrusel.service';
 import { DetalleOrdenService } from '../../services/detalle-orden.service';
 import { OrdenVentaService } from '../../services/orden-venta.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.css']
 })
@@ -28,6 +29,23 @@ export class InicioComponent implements AfterViewInit {
 
   mostrarCarrito = false;
   carritoVisible = false;
+
+  // Añade esto en las propiedades de tu clase InicioComponent
+mostrarInputDescuento: boolean = false;
+codigoDescuento: string = '';
+aplicandoDescuento: boolean = false; // <-- Esta es la propiedad faltante
+errorDescuento: string = '';
+
+// Añade esto en las propiedades de tu clase
+descuentosValidos: { [codigo: string]: number } = {
+  '11': 20,
+  'DESC20': 20,
+  'NAVIDAD': 15,
+  'BLACKFRIDAY': 30,
+  'VIP15': 15
+};
+
+
 
   constructor(
     private productoService: ProductoService,
@@ -228,10 +246,77 @@ export class InicioComponent implements AfterViewInit {
     this.carritoVisible = !this.carritoVisible;
   }
 
-  aplicarDescuento(): void {
-    // TODO: Lógica para aplicar un código de descuento
-    console.log('Aplicar descuento clickeado');
+  // Métodos actualizados para manejar descuentos
+aplicarDescuento() {
+  this.mostrarInputDescuento = true;
+  // Focus al input cuando aparece
+  setTimeout(() => {
+    const input = document.querySelector('.discount-input');
+    if (input) (input as HTMLElement).focus();
+  });
+}
+
+validarDescuento() {
+  console.log('[1] Iniciando validarDescuento() - Código ingresado:', this.codigoDescuento);
+
+  if (!this.codigoDescuento.trim()) {
+    this.errorDescuento = 'Por favor ingresa un código de descuento';
+    console.log('[2] Validación fallida: Código vacío');
+    return;
   }
+
+  this.aplicandoDescuento = true;
+  this.errorDescuento = '';
+
+  const orden = this.ordenVentaService.getOrden();
+  console.log('[3] Orden obtenida del servicio:', orden);
+
+  if (!orden || !orden.id) {
+    this.errorDescuento = 'No hay una orden activa';
+    this.aplicandoDescuento = false;
+    console.log('[4] Validación fallida: No hay orden activa o falta ID');
+    return;
+  }
+
+  // Convertir a mayúsculas para hacer la comparación insensible a mayúsculas/minúsculas
+  const codigo = this.codigoDescuento.toUpperCase().trim();
+  const porcentaje = this.descuentosValidos[codigo];
+  console.log('[5] Código procesado y porcentaje encontrado:', { codigo, porcentaje });
+
+  if (porcentaje === undefined) {
+    this.errorDescuento = 'Código no válido';
+    this.aplicandoDescuento = false;
+    console.log('[6] Validación fallida: Código no existe en descuentosValidos');
+    return;
+  }
+
+  console.log('[7] Preparando para aplicar descuento:', {
+    ordenId: orden.id,
+    porcentajeDescuento: porcentaje
+  });
+
+  this.detalleOrdenService.aplicarDescuento(orden.id, porcentaje).subscribe({
+    next: () => {
+      console.log('[8] Descuento aplicado con éxito');
+      this.cargarDetallesCarrito(orden.id);
+      this.mostrarInputDescuento = false;
+      this.codigoDescuento = '';
+    },
+    error: (err) => {
+      console.error('[9] Error al aplicar descuento:', err);
+      console.log('[10] Respuesta completa del error:', {
+        status: err.status,
+        error: err.error,
+        message: err.message
+      });
+      this.errorDescuento = err.error?.message || 'Error al aplicar descuento';
+    },
+    complete: () => {
+      console.log('[11] Operación completada (éxito o error)');
+      this.aplicandoDescuento = false;
+    }
+  });
+}
   
   pagarCarrito() {
   // Navega al componente y recarga los datos

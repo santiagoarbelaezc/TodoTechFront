@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { ProductoDTO } from '../models/producto.dto';
 import { DetalleOrdenDTO } from '../models/detalle-orden.dto';
+import { AplicarDescuentoRequestDTO } from '../models/aplicarDescuentoRequest.dto';
 
 interface CrearDetalleRequest {
   producto: ProductoDTO;
@@ -38,7 +39,15 @@ export class DetalleOrdenService {
       map(response => JSON.parse(response)) // Analizar la respuesta como JSON
     );
   }
+
+  aplicarDescuento(ordenVentaId: number, porcentajeDescuento: number): Observable<any> {
+  const body: AplicarDescuentoRequestDTO = {
+        ordenVentaId: ordenVentaId,       // Nombre exacto que espera el backend
+        porcentajeDescuento: porcentajeDescuento  // Nombre exacto que espera el backend
+    };
   
+  return this.http.post(`${this.apiUrl}/aplicar-descuento`, body);
+}
 
   
   

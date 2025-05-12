@@ -894,24 +894,24 @@ footer {
   /* Se eliminó el transform */
   box-shadow: 0 0 8px rgba(255, 0, 60, 0.4); /* Efecto alternativo */
 }
-  /* Contenedor de acciones al fondo del carrito */
-.cart-actions {
+/* Contenedor de acciones al fondo del carrito */
+.cart-footer-actions {
   display: flex;
-  flex-direction: column; /* ahora vertical */
+  flex-direction: column;
   gap: 10px;
   margin-top: auto;
   padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.bottom-buttons {
+.action-buttons {
   display: flex;
   justify-content: space-between;
   gap: 10px;
 }
 
-/* Botón de pagar carrito con ícono - Sin transform/translate */
-.btn-pagar {
+/* Botón principal de checkout */
+.btn-checkout {
   background: linear-gradient(135deg, #004d40, #26a69a);
   color: #fff;
   border: 2px solid #00796b;
@@ -920,7 +920,7 @@ footer {
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.2s ease;
   width: 100%;
   margin-bottom: 10px;
   display: flex;
@@ -928,19 +928,16 @@ footer {
   justify-content: center;
 }
 
-.btn-pagar i {
+.btn-checkout i {
   margin-right: 10px;
 }
 
-.btn-pagar:hover {
-  background: linear-gradient(135deg, #035951, #29b5a4);
-  border-color: #009688;
-  /* Se eliminó el transform */
-  box-shadow: 0 0 10px rgba(0, 153, 136, 0.3); /* Efecto alternativo más sutil */
+.btn-checkout:hover {
+  background: linear-gradient(135deg, #00332b, #1d8479);
 }
 
-/* Botón de aplicar descuento - Sin efectos de movimiento */
-.btn-descuento {
+/* Botón de descuento */
+.btn-discount {
   background: linear-gradient(135deg, #1a1a1a, #2e2e2e);
   color: #eee;
   border: 1px solid #444;
@@ -949,16 +946,15 @@ footer {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
-.btn-descuento:hover {
-  background: linear-gradient(135deg, #232323, #353535);
-  border-color: #555;
+.btn-discount:hover {
+  background: linear-gradient(135deg, #121212, #252525);
 }
 
-/* Botón de cancelar orden - rojo elegante - Sin movimiento */
-.btn-cancelar {
+/* Botón de cancelar */
+.btn-cancel {
   background: linear-gradient(135deg, #3a0f0f, #a51212);
   color: #f5f5f5;
   border: 1px solid #661f1f;
@@ -967,12 +963,11 @@ footer {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
-.btn-cancelar:hover {
-  background: linear-gradient(135deg, #4b1a1a, #b02020);
-  border-color: #8e2a2a;
+.btn-cancel:hover {
+  background: linear-gradient(135deg, #2a0a0a, #8a0e0e);
 }
 
 /* Estilo para el texto del stock - Sin cambios */
@@ -984,4 +979,85 @@ footer {
   border-radius: 4px;
   border: 1px solid rgba(34, 34, 34, 0.747);
   margin-left: 10px;
+}
+/* Contenedor del input de descuento - Versión refinada */
+.discount-container {
+  display: inline-flex; /* Cambiado a inline-flex para mejor ajuste */
+  gap: 5px;
+  align-items: center;
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  vertical-align: middle; /* Mejor alineación con otros elementos */
+}
+
+/* Input de descuento - Versión refinada */
+.discount-input {
+  flex: 1;
+  padding: 5px 8px; /* Padding vertical aumentado 1px */
+  background: #1e1e1e;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 3px;
+  font-size: 12px;
+  min-width: 140px; /* Ancho aumentado */
+  height: 24px; /* Altura fija para mejor alineación */
+  box-sizing: border-box; /* Para cálculo consistente del tamaño */
+  line-height: 1; /* Mejor control de altura */
+}
+
+.discount-input::placeholder {
+  color: #777;
+  font-style: italic;
+  font-size: 11px; /* Tamaño reducido para placeholder */
+}
+
+/* Botón Aplicar - Versión refinada */
+.btn-apply {
+  background: linear-gradient(135deg, #1a3a1a, #2e6e2e);
+  color: #eee;
+  border: 1px solid #2a4a2a;
+  padding: 5px 12px; /* Padding aumentado */
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  height: 24px; /* Misma altura que el input */
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px; /* Espacio entre el input y el botón */
+  margin-right: 5px; /* Espacio entre el botón y el borde */
+}
+
+.btn-apply:hover {
+  background: linear-gradient(135deg, #143214, #255e25);
+}
+
+/* Botón Cancelar (×) - Versión refinada */
+.btn-cancel-input {
+  background: linear-gradient(135deg, #3a0f0f, #a51212);
+  color: #f5f5f5;
+  border: 1px solid #661f1f;
+  width: 24px; /* Aumentado 2px */
+  height: 24px; /* Misma altura que otros elementos */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  flex-shrink: 0; /* Evita que se reduzca */
+}
+
+.btn-cancel-input:hover {
+  background: linear-gradient(135deg, #2a0a0a, #8a0e0e);
 }

@@ -25,7 +25,6 @@
         <div class="icons">
             <i class="fas fa-search"></i>
             <i class="fas fa-shopping-cart"></i>
-            
         </div>
     </header>
     
@@ -35,178 +34,195 @@
                 <span class="reveal-text delay-1">¡ Bienvenido a TodoTechShop Tecnología Sin Límites !</span>
                 <span class="reveal-text delay-2"></span>
                 <span class="reveal-text delay-3">Descubre innovación, calidad y asesoría experta en cada compra</span>       
-
             </h2>
         </div>
     </section>
    
-<!-- Carrito (solo aparece al bajar el scroll) -->
-<div class="cart-wrapper" *ngIf="mostrarCarrito">
-  <!-- Botón para abrir/cerrar el carrito -->
-  <button class="cart-button" (click)="toggleCarrito()">
-    🛒 <span>Carrito</span>
-  </button>
-
-  <!-- Contenedor del carrito -->
-  <div class="cart-panel" [ngClass]="{ 'open': carritoVisible }">
-    <div class="cart-header">
-      <h3>🛍 Mi Carrito</h3>
-      <button class="close-btn" (click)="toggleCarrito()">✖</button>
-    </div>
-
-    <div class="cart-body">
-      <!-- Encabezados de la tabla -->
-      <div class="cart-row cart-header-row">
-        <span class="cart-col">Producto</span>
-        <span class="cart-col">Cantidad</span>
-        <span class="cart-col">Subtotal</span>
-        <span class="cart-col">Acciones</span> <!-- Nueva columna para acciones -->
-      </div>
-
-      <!-- Detalles del carrito -->
-      <div *ngFor="let item of carrito; let i = index" class="cart-row">
-        <span class="cart-col">{{ item.nombreProducto }}</span>
-        <span class="cart-col">
-          <div class="quantity-controls">
-            <button class="quantity-btn" (click)="ajustarCantidad(i, -1)">−</button>
-            <span>{{ item.detalle.cantidad }}</span>
-            <button class="quantity-btn" (click)="ajustarCantidad(i, 1)">+</button>
-          </div>
-        </span>
-        <span class="cart-col">${{ item.detalle.subtotal | number:'1.2-2' }}</span>
-        <span class="cart-col">
-          <button class="remove-btn" (click)="eliminarProducto(i)">🗑️</button>
-        </span>
-      </div>
-
-      <!-- Botones nuevos -->
-      <div class="cart-actions">
-        <button class="btn-carrito btn-pagar" (click)="pagarCarrito()">
-          <i class="fas fa-shopping-cart"></i> Pagar Carrito
+    <!-- Carrito (solo aparece al bajar el scroll) -->
+    <div class="cart-wrapper" *ngIf="mostrarCarrito">
+        <!-- Botón para abrir/cerrar el carrito -->
+        <button class="cart-button" (click)="toggleCarrito()">
+            🛒 <span>Carrito</span>
         </button>
-      
-        <div class="bottom-buttons">
-          <button class="btn-carrito btn-descuento" (click)="aplicarDescuento()">🎟 Aplicar Descuento</button>
-          <button class="btn-carrito btn-cancelar" (click)="cancelarOrden()">🗑 Cancelar Orden</button>
+
+        <!-- Contenedor del carrito -->
+        <div class="cart-panel" [ngClass]="{ 'open': carritoVisible }">
+            <div class="cart-header">
+                <h3>🛍 Mi Carrito</h3>
+                <button class="close-btn" (click)="toggleCarrito()">✖</button>
+            </div>
+
+            <div class="cart-body">
+                <!-- Encabezados de la tabla -->
+                <div class="cart-row cart-header-row">
+                    <span class="cart-col">Producto</span>
+                    <span class="cart-col">Cantidad</span>
+                    <span class="cart-col">Subtotal</span>
+                    <span class="cart-col">Acciones</span>
+                </div>
+
+                <!-- Detalles del carrito -->
+                <div *ngFor="let item of carrito; let i = index" class="cart-row">
+                    <span class="cart-col">{{ item.nombreProducto }}</span>
+                    <span class="cart-col">
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" (click)="ajustarCantidad(i, -1)">−</button>
+                            <span>{{ item.detalle.cantidad }}</span>
+                            <button class="quantity-btn" (click)="ajustarCantidad(i, 1)">+</button>
+                        </div>
+                    </span>
+                    <span class="cart-col">${{ item.detalle.subtotal | number:'1.2-2' }}</span>
+                    <span class="cart-col">
+                        <button class="remove-btn" (click)="eliminarProducto(i)">🗑️</button>
+                    </span>
+                </div>
+
+                <div class="cart-footer-actions">
+                    <button class="btn-cart btn-checkout" (click)="pagarCarrito()">
+                        <i class="fas fa-shopping-cart"></i> Pagar Carrito
+                    </button>
+
+                    <div class="action-buttons">
+                        <div *ngIf="mostrarInputDescuento" class="discount-input-container">
+                            <input 
+                                type="text" 
+                                [(ngModel)]="codigoDescuento"
+                                placeholder="Código de descuento"
+                                class="discount-input"
+                                (keyup.enter)="validarDescuento()"
+                                [disabled]="aplicandoDescuento"
+                            >
+                            <button 
+                                class="btn-cart btn-apply" 
+                                (click)="validarDescuento()"
+                                [disabled]="aplicandoDescuento || !codigoDescuento.trim()"
+                            >
+                                {{ aplicandoDescuento ? 'Aplicando...' : 'Aplicar' }}
+                            </button>
+                            <button 
+                                class="btn-cart btn-cancel-input" 
+                                (click)="mostrarInputDescuento = false"
+                                [disabled]="aplicandoDescuento"
+                            >×</button>
+                        </div>
+                        
+                        <button 
+                            class="btn-cart btn-discount" 
+                            (click)="aplicarDescuento()"
+                            *ngIf="!mostrarInputDescuento"
+                        >
+                            🎟 Aplicar Descuento
+                        </button>
+                        
+                        <button class="btn-cart btn-cancel" (click)="cancelarOrden()">🗑 Cancelar</button>
+                    </div>
+
+                    <!-- Mensaje de error -->
+                    <div *ngIf="errorDescuento" class="error-message">
+                        {{ errorDescuento }}
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      
     </div>
-  </div>
-</div>
-
-
   
-  <section class="products-section" *ngIf="productosAsus.length > 0">
-    <div class="carousel-container">
-      <button id="prevBtnAsus" class="carousel-nav prev">‹</button>
-      <div class="carousel carouselAsus">
-        <div class="carousel-item" *ngFor="let producto of productosAsus">
-          <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
-          <h3>{{ producto.nombre }}</h3>
-          <p>{{ producto.descripcion }}</p>
-          <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
-          <div class="carrito-container">
-            <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
-            <span class="stock-info">Stock: {{ producto.stock }}</span>
-          </div>
+    <section class="products-section" *ngIf="productosAsus.length > 0">
+        <div class="carousel-container">
+            <button id="prevBtnAsus" class="carousel-nav prev">‹</button>
+            <div class="carousel carouselAsus">
+                <div class="carousel-item" *ngFor="let producto of productosAsus">
+                    <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
+                    <h3>{{ producto.nombre }}</h3>
+                    <p>{{ producto.descripcion }}</p>
+                    <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
+                    <div class="carrito-container">
+                        <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+                        <span class="stock-info">Stock: {{ producto.stock }}</span>
+                    </div>
+                </div>
+            </div>
+            <button id="nextBtnAsus" class="carousel-nav next">›</button>
         </div>
-      </div>
-      <button id="nextBtnAsus" class="carousel-nav next">›</button>
-    </div>
-  </section>
+    </section>
 
-
-  <section class="products-section" *ngIf="productosIphone.length > 0">
-    
-    <div class="carousel-container">
-      <button id="prevBtnIphone" class="carousel-nav prev">‹</button>
-      <div class="carousel carouselIphone">
-        <div class="carousel-item" *ngFor="let producto of productosIphone">
-          <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
-          <h3>{{ producto.nombre }}</h3>
-          <p>{{ producto.descripcion }}</p>
-          <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
-          <div class="carrito-container">
-            <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
-            <span class="stock-info">Stock: {{ producto.stock }}</span>
-          </div>
-          
+    <section class="products-section" *ngIf="productosIphone.length > 0">
+        <div class="carousel-container">
+            <button id="prevBtnIphone" class="carousel-nav prev">‹</button>
+            <div class="carousel carouselIphone">
+                <div class="carousel-item" *ngFor="let producto of productosIphone">
+                    <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
+                    <h3>{{ producto.nombre }}</h3>
+                    <p>{{ producto.descripcion }}</p>
+                    <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
+                    <div class="carrito-container">
+                        <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+                        <span class="stock-info">Stock: {{ producto.stock }}</span>
+                    </div>
+                </div>
+            </div>
+            <button id="nextBtnIphone" class="carousel-nav next">›</button>
         </div>
-      </div>
-      <button id="nextBtnIphone" class="carousel-nav next">›</button>
+    </section>
+
+    <div class="promos-container">
+        <div class="promo-box" id="promo1">
+            <img src="assets/catalogo.jpg" alt="Escanea el código QR">
+            <div class="promo-text">
+                <h3>Escanea el código QR</h3>
+                <p>y mira el catálogo en tu celular</p>
+            </div>
+        </div>
+        <div class="promo-box" id="promo2">
+            <div class="promo-text">
+                <h3>Obtén descuentos especiales en nuestros productos</h3>
+            </div>
+        </div>
+        <div class="promo-box" id="promo3">
+            <img src="assets/tienda.png" alt="Conoce nuestros productos">
+            <div class="promo-text">
+                <h3>Conoce nuestros productos</h3>
+                <p>Tecnología sin límites</p>
+            </div>
+        </div>
     </div>
-  </section>
-
-
   
-  <div class="promos-container">
-    <div class="promo-box" id="promo1">
-        <img src="assets/catalogo.jpg" alt="Escanea el código QR">
-        <div class="promo-text">
-            <h3>Escanea el código QR</h3>
-            <p>y mira el catálogo en tu celular</p>
+    <section class="products-section" *ngIf="productosSamsung.length > 0">
+        <div class="carousel-container">
+            <button id="prevBtnSamsung" class="carousel-nav prev">‹</button>
+            <div class="carousel carouselSamsung">
+                <div class="carousel-item" *ngFor="let producto of productosSamsung">
+                    <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
+                    <h3>{{ producto.nombre }}</h3>
+                    <p>{{ producto.descripcion }}</p>
+                    <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
+                    <div class="carrito-container">
+                        <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+                        <span class="stock-info">Stock: {{ producto.stock }}</span>
+                    </div>
+                </div>
+            </div>
+            <button id="nextBtnSamsung" class="carousel-nav next">›</button>
         </div>
-    </div>
-    <div class="promo-box" id="promo2">
-        <div class="promo-text">
-            <h3>Obtén descuentos especiales en nuestros productos</h3>
-        </div>
-    </div>
-    <div class="promo-box" id="promo3">
-        <img src="assets/tienda.png" alt="Conoce nuestros productos">
-        <div class="promo-text">
-            <h3>Conoce nuestros productos</h3>
-            <p>Tecnología sin límites</p>
-        </div>
-    </div>
-</div>
+    </section>
   
-  
-  <section class="products-section" *ngIf="productosSamsung.length > 0">
-    
-    <div class="carousel-container">
-      <button id="prevBtnSamsung" class="carousel-nav prev">‹</button>
-      <div class="carousel carouselSamsung">
-        <div class="carousel-item" *ngFor="let producto of productosSamsung">
-          <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
-          <h3>{{ producto.nombre }}</h3>
-          <p>{{ producto.descripcion }}</p>
-          <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
-          <div class="carrito-container">
-            <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
-            <span class="stock-info">Stock: {{ producto.stock }}</span>
-          </div>
+    <section class="products-section" *ngIf="productosHp.length > 0">
+        <div class="carousel-container">
+            <button id="prevBtnHp" class="carousel-nav prev">‹</button>
+            <div class="carousel carouselHp">
+                <div class="carousel-item" *ngFor="let producto of productosHp">
+                    <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
+                    <h3>{{ producto.nombre }}</h3>
+                    <p>{{ producto.descripcion }}</p>
+                    <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
+                    <div class="carrito-container">
+                        <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+                        <span class="stock-info">Stock: {{ producto.stock }}</span>
+                    </div>
+                </div>
+            </div>
+            <button id="nextBtnHp" class="carousel-nav next">›</button>
         </div>
-      </div>
-      <button id="nextBtnSamsung" class="carousel-nav next">›</button>
-    </div>
-  </section>
-  
-  <section class="products-section" *ngIf="productosHp.length > 0">
-    
-    <div class="carousel-container">
-      <button id="prevBtnHp" class="carousel-nav prev">‹</button>
-      <div class="carousel carouselHp">
-        <div class="carousel-item" *ngFor="let producto of productosHp">
-          <img [src]="'assets/' + producto.imagen" alt="{{ producto.nombre }}">
-          <h3>{{ producto.nombre }}</h3>
-          <p>{{ producto.descripcion }}</p>
-          <span class="price">${{ producto.precio | number:'1.0-0' }}</span>
-          <div class="carrito-container">
-            <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
-            <span class="stock-info">Stock: {{ producto.stock }}</span>
-          </div>
-        </div>
-      </div>
-      <button id="nextBtnHp" class="carousel-nav next">›</button>
-    </div>
-  </section>
-   
-  <!--@for (usuario of usuarios; track usuario) {
-    nombre del usuario: {{usuario.usuario}} -->
-    
-
+    </section>
     
     <footer>
         <div class="footer-container">
@@ -245,7 +261,5 @@
             <p>© 2025 TodoTech Shop. Todos los derechos reservados.</p>
         </div>
     </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>
