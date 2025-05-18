@@ -347,6 +347,8 @@ nav ul li a:hover {
 }
 
 
+
+
 /* Estilo de las imágenes */
 .carousel-item img {
     width: 100%;
@@ -439,7 +441,8 @@ nav ul li a:hover {
 }
 
 /* Botones del carrusel */
-#prevBtnCel, #nextBtnCel {
+#prevBtnCel, #nextBtnCel, #nextBtnInicio, #prevBtnInicio, #nextBtnAsus, #prevBtnAsus, #nextBtnIphone, 
+#prevBtnIphone, #nextBtnSamsung,#prevBtnSamsung, #nextBtnHp,#prevBtnHp{
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -454,15 +457,15 @@ nav ul li a:hover {
     transition: background 0.3s ease;
 }
 
-#prevBtnCel:hover, #nextBtnCel:hover {
+#prevBtnCel:hover, #nextBtnCel:hover, #prevBtn:hover, #nextBtn:hover{
     background: rgba(0, 0, 0, 0.9);
 }
 
-#prevBtnCel {
+#prevBtnCel, #prevBtnInicio, #prevBtnAsus, #prevBtnIphone, #prevBtnSamsung,#prevBtnHp{
     left: 10px;
 }
 
-#nextBtnCel {
+#nextBtnCel, #nextBtnInicio, #nextBtnAsus, #nextBtnIphone, #nextBtnSamsung, #nextBtnHp{
     right: 10px;
 }
 
@@ -689,7 +692,7 @@ footer {
     position: fixed;
     top: 0;
     right: -300px; /* Oculto por defecto */
-    width: 280px;
+    width: 300px;
     height: 100vh;
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
@@ -737,10 +740,13 @@ footer {
   /* Cuerpo del carrito */
   .cart-body {
     flex: 1;
+    overflow-y: auto;
+    padding-top: 10px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
   }
+  
   
   .empty-text {
     font-size: 14px;
@@ -774,4 +780,284 @@ footer {
     padding: 10px;
     border-radius: 5px;
   }
+
+  .carrito-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* opcional */
+    width: 100%;
+  }
   
+  .btn-carrito {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 8px 16px; /* más delgado */
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 14px; /* más compacto */
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+  
+  .btn-carrito:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 6px 12px rgba(255, 255, 255, 0.08);
+  }
+  
+  .btn-carrito:active {
+    transform: scale(0.95);
+  }
+
+  .cart-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #444;
+    padding: 6px 0;
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  .cart-header-row {
+    font-weight: bold;
+    border-bottom: 2px solid #666;
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+  }
+  
+  .cart-col {
+    flex: 1;
+    text-align: center;
+  }
+  
+  
+
+  .marca-titulo {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    width: 100%;
+}
+/* Contenedor para los botones de cantidad */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  
+  /* Botones + y - */
+  .quantity-btn {
+    background: linear-gradient(135deg, #111, #333);
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 24px;
+    text-align: center;
+  }
+  
+  .quantity-btn:hover {
+  background: linear-gradient(135deg, #222, #444);
+  /* Se eliminó el transform */
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); /* Efecto alternativo */
+}
+  
+  /* Botón de eliminar */
+  .remove-btn {
+    background: linear-gradient(135deg, #ff003c, #c2002f);
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 4px rgba(255, 0, 60, 0.3);
+  }
+  
+  .remove-btn:hover {
+  background: linear-gradient(135deg, #ff1a52, #d1003d);
+  /* Se eliminó el transform */
+  box-shadow: 0 0 8px rgba(255, 0, 60, 0.4); /* Efecto alternativo */
+}
+/* Contenedor de acciones al fondo del carrito */
+.cart-footer-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Botón principal de checkout */
+.btn-checkout {
+  background: linear-gradient(135deg, #004d40, #26a69a);
+  color: #fff;
+  border: 2px solid #00796b;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-checkout i {
+  margin-right: 10px;
+}
+
+.btn-checkout:hover {
+  background: linear-gradient(135deg, #00332b, #1d8479);
+}
+
+/* Botón de descuento */
+.btn-discount {
+  background: linear-gradient(135deg, #1a1a1a, #2e2e2e);
+  color: #eee;
+  border: 1px solid #444;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-discount:hover {
+  background: linear-gradient(135deg, #121212, #252525);
+}
+
+/* Botón de cancelar */
+.btn-cancel {
+  background: linear-gradient(135deg, #3a0f0f, #a51212);
+  color: #f5f5f5;
+  border: 1px solid #661f1f;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background: linear-gradient(135deg, #2a0a0a, #8a0e0e);
+}
+
+/* Estilo para el texto del stock - Sin cambios */
+.stock-info {
+  font-size: 13px;
+  color: #e7e7e7;
+  background-color: rgba(22, 22, 22, 0.808);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(34, 34, 34, 0.747);
+  margin-left: 10px;
+}
+/* Contenedor del input de descuento - Versión refinada */
+.discount-container {
+  display: inline-flex; /* Cambiado a inline-flex para mejor ajuste */
+  gap: 5px;
+  align-items: center;
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  vertical-align: middle; /* Mejor alineación con otros elementos */
+}
+
+/* Input de descuento - Versión refinada */
+.discount-input {
+  flex: 1;
+  padding: 5px 8px; /* Padding vertical aumentado 1px */
+  background: #1e1e1e;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 3px;
+  font-size: 12px;
+  min-width: 140px; /* Ancho aumentado */
+  height: 24px; /* Altura fija para mejor alineación */
+  box-sizing: border-box; /* Para cálculo consistente del tamaño */
+  line-height: 1; /* Mejor control de altura */
+}
+
+.discount-input::placeholder {
+  color: #777;
+  font-style: italic;
+  font-size: 11px; /* Tamaño reducido para placeholder */
+}
+
+/* Botón Aplicar - Versión refinada */
+.btn-apply {
+  background: linear-gradient(135deg, #1a3a1a, #2e6e2e);
+  color: #eee;
+  border: 1px solid #2a4a2a;
+  padding: 5px 12px; /* Padding aumentado */
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  height: 24px; /* Misma altura que el input */
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px; /* Espacio entre el input y el botón */
+  margin-right: 5px; /* Espacio entre el botón y el borde */
+}
+
+.btn-apply:hover {
+  background: linear-gradient(135deg, #143214, #255e25);
+}
+
+/* Botón Cancelar (×) - Versión refinada */
+.btn-cancel-input {
+  background: linear-gradient(135deg, #3a0f0f, #a51212);
+  color: #f5f5f5;
+  border: 1px solid #661f1f;
+  width: 24px; /* Aumentado 2px */
+  height: 24px; /* Misma altura que otros elementos */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  flex-shrink: 0; /* Evita que se reduzca */
+}
+
+.btn-cancel-input:hover {
+  background: linear-gradient(135deg, #2a0a0a, #8a0e0e);
+}

@@ -1,13 +1,17 @@
+// src/app/components/orden-venta/orden-venta.component.ts
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UsuarioService } from '../../services/usuario.service';
+import { OrdenVentaService } from '../../services/orden-venta.service';
 import { Router } from '@angular/router';
+
 import { ClienteDTO } from '../../models/cliente.dto';
 import { UsuarioDTO } from '../../models/usuario.dto';
+import { CrearOrdenDTO } from '../../models/CrearOrden.dto';
+import { OrdenVentaDTO } from '../../models/ordenventa.dto';
 
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CrearOrdenDTO } from '../../models/CrearOrden.dto';
 
 @Component({
   selector: 'app-orden-venta',
@@ -26,18 +30,31 @@ export class OrdenVentaComponent implements OnInit {
     clave: ''
   };
 
-  private apiUrl = 'http://localhost:8080/api/ordenes/crear';
+  private crearOrdenUrl = 'http://localhost:8080/api/ordenes/crear';
+  ordenes: OrdenVentaDTO[] = [];
 
   constructor(
     private http: HttpClient,
     private usuarioService: UsuarioService,
+    private ordenVentaService: OrdenVentaService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.actualizarFechaHora();
     setInterval(() => this.actualizarFechaHora(), 1000);
+    this.cargarOrdenes();
   }
+
+  cargarOrdenes() {
+  this.ordenVentaService.obtenerOrdenes().subscribe({
+    next: (data) => this.ordenes = data,
+    error: (err) => {
+      console.error('Error al obtener órdenes:', err);
+      alert('Error al cargar las órdenes');
+    }
+  });
+}
 
   actualizarFechaHora(): void {
     const ahora = new Date();
@@ -63,14 +80,19 @@ export class OrdenVentaComponent implements OnInit {
 
     const request: CrearOrdenDTO = {
       cliente: this.cliente,
-      vendedor: vendedor.usuario // solo el nombre de usuario
+      vendedor: vendedor.usuario
     };
 
-    this.http.post(this.apiUrl, request).subscribe({
-      next: (respuesta) => {
-        console.log('Orden creada con éxito:', respuesta);
-        alert('Orden creada correctamente');
-        this.router.navigate(['/inicio']); // Redirigir si deseas
+    this.http.post<OrdenVentaDTO>(this.crearOrdenUrl, request).subscribe({
+      next: (ordenCreada) => {
+        console.log('Orden creada:', ordenCreada);
+
+        // Guardar la orden en el servicio y en localStorage
+        this.ordenVentaService.setOrden(ordenCreada);
+        this.ordenVentaService.setOrdenIdEnLocalStorage(ordenCreada.id);
+
+        // Redirigir
+        this.router.navigate(['/inicio']);
       },
       error: (error) => {
         console.error('Error al crear la orden:', error);

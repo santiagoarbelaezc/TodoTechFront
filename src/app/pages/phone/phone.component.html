@@ -1,1 +1,105 @@
-<p>phone works!</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodoTech Shop</title>
+    <link rel="stylesheet" href="phone.component.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="assets/logoTech.png" alt="TodoTech Shop">
+        </div>
+        <nav>
+            <ul class="menu">
+                <button class="boton-menu" (click)="irAInicio()">Inicio</button>
+                <button class="boton-menu" (click)="irALaptops()">Laptops & PCs</button>
+                <button class="boton-menu" (click)="irAPhone()">Smartphones</button>
+                <button class="boton-menu" (click)="irAGaming()">Gaming</button>
+                <button class="boton-menu" (click)="irAAccesorios()">Accesorios</button>
+            </ul>
+        </nav>
+        <div class="icons">
+            <i class="fas fa-search"></i>
+            <i class="fas fa-shopping-cart"></i>
+            
+        </div>
+    </header>
+    
+    <section class="banner">
+        <div class="banner-content">
+            <h2>
+                <span class="reveal-text delay-1">¡ Bienvenido a TodoTechShop Tecnología Sin Límites !</span>
+                <span class="reveal-text delay-2"></span>
+                <span class="reveal-text delay-3">Descubre innovación, calidad y asesoría experta en cada compra</span>       
+
+            </h2>
+        </div>
+    </section>
+
+    <!-- Carrito (solo aparece al bajar el scroll) -->
+    <div class="cart-wrapper" *ngIf="mostrarCarrito">
+        <!-- Botón para abrir/cerrar el carrito -->
+        <button class="cart-button" (click)="toggleCarrito()">
+        🛒 <span>Carrito</span>
+        </button>
+  
+    <!-- Contenedor del carrito -->
+    <div class="cart-panel" [ngClass]="{ 'open': carritoVisible }">
+      <div class="cart-header">
+        <h3>🛍 Mi Carrito</h3>
+        <button class="close-btn" (click)="toggleCarrito()">✖</button>
+      </div>
+      <div class="cart-body">
+        <p class="empty-text">Tu carrito está vacío</p>
+      </div>
+    </div>
+  </div>
+
+  
+  <footer>
+    <div class="footer-container">
+        <div class="footer-section about">
+            <h2>TodoTech Shop</h2>
+            <p>Tu destino para lo último en tecnología. Encuentra laptops, smartphones, gaming y más.</p>
+        </div>
+        
+        <div class="footer-section links">
+            <h3>Enlaces rápidos</h3>
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Ofertas</a></li>
+                <li><a href="#">Política de privacidad</a></li>
+                <li><a href="#">Términos y condiciones</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section contact">
+            <h3>Contacto</h3>
+            <p>Teléfono: +57 320 123 4567</p>
+        </div>
+
+        <div class="footer-section social">
+            <h3>Síguenos</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2025 TodoTech Shop. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+
