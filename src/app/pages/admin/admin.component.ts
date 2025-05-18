@@ -116,14 +116,24 @@ export class AdminComponent implements OnInit {
   }
 
   cargarProductos() {
-    this.productoService.obtenerProductos().subscribe({
-      next: (data) => this.productos = data,
-      error: (err) => {
-        console.error('Error al obtener productos:', err);
-        alert('Error al cargar los productos');
+  this.productoService.obtenerProductos().subscribe({
+    next: (data) => {
+      this.productos = data;
+
+      const productosBajoStock = this.productos.filter(p => p.stock < 10);
+
+      if (productosBajoStock.length > 0) {
+        const nombres = productosBajoStock.map(p => `${p.nombre} (stock: ${p.stock})`).join('\n');
+        alert(`⚠️ Productos con bajo stock:\n${nombres}`);
       }
-    });
-  }
+    },
+    error: (err) => {
+      console.error('Error al obtener productos:', err);
+      alert('Error al cargar los productos');
+    }
+  });
+}
+
 
 cargarProductosReporte(): void {
   console.log('Iniciando carga de productos para el reporte...');
