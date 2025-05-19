@@ -8,7 +8,7 @@ import { ReporteRendimientoDTO } from '../models/reporteRendimiento.dto'; // Ase
 })
 export class ReporteService {
 
-  private baseUrl = 'http://localhost:8080/api/vendedores'; // Base URL de la API
+  private baseUrl = 'https://todotechshopprojectsoftware.onrender.com/api/vendedores'; // Base URL de la API
 
   constructor(private http: HttpClient) { }
 

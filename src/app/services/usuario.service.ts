@@ -7,7 +7,7 @@ import { UsuarioDTO } from '../models/usuario.dto';
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl: string = 'http://localhost:8080/api/usuarios'; // URL base para la API
+  private apiUrl: string = 'https://todotechshopprojectsoftware.onrender.com//api/usuarios'; // URL base para la API
   private usuarioActual: UsuarioDTO | null = null; // Propiedad privada para almacenar el usuario actual
 
   constructor(private http: HttpClient) {}

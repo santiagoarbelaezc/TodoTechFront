@@ -9,7 +9,7 @@ import { PagoDTO } from '../models/pago.dto';
   providedIn: 'root',
 })
 export class PagoService {
-  private apiUrl = 'http://localhost:8080/api/pagos';
+  private apiUrl = 'https://todotechshopprojectsoftware.onrender.com/api/pagos';
 
   constructor(private http: HttpClient) {}
 

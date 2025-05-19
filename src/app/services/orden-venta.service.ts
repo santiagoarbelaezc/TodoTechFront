@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class OrdenVentaService {
-  private apiUrl = 'http://localhost:8080/api/ordenes';
+  private apiUrl = 'https://todotechshopprojectsoftware.onrender.com/api/ordenes';
   private ordenActual: OrdenVentaDTO | null = null;
 
   constructor(private http: HttpClient) { }

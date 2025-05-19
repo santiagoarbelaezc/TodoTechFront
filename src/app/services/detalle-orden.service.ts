@@ -14,7 +14,7 @@ interface CrearDetalleRequest {
   providedIn: 'root'
 })
 export class DetalleOrdenService {
-  private apiUrl = 'http://localhost:8080/api/detalles'; // Ajusta la URL según tu backend
+  private apiUrl = 'https://todotechshopprojectsoftware.onrender.com/api/detalles'; // Ajusta la URL según tu backend
 
   constructor(private http: HttpClient) {}
 

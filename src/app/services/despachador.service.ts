@@ -8,7 +8,7 @@ import { PersonaDTO } from '../models/persona.dto';
   providedIn: 'root'
 })
 export class DespachadorService {
-  private apiUrl = 'http://localhost:8080/api/despachadores';
+  private apiUrl = 'https://todotechshopprojectsoftware.onrender.com/api/despachadores';
 
   constructor(private http: HttpClient) {}
 

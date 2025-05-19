@@ -11,7 +11,7 @@ import { UsuarioService } from './usuario.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/usuarios';
+  private apiUrl = 'https://todotechshopprojectsoftware.onrender.com/api/usuarios';
   private usuarioActual: UsuarioDTO | null = null;
 
   constructor(

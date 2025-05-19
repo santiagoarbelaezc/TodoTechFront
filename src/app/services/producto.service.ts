@@ -11,7 +11,7 @@ import { ProductoReporteRequest } from '../models/productoReporteRequest.dto';
 })
 export class ProductoService {
   // private apiUrl = 'http://localhost:8080/api/productos'; // URL de la API
-  private apiUrl = 'http://localhost:8080/api/productos';
+  private apiUrl = 'https://todotechshopprojectsoftware.onrender.com/api/productos';
   private productosSubject = new BehaviorSubject<ProductoDTO[]>([]);
   public productos$ = this.productosSubject.asObservable(); // Exponemos el observable
 
