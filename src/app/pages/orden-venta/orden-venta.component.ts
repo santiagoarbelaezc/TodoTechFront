@@ -30,7 +30,7 @@ export class OrdenVentaComponent implements OnInit {
     clave: ''
   };
 
-  private crearOrdenUrl = 'http://localhost:8080/api/ordenes/crear';
+  private crearOrdenUrl = 'https://todotechshopprojectsoftware.onrender.com/api/ordenes/crear';
   ordenes: OrdenVentaDTO[] = [];
 
   constructor(
