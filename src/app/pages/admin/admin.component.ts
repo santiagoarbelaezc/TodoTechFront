@@ -282,21 +282,22 @@ aplicarFiltroBusqueda(): void {
 
 
   editarProducto(producto: ProductoDTO) {
-    console.log('Editar producto:', producto);
-    // Implementar lógica
-    // Por ejemplo, abrir un modal con el formulario de edición
-    this.nuevoProducto = {
-          id: 0,
-          nombre: producto.nombre,
-          codigo: producto.codigo,
-          descripcion: producto.descripcion,
-          precio: producto.precio,
-          stock: producto.stock,
-          categoria: producto.categoria.nombre,
-          imagen: producto.imagen
-        };
+  console.log('Editar producto:', producto);
+  this.nuevoProducto = {
+    id: producto.id, // ✅ Usa el ID del producto existente
+    nombre: producto.nombre,
+    codigo: producto.codigo,
+    descripcion: producto.descripcion,
+    precio: producto.precio,
+    stock: producto.stock,
+    categoria: producto.categoria.nombre,
+    imagen: producto.imagen
+  };
 
-  }
+  // Si usas un modal, puedes abrirlo aquí
+  // this.modalService.open(...);
+}
+
 
  // tu-componente.component.ts
 eliminarProducto(producto: ProductoDTO) {
