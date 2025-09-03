@@ -28,21 +28,36 @@
 
 <main>
   <section class="content">
-    <div *ngIf="seccionActiva === 'bienvenida'" class="bienvenida-box">
-      <img src="assets/logoTech.png" alt="Panel de administración" class="bienvenida-img" />
-      <h1>¡Bienvenido al Panel de Administración!</h1>
-      <p>
-        Desde aquí podrás gestionar <strong>usuarios</strong>, <strong>productos</strong>,
-        <strong>reportes</strong> e <strong>inventario</strong>. Todo en un solo lugar,
-        con una experiencia intuitiva y eficiente.
-      </p>
-      <div class="bienvenida-iconos">
-        <span>👤</span>
-        <span>🛒</span>
-        <span>📊</span>
-        <span>📦</span>
+    <div *ngIf="seccionActiva === 'bienvenida'" class="bienvenida-container">
+  <div class="logo-animation">
+    <div class="logo-wrapper">
+      <img src="assets/TigreCircle.png" alt="Panel de administración" class="bienvenida-img" />
+      <div class="wave-container">
+        <div class="wave-circle"></div>
+        <div class="wave-circle"></div>
+        <div class="wave-circle"></div>
+      </div>
+      <div class="orbit-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
       </div>
     </div>
+  </div>
+  
+  <h1 class="bienvenida-title">¡Bienvenido al Panel de Administración!</h1>
+  
+  <p class="bienvenida-text">
+    Desde aquí podrás gestionar <span class="highlight">usuarios</span>, <span class="highlight">productos</span>,
+    <span class="highlight">reportes</span> e <span class="highlight">inventario</span>. Todo en un solo lugar,
+    con una experiencia intuitiva y eficiente.
+  </p>
+</div>
  
 
     <div *ngIf="seccionActiva === 'usuarios'">

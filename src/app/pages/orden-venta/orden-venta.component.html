@@ -1,82 +1,130 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orden de Venta - Nuevo Cliente</title>
-    <link rel="stylesheet" href="orden-venta.component.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orden de Venta - TodoTech Shop</title>
+  <link rel="stylesheet" href="orden-venta.component.css">
 </head>
 <body>
+  <!-- Botones de cambio de tema -->
+  
+  
+  <main class="orden-venta-container" id="ordenVentaContainer">
+    <!-- Sección del formulario -->
+    <div class="orden-venta-form">
+      <h1 class="orden-venta-title">Orden de Venta</h1>
+      <p class="orden-venta-subtitle">Registra una nueva venta para tu cliente</p>
       
-          <div class="orden-venta-container">
-    <h2>Orden de Venta</h2>
+      <form (ngSubmit)="onSubmit()">
+        <div class="input-group">
+          <input 
+            type="text" 
+            id="nombreCliente" 
+            name="nombreCliente" 
+            required 
+            [(ngModel)]="cliente.nombre"
+            placeholder=" ">
+          <label for="nombreCliente">Nombre del Cliente</label>
+        </div>
+
+        <div class="input-group">
+          <input 
+            type="email" 
+            id="correoCliente" 
+            name="correoCliente" 
+            required 
+            [(ngModel)]="cliente.correo"
+            placeholder=" ">
+          <label for="correoCliente">Correo Electrónico</label>
+        </div>
+
+        <div class="input-group">
+          <input 
+            type="tel" 
+            id="telefonoCliente" 
+            name="telefonoCliente" 
+            required 
+            [(ngModel)]="cliente.telefono"
+            placeholder=" ">
+          <label for="telefonoCliente">Teléfono</label>
+        </div>
+
+        <div class="input-group">
+          <input 
+            type="password" 
+            id="claveCliente" 
+            name="claveCliente" 
+            [(ngModel)]="cliente.clave"
+            placeholder=" ">
+          <label for="claveCliente">Clave</label>
+        </div>
+
+        <button type="submit">Registrar Venta</button>
+      </form>
+    </div>
     
-    <form (ngSubmit)="onSubmit()">
-      <!-- Grupo de Cliente -->
-      <div class="input-group">
-        <input type="text" id="nombreCliente" name="nombreCliente" 
-              [(ngModel)]="cliente.nombre" required placeholder=" ">
-        <label for="nombreCliente">Nombre del Cliente</label>
+    <!-- Sección del logo con fondo negro -->
+    <div class="logo-section">
+      <div class="logo-wrapper">
+        <img src="assets/TigreCircle.png" alt="Logo TodoTech Shop" class="logo">
+        <!-- Contenedor de ondas -->
+        <div class="wave-container">
+          <div class="wave-circle"></div>
+          <div class="wave-circle"></div>
+          <div class="wave-circle"></div>
+        </div>
+
+        <!-- Puntos orbitales -->
+        <div class="orbit-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
       </div>
-      
-      <!-- Grupo de Correo -->
-      <div class="input-group">
-        <input type="email" id="correoCliente" name="correoCliente" 
-              [(ngModel)]="cliente.correo" required placeholder=" ">
-        <label for="correoCliente">Correo Electrónico</label>
+      <div class="welcome-text">
+        <h2>TodoTech Shop</h2>
+        <p>Sistema de gestión de ventas</p>
       </div>
-      
-      <!-- Grupo de Teléfono -->
-      <div class="input-group">
-        <input type="tel" id="telefonoCliente" name="telefonoCliente" 
-              [(ngModel)]="cliente.telefono" required placeholder=" ">
-        <label for="telefonoCliente">Teléfono</label>
-      </div>
-      
-      <!-- Grupo de Clave (si es necesario) -->
-      <div class="input-group">
-        <input type="password" id="claveCliente" name="claveCliente" 
-              [(ngModel)]="cliente.clave" placeholder=" ">
-        <label for="claveCliente">Clave</label>
-      </div>
-      
-      <button type="submit">Registrar Venta</button>
-    </form>
-  </div>
+    </div>
+  </main>
 
   <!-- Tabla de Órdenes de Venta -->
-<div class="tabla-container">
-  <h3>Órdenes Registradas</h3>
-  <table class="tabla-ordenes">
-    <thead>
-      <tr>
-        <th>N° Orden</th>
-        <th>Cliente</th>
-        <th>Fecha</th>
-        <th>Total</th>
-        <th>Estado</th>
-        
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let orden of ordenes">
-        <td>{{ orden.id }}</td>
-        <td>{{ orden.cliente.nombre }}</td>
-        <td>{{ orden.fecha | date:'shortDate' }}</td>
-        <td>{{ orden.total | currency:'USD' }}</td>
-        <td>{{ orden.estado }}</td>
-        
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <div class="tabla-container">
+    <h3>Órdenes Registradas</h3>
+    <table class="tabla-ordenes">
+      <thead>
+        <tr>
+          <th>N° Orden</th>
+          <th>Cliente</th>
+          <th>Fecha</th>
+          <th>Total</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let orden of ordenes">
+          <td>{{ orden.id }}</td>
+          <td>{{ orden.cliente.nombre }}</td>
+          <td>{{ orden.fecha | date:'shortDate' }}</td>
+          <td>{{ orden.total | currency:'USD' }}</td>
+          <td>{{ orden.estado }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="orden-venta-horario">
+    <p>{{ fechaHora }}</p>
+  </div>
 
-        
-      
-      <div class="orden-venta-horario">
-        <p>{{ fechaHora }}</p>
-      </div>
-      
-
+  <footer>
+    © 2025 TodoTech Shop - Todos los derechos reservados.
+  </footer>
 </body>
 </html>

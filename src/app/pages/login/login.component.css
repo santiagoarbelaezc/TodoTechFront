@@ -1,144 +1,664 @@
-/* Estilos base */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
-/* Fondo con imagen */
 body {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
-    background: url('/assets/loginFondo.png') no-repeat center center/cover;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background: linear-gradient(135deg, #1421cf 0%, #db1f1f 100%);
+    padding: 16px;
 }
 
-/* Contenedor principal */
 .login-container {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  background: url('/assets/fondoGamer2.jpg') center/cover no-repeat;
+  border-radius: 16px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.1),
+    0 5px 15px rgba(0, 0, 0, 0.04);
+  overflow: hidden; /* Esto ya está presente */
+  min-height: 460px;
+  position: relative;
+  perspective: 1000px;
+  /* Añade esto para asegurar que nada sobresalga: */
+  overflow: hidden;
+}
+
+
+.login-form {
     flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px; /* Espacio lateral para pantallas pequeñas */
-}
-
-
-/* Caja del formulario con efecto de elevación */
-.login-box {
-    background: rgba(255, 255, 255, 0.1); /* Fondo con transparencia */
-    padding: 40px;
-    border-radius: 15px;
-    backdrop-filter: blur(10px); /* Efecto de desenfoque */
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3); /* Sombra elegante */
-    text-align: center;
-    width: 350px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Efecto al pasar el mouse */
-.login-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.4);
-}
-
-/* Estilos para centrar el logo y hacerlo más pequeño */
-.logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100px; /* Reducimos el tamaño */
-    height: auto;
-    margin: 0 auto; /* Centra el logo horizontalmente */
-    transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out;
-}
-
-/* Efecto cuando pasas el cursor */
-.logo:hover {
-    transform: rotateY(360deg) scale(1.1); /* Rotación y leve aumento de tamaño */
-    filter: drop-shadow(0 0 10px #00d9ff); /* Brillo azul neón */
-}
-
-
-
-/* Formularios */
-form {
+    padding: 45px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    order: 1;
+    transition: all 1.2s ease-in-out;
+    opacity: 1;
+    transform: translateX(0);
+    background: #fff;
+    z-index: 2;
 }
 
-/* Grupo de input */
+.logo-section {
+    flex: 0.9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    order: 2;
+    transition: all 1.2s ease-in-out;
+    opacity: 1;
+    transform: translateX(0);
+    z-index: 2;
+}
+
+
+
+.login-form, .logo-section {
+    transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+}
+
+/* Estado inicial */
+.login-form {
+    order: 1;
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.logo-section {
+    order: 2;
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Fase de preparación */
+.login-container.swap-init .login-form {
+    transform: translateX(-30%);
+    opacity: 0.8;
+}
+
+.login-container.swap-init .logo-section {
+    transform: translateX(30%);
+    opacity: 0.8;
+}
+
+/* Fase final - Intercambio completo */
+.login-container.swap-completed .login-form {
+    order: 2;
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.login-container.swap-completed .logo-section {
+    order: 1;
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Efectos secundarios - Olas */
+.wave-circle {
+    animation-play-state: paused;
+}
+
+.login-container.swap-completed .wave-circle {
+    animation-play-state: running;
+}
+
+/* Efectos secundarios - Puntos orbitales */
+.orbit-dots,
+.dot {
+    animation-play-state: paused;
+}
+
+.login-container.swap-completed .orbit-dots,
+.login-container.swap-completed .dot {
+    animation-play-state: running;
+}
+
+/* Efectos sutiles en elementos internos */
+.logo {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    padding: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transition: all 1s ease-in-out 0.3s;
+}
+
+.login-container.swap-completed .logo {
+    transform: scale(1.04);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.welcome-text {
+    color: white;
+    text-align: center;
+    margin-top: 30px;
+    transition: all 1s ease-in-out 0.4s;
+}
+
+.login-container.swap-completed .welcome-text {
+    transform: translateY(-3px);
+}
+
+.welcome-text h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 1s ease-in-out 0.5s;
+    margin-top: 50px;
+}
+
+.login-container.swap-completed .welcome-text h2 {
+    letter-spacing: -0.2px;
+}
+
+.welcome-text p {
+    font-size: 14px;
+    opacity: 0.9;
+    font-weight: 400;
+    line-height: 1.6;
+    transition: all 1s ease-in-out 0.6s;
+}
+
+.login-container.swap-completed .welcome-text p {
+    opacity: 0.95;
+}
+
+.login-title {
+    font-size: 28px;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    transition: all 1s ease-in-out 0.3s;
+}
+
+.login-container.swap-completed .login-title {
+    transform: translateY(-2px);
+    color: #000;
+}
+
+.login-subtitle {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 35px;
+    line-height: 1.5;
+    font-weight: 400;
+    transition: all 1s ease-in-out 0.4s;
+}
+
+.login-container.swap-completed .login-subtitle {
+    transform: translateY(-1px);
+    color: #555;
+}
+
+form {
+    width: 100%;
+}
+
 .input-group {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 28px;
+    transition: all 1s ease-in-out 0.5s;
 }
 
-/* Campos de entrada con línea en lugar de borde */
-input {
+.login-container.swap-completed .input-group {
+    transform: translateX(3px);
+}
+
+.input-group input {
     width: 100%;
-    padding: 12px;
-    border: none;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    padding: 16px 22px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
     outline: none;
-    font-size: 16px;
-    background: transparent;
-    color: white;
-    transition: all 0.3s ease;
+    font-size: 15px;
+    color: #1a1a1a;
+    font-weight: 400;
+    transition: all 0.4s ease;
 }
 
-/* Efecto al enfocar */
-input:focus {
-    border-bottom: 2px solid white;
+.input-group input:focus {
+    border-color: #000;
+    background: #fff;
+    box-shadow: 
+        0 0 0 3px rgba(0, 0, 0, 0.06),
+        0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Efecto en los labels */
-label {
+.input-group label {
     position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
-    transition: 0.3s ease;
+    left: 22px;
+    top: 16px;
+    font-size: 15px;
+    color: #999;
     pointer-events: none;
+    font-weight: 400;
+    transition: all 0.4s ease;
 }
 
-/* Efecto al escribir en los inputs */
-input:focus + label,
-input:valid + label {
-    top: 5px;
-    left: 10px;
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -12px;
+    left: 16px;
     font-size: 12px;
-    color: white;
+    background: #fff;
+    padding: 0 8px;
+    color: #000;
+    font-weight: 500;
 }
 
-/* Botón elegante */
-button {
+button[type="submit"] {
     width: 100%;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    font-size: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 5px;
+    height: 50px;
+    background: linear-gradient(135deg, #000 0%, #2a2a2a 100%);
+    border-radius: 12px;
+    border: none;
     cursor: pointer;
-    margin-top: 10px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+    margin-top: 25px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    transition: all 1s ease-in-out 0.6s;
 }
 
-button:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: white;
+.login-container.swap-completed button[type="submit"] {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(135deg, #2a2a2a 0%, #4a4a4a 100%);
+}
+
+.register-link {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #777;
+    text-align: center;
+    font-weight: 400;
+    transition: all 1s ease-in-out 0.7s;
+}
+
+.login-container.swap-completed .register-link {
+    transform: translateY(-1px);
+}
+
+.register-link a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.4s ease;
+}
+
+.register-link a:hover {
+    color: #333;
 }
 
 footer {
+    margin-top: 35px;
+    color: #999;
     text-align: center;
-    padding: 10px;
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    width: 100%;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    font-weight: 400;
+    transition: all 1s ease-in-out 0.8s;
+}
+
+.login-container.swap-completed footer {
+    color: #777;
+}
+
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        max-width: 90%;
+        min-height: auto;
+    }
+    
+    .login-form {
+        padding: 35px 25px;
+        order: 2;
+    }
+    
+    .logo-section {
+        padding: 35px 25px;
+        order: 1;
+        flex: none;
+        min-height: 240px;
+    }
+    
+    .logo {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .welcome-text h2 {
+        font-size: 22px;
+    }
+    
+    .welcome-text p {
+        font-size: 13px;
+    }
+    
+    /* Desactivar efectos en móviles */
+    .login-container.swap-init .login-form,
+    .login-container.swap-init .logo-section,
+    .login-container.swap-completed .login-form,
+    .login-container.swap-completed .logo-section {
+        transform: none !important;
+    }
+    
+    .login-container::before {
+        display: none;
+    }
+    
+    .logo-section::before {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .login-container {
+        max-width: 95%;
+        border-radius: 14px;
+    }
+    
+    .login-form {
+        padding: 28px 22px;
+    }
+    
+    .logo-section {
+        padding: 30px 22px;
+    }
+    
+    .login-title {
+        font-size: 24px;
+    }
+    
+    .login-subtitle {
+        font-size: 13px;
+    }
+}
+
+
+/* Contenedor del logo */
+.logo-wrapper {
+  position: relative;
+  display: inline-block;
+  z-index: 10;
+}
+
+/* Contenedor de ondas */
+.wave-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Círculos de onda mejorados */
+.wave-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Efecto de borde degradado para las ondas */
+.wave-circle::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.8), 
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  mask: linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 2px;
+}
+
+/* Animación de onda mejorada */
+@keyframes elegantWavePulse {
+  0% {
+    width: 150px;
+    height: 150px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
   }
+  20% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.3;
+  }
+  100% {
+    width: 240px;
+    height: 240px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+/* Aplicar animación cuando se completa el swap */
+.login-container.swap-completed .wave-circle:nth-child(1) {
+  animation: elegantWavePulse 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.login-container.swap-completed .wave-circle:nth-child(2) {
+  animation: elegantWavePulse 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  animation-delay: 1.3s;
+}
+
+.login-container.swap-completed .wave-circle:nth-child(3) {
+  animation: elegantWavePulse 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  animation-delay: 2.6s;
+}
+
+/* Efecto de puntos orbitales mejorado */
+.orbit-dots {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  transform: translate(-50%, -50%);
+  box-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(255, 255, 255, 0.4);
+  animation: dotPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes dotPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Posicionamiento de puntos en forma de diamante */
+.dot:nth-child(1) { 
+  top: 0; 
+  left: 50%;
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) { 
+  top: 50%; 
+  right: 0;
+  animation-delay: 0.5s;
+}
+
+.dot:nth-child(3) { 
+  bottom: 0; 
+  left: 50%;
+  animation-delay: 1s;
+}
+
+.dot:nth-child(4) { 
+  top: 50%; 
+  left: 0;
+  animation-delay: 1.5s;
+}
+
+/* Puntos adicionales para una órbita más completa */
+.dot:nth-child(5) { 
+  top: 15%; 
+  right: 15%;
+  animation-delay: 0.25s;
+}
+
+.dot:nth-child(6) { 
+  top: 15%; 
+  left: 15%;
+  animation-delay: 0.75s;
+}
+
+.dot:nth-child(7) { 
+  bottom: 15%; 
+  right: 15%;
+  animation-delay: 1.25s;
+}
+
+.dot:nth-child(8) { 
+  bottom: 15%; 
+  left: 15%;
+  animation-delay: 1.75s;
+}
+
+@keyframes smoothOrbitRotation {
+  0% { 
+    transform: translate(-50%, -50%) rotate(0deg); 
+  }
+  100% { 
+    transform: translate(-50%, -50%) rotate(360deg); 
+  }
+}
+
+.login-container.swap-completed .orbit-dots {
+  animation: smoothOrbitRotation 18s linear infinite;
+}
+
+/* Efecto de brillo sutil en el logo */
+.login-container.swap-completed .logo {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+  transition: filter 1.5s ease;
+}
+
+/* Asegurar que las animaciones se ejecuten */
+.login-container.swap-completed .wave-circle,
+.login-container.swap-completed .orbit-dots,
+.login-container.swap-completed .dot {
+  animation-play-state: running;
+}
+
+/* Efecto de partículas sutiles adicionales */
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  animation: particleFloat 6s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(var(--tx, 20px), var(--ty, 20px)) scale(1);
+  }
+}
+
+/* Partículas posicionadas aleatoriamente */
+.particle:nth-child(1) { --tx: 30px; --ty: -20px; animation-delay: 0s; }
+.particle:nth-child(2) { --tx: -25px; --ty: 15px; animation-delay: 2s; }
+.particle:nth-child(3) { --tx: 20px; --ty: 25px; animation-delay: 4s; }
+
+
+.wave-circle,
+.orbit-dots,
+.dot {
+  animation-play-state: paused;
+}
+
+
+/* Transiciones suaves para la aparición */
+.wave-container,
+.orbit-dots {
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.login-container.swap-completed .wave-container,
+.login-container.swap-completed .orbit-dots {
+  opacity: 1;
+}
