@@ -9,6 +9,7 @@ import { AccesoriosComponent } from './pages/accesorios/accesorios.component';
 import { OrdenVentaComponent } from './pages/orden-venta/orden-venta.component';
 import { CajaComponent } from './pages/caja/caja.component';
 import { DespachoComponent } from './pages/despacho/despacho.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
    { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redirigir a login al inicio
@@ -19,9 +20,10 @@ export const routes: Routes = [
    { path: 'gaming', component: GamingComponent },
    { path: 'laptops', component: LaptopsComponent },
    { path: 'accesorios', component: AccesoriosComponent },
-   { path: 'ordenVenta', component: OrdenVentaComponent },
+   
    { path: 'caja', component: CajaComponent },
    { path: 'despacho', component: DespachoComponent },
+   { path: 'ordenVenta', component: OrdenVentaComponent, canActivate: [AuthGuard] },
    
 
    { path: '**', redirectTo: 'login', pathMatch: 'full' } // Rutas no encontradas -> login

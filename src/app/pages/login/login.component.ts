@@ -25,8 +25,8 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     // Cargar el tema guardado al inicializar el componente
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    this.setTheme(savedTheme);
+    localStorage.clear();
+  console.log('LocalStorage reiniciado al ingresar al login');
   }
 
   ngAfterViewInit(): void {
@@ -84,26 +84,14 @@ export class LoginComponent implements AfterViewInit, OnInit {
     });
   }
 
-  setTheme(theme: string): void {
-  this.currentTheme = theme;
-  
-  if (theme === 'dark') {
-    document.body.classList.add('dark-theme');
-    console.log('Tema oscuro activado');
-  } else {
-    document.body.classList.remove('dark-theme');
-    console.log('Tema claro activado');
-  }
-  
-  // Guardar preferencia del tema
-  localStorage.setItem('theme', theme);
-}
+
 
   onLogin(): void {
     if (!this.username || !this.password) {
       alert('Por favor ingresa usuario y contraseña');
       return;
     }
+    
   
     this.authService.login(this.username, this.password).subscribe({
       next: (usuario) => {

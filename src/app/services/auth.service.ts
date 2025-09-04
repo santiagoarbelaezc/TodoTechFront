@@ -1,5 +1,4 @@
 // src/app/services/auth.service.ts
-
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -13,6 +12,7 @@ import { UsuarioService } from './usuario.service';
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api/usuarios';
   private usuarioActual: UsuarioDTO | null = null;
+  private tiempoExpiracion = 1000 * 60 * 30; // ⏰ 30 minutos
 
   constructor(
     private http: HttpClient,
@@ -23,48 +23,62 @@ export class AuthService {
     return this.http.get<UsuarioDTO>(`${this.apiUrl}/login/${username}/${password}`).pipe(
       tap(usuario => {
         this.usuarioActual = usuario;
-        localStorage.setItem('usuario', JSON.stringify(usuario));
-        this.redirigirPorRol(usuario.tipoUsuario); // <- Redirige automáticamente
+
+        const data = {
+          usuario,
+          exp: Date.now() + this.tiempoExpiracion
+        };
+
+        localStorage.setItem('usuario', JSON.stringify(data));
+        this.redirigirPorRol(usuario.tipoUsuario);
       }),
       catchError(() => of(null))
     );
   }
 
-  redirigirPorRol(rol: UsuarioDTO['tipoUsuario']): void {
-    switch (rol) {
-      case 'ADMINISTRADOR':
-      this.router.navigate(['/admin']);
-      break;
-      case 'VENDEDOR':
-      this.router.navigate(['/ordenVenta']);
-      break;
-      case 'CAJERO':
-      this.router.navigate(['/caja']);
-      break;
-      case 'DESPACHADOR':
-      this.router.navigate(['/despacho']);
-      break;
-      default:
-      this.router.navigate(['/']);
-      break;
-    }
-
-    // Setear el usuario actual en UsuarioService
-    if (this.usuarioActual) {
-      const usuarioService = new UsuarioService(this.http); // Crear instancia de UsuarioService
-      usuarioService.setUsuario(this.usuarioActual); // Setear el usuario actual
-    }
-  }
-
   getUsuarioActual(): UsuarioDTO | null {
-    if (this.usuarioActual) return this.usuarioActual;
     const usuarioStr = localStorage.getItem('usuario');
-    return usuarioStr ? JSON.parse(usuarioStr) : null;
+    if (!usuarioStr) return null;
+
+    const data = JSON.parse(usuarioStr);
+
+    if (Date.now() > data.exp) {
+      // ⏳ Sesión expirada
+      this.logout();
+      return null;
+    }
+
+    return data.usuario as UsuarioDTO;
   }
 
   logout(): void {
     this.usuarioActual = null;
     localStorage.removeItem('usuario');
     this.router.navigate(['/login']);
+  }
+
+  redirigirPorRol(rol: UsuarioDTO['tipoUsuario']): void {
+    switch (rol) {
+      case 'ADMINISTRADOR':
+        this.router.navigate(['/admin']);
+        break;
+      case 'VENDEDOR':
+        this.router.navigate(['/ordenVenta']);
+        break;
+      case 'CAJERO':
+        this.router.navigate(['/caja']);
+        break;
+      case 'DESPACHADOR':
+        this.router.navigate(['/despacho']);
+        break;
+      default:
+        this.router.navigate(['/']);
+        break;
+    }
+
+    if (this.usuarioActual) {
+      const usuarioService = new UsuarioService(this.http);
+      usuarioService.setUsuario(this.usuarioActual);
+    }
   }
 }
